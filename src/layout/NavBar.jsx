@@ -1,29 +1,58 @@
+import React, { useState } from "react";
+import LoginModal from "../components/LoginModal";
+import ArtistsPanel from "../components/ArtistsPanel";
+
 export default function Navbar() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showArtists, setShowArtists] = useState(false);
+
   return (
-    <div className="fixed top-6 left-0 w-full flex justify-center z-100 px-6 pointer-events-none">
-      <nav className="flex items-center gap-5 px-5 py-2 rounded-full border border-red-500/20 bg-black/40 backdrop-blur-xl shadow-[0_0_25px_rgba(255,0,60,0.15)] transition-all hover:border-red-500/40 pointer-events-auto">
-        
-        {/* LOGO FRAME: High-Impact Branding Container */}
-       
+    <>
+      <div className="fixed top-6 left-0 w-full flex justify-center z-50 px-4 pointer-events-none">
+        <nav className="flex items-center gap-4 px-5 py-2 rounded-full border border-red-500/20 bg-black/40 backdrop-blur-xl shadow-[0_0_25px_rgba(255,0,60,0.15)] transition-all hover:border-red-500/40 pointer-events-auto flex-wrap justify-center">
+          
+          {/* NAV LINKS */}
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            {["Platform", "Resources", "Artists", "Contact"].map((item) =>
+              item === "Artists" ? (
+                <button
+                  key={item}
+                  onClick={() => setShowArtists(true)}
+                  className="text-[10px] sm:text-[11px] font-bold text-gray-400 hover:text-red-500 transition-colors uppercase tracking-[0.25em]"
+                >
+                  {item}
+                </button>
+              ) : (
+                <a
+                  key={item}
+                  href={`#${item.toLowerCase()}`}
+                  className="text-[10px] sm:text-[11px] font-bold text-gray-400 hover:text-red-500 transition-colors uppercase tracking-[0.25em]"
+                >
+                  {item}
+                </a>
+              )
+            )}
+          </div>
 
-        {/* COMPACT LINKS: Luxury Spacing */}
-        <div className="hidden md:flex items-center gap-7">
-          {["Platform", "Resources", "Artists", "Contact"].map((item) => (
-            <a 
-              key={item} 
-              href={`#${item.toLowerCase()}`} 
-              className="text-[9px] font-bold text-gray-400 hover:text-red-500 transition-colors uppercase tracking-[0.3em]"
+          {/* LOGIN BUTTON + DROPDOWN */}
+          <div className="relative">
+            <button
+              onClick={() => setShowLogin(!showLogin)}
+              className="bg-red-600 hover:bg-red-500 text-white text-[10px] font-black px-5 py-2 rounded-full shadow-[0_4px_12px_rgba(255,0,60,0.3)] transition-all transform active:scale-95 uppercase"
             >
-              {item}
-            </a>
-          ))}
-        </div>
+              Login
+            </button>
 
-        {/* MINIMALIST ACTION BUTTON */}
-        <button className="bg-red-600 hover:bg-red-500 text-white text-[9px] font-black px-5 py-2 rounded-full shadow-[0_4px_12px_rgba(255,0,60,0.3)] transition-all transform active:scale-95 tracking-0.1em uppercase">
-          Schedule Demo
-        </button>
-      </nav>
-    </div>
+            <LoginModal isOpen={showLogin} />
+          </div>
+        </nav>
+      </div>
+
+      {/* ARTISTS SHOWCASE OVERLAY */}
+      <ArtistsPanel
+        isOpen={showArtists}
+        onClose={() => setShowArtists(false)}
+      />
+    </>
   );
 }

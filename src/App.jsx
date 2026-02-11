@@ -1,8 +1,10 @@
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./layout/NavBar";
 import Hero from "./components/Hero";
 import BrandLogo from "./components/BrandLogo";
 import EventTypes from "./components/EventTypes";
 import ChatWidget from "./components/ChatWidget";
+import PlanEvent from "./pages/PlanEvent";
 
 export default function App() {
   return (
@@ -18,15 +20,28 @@ export default function App() {
         <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black/95" />
       </div>
 
-      {/* SCROLLABLE CONTENT */}
+      {/* ROUTED CONTENT */}
       <main className="relative z-10">
-        <Hero />
-        <div className="relative z-20 bg-black/90 backdrop-blur-xl">
-          <EventTypes />
-        </div>
+        <Routes>
+          {/* HOME PAGE */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero />
+                <div className="relative z-20 bg-black/90 backdrop-blur-xl">
+                  <EventTypes />
+                </div>
+              </>
+            }
+          />
+
+          {/* EVENT PLANNING PAGE */}
+          <Route path="/plan-event" element={<PlanEvent />} />
+        </Routes>
       </main>
 
-      {/* 4. CHAT WIDGET: Placed outside main content to stay fixed */}
+      {/* CHAT WIDGET */}
       <ChatWidget />
     </div>
   );

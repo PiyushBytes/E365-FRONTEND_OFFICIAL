@@ -1,7 +1,10 @@
+import { useNavigate } from "react-router-dom";
+
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 overflow-hidden bg-black">
-      
       
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
         <video
@@ -16,8 +19,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-linear-to-b from-black/70 via-transparent to-black/90" />
       </div>
 
-      
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-600px h-400px bg-red-600/10 blur-[140px] rounded-full animate-pulse z-1" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-100 bg-red-600/10 blur-[140px] rounded-full animate-pulse z-1" />
 
       <div className="relative z-10 text-center px-6">
         
@@ -31,13 +33,14 @@ export default function Hero() {
         </p>
 
         {/* Action Button */}
-        <button className="group relative bg-white text-black px-12 py-5 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 hover:bg-red-600 hover:text-white shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+        <button
+          onClick={() => navigate("/plan-event")}
+          className="group relative bg-white text-black px-12 py-5 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 hover:bg-red-600 hover:text-white shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+        >
           Start Planning
-          
         </button>
       </div>
 
-      {/* 4. BOTTOM SECTION TRANSITION */}
       <div className="absolute bottom-0 w-full h-32 bg-linear-to-t from-black to-transparent z-5" />
     </section>
   );

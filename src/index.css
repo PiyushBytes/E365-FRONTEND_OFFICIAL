@@ -1,16 +1,16 @@
+/* ALL IMPORTS MUST BE FIRST */
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
 @import "tailwindcss";
 
-body {
- @apply bg-black text-white;
-}
-@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
-
+/* CUSTOM VARIABLES */
 :root {
-  --primary-red: #ff003c; /* Electric Red */
+  --primary-red: #ff003c;
   --glow-red: rgba(255, 0, 60, 0.4);
 }
 
+/* GLOBAL STYLES */
 body {
+  @apply bg-black text-white;
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #050505;
 }
@@ -18,4 +18,22 @@ body {
 h1, h2 {
   font-family: 'Syncopate', sans-serif;
   text-transform: uppercase;
+}
+
+.input-style {
+  @apply bg-black/40 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-red-500;
+}
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: fadeSlide 0.5s ease-in-out;
 }
