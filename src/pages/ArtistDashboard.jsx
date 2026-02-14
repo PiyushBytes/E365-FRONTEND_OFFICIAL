@@ -82,13 +82,24 @@ const ArtistDashboard = () => {
               <p className="text-gray-400 text-sm">{req.details}</p>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex items-center flex-wrap gap-3">
+
               <button className="bg-red-600 hover:bg-red-700 transition px-4 py-1 rounded-full text-sm">
                 Accept
               </button>
+
               <button className="border border-gray-500 hover:border-red-500 px-4 py-1 rounded-full text-sm">
                 Reject
               </button>
+
+              {/* Bot Icon */}
+              <button
+                className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:border-red-500 hover:bg-red-600/20 transition"
+                title="Open Chat"
+              >
+                🤖
+              </button>
+
             </div>
           </div>
         ))}

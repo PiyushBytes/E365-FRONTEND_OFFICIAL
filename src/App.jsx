@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+
 import Navbar from "./layout/NavBar";
 import Hero from "./components/Hero";
 import BrandLogo from "./components/BrandLogo";
@@ -13,16 +14,19 @@ import AdminDashboard from "./pages/AdminDashboard";
 export default function App() {
   const location = useLocation();
 
+  // Detect dashboard routes
   const isDashboard =
-    location.pathname === "/artist" || location.pathname === "/admin";
+    location.pathname === "/artist" ||
+    location.pathname === "/admin";
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-red-500/30">
-      
+
+      {/* Show Logo & Navbar only on main website */}
       {!isDashboard && <BrandLogo />}
       {!isDashboard && <Navbar />}
 
-      {/* Background Video Only For Website */}
+      {/* Background Video only for website pages */}
       {!isDashboard && (
         <div className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
           <video
@@ -35,7 +39,7 @@ export default function App() {
             <source src="/Logos/video1.mp4" type="video/mp4" />
           </video>
 
-          <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95" />
         </div>
       )}
 
@@ -43,7 +47,7 @@ export default function App() {
       <main className="relative z-10">
         <Routes>
 
-          {/* HOME PAGE */}
+          {/* HOME */}
           <Route
             path="/"
             element={
@@ -57,7 +61,7 @@ export default function App() {
             }
           />
 
-          {/* EVENT PLANNING PAGE */}
+          {/* PLAN EVENT */}
           <Route path="/plan-event" element={<PlanEvent />} />
 
           {/* ARTIST DASHBOARD */}
@@ -69,6 +73,7 @@ export default function App() {
         </Routes>
       </main>
 
+      {/* Chat only on website */}
       {!isDashboard && <ChatWidget />}
     </div>
   );
