@@ -51,7 +51,7 @@ export default function PlanEvent() {
         {/* STEP CONTENT */}
         <div
           key={step}
-          className="min-h-[200px] flex flex-col gap-4 animate-fade"
+          className="min-h-200px flex flex-col gap-4 animate-fade"
         >
           {step === 0 && (
             <>
