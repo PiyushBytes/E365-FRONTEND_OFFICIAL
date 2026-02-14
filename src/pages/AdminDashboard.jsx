@@ -6,8 +6,8 @@ const AdminDashboard = () => {
 
       {/* Red Radial Glow */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-red-600/20 rounded-full blur-[180px]" />
-        <div className="absolute bottom-[-250px] left-[-200px] w-[700px] h-[700px] bg-red-700/10 rounded-full blur-[200px]" />
+        <div className="absolute -top-50 right-[-200px] w-[600px] h-[600px] bg-red-600/20 rounded-full blur-[180px]" />
+        <div className="absolute -bottom-62.5 left-[-200px] w-[700px] h-[700px] bg-red-700/10 rounded-full blur-[200px]" />
       </div>
 
       {/* Header */}
