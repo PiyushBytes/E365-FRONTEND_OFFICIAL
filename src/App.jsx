@@ -10,6 +10,7 @@ import Contact from "./components/Contact";
 
 import ArtistDashboard from "./pages/ArtistDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 
 export default function App() {
   const location = useLocation();
@@ -17,7 +18,8 @@ export default function App() {
   // Detect dashboard routes
   const isDashboard =
     location.pathname === "/artist" ||
-    location.pathname === "/admin";
+    location.pathname === "/admin" ||
+    location.pathname === "/client";
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-red-500/30">
@@ -56,7 +58,7 @@ export default function App() {
                 <div className="relative z-20 bg-black/90 backdrop-blur-xl">
                   <EventTypes />
                 </div>
-                <Contact />
+                {/* <Contact /> */}
               </>
             }
           />
@@ -69,6 +71,9 @@ export default function App() {
 
           {/* ADMIN DASHBOARD */}
           <Route path="/admin" element={<AdminDashboard />} />
+
+          {/* CLIENT DASHBOARD */}
+          <Route path="/client" element={<ClientDashboard />} />
 
         </Routes>
       </main>

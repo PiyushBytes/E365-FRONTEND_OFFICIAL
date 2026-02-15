@@ -1,110 +1,403 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Calendar,
+  CreditCard,
+  Settings,
+  LogOut,
+  Bell,
+  Search,
+  Menu,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  Mic2,
+  ListMusic,
+  User,
+  MoreVertical,
+  ChevronRight,
+  Ticket
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ArtistDashboard = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
   const [available, setAvailable] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  
+  const [stats, setStats] = useState({
+    totalBookings: 0,
+    pendingRequests: 0,
+    acceptedBookings: 0,
+    revenue: "₹0K",
+  });
+  const [requests, setRequests] = useState([]);
+
+  // Mock data for client photos
+  const clientImages = [
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop",
+    "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop",
+    "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
+  ];
+
+  useEffect(() => {
+    fetch("/static/artist_dashboard_count.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setStats({
+          totalBookings: data.totalBookings,
+          pendingRequests: data.pendingRequests,
+          acceptedBookings: data.acceptedBookings,
+          revenue: data.revenue,
+        });
+        const enrichedRequests = (data.requests || []).map((req, i) => ({
+          ...req,
+          clientImg: clientImages[i % clientImages.length]
+        }));
+        setRequests(enrichedRequests);
+      })
+      .catch((err) => console.error("Error fetching dashboard data:", err));
+  }, []);
+
+  const handleLogout = () => {
+    navigate("/");
+  };
+
+  const menuItems = [
+    { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { id: "requests", icon: Ticket, label: "Requests" },
+    { id: "calendar", icon: Calendar, label: "Calendar" },
+    { id: "payments", icon: CreditCard, label: "Payments" },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-[#0f0f0f] to-[#1a0000] text-white px-4 sm:px-8 lg:px-12 py-8">
-
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-6 mb-12">
-        <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-full border-2 border-red-500 flex items-center justify-center text-sm text-gray-400">
-            artist
-          </div>
-
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-wide">
-              ARIJIT SINGH
-            </h1>
-            <p className="text-gray-400">Singer • Mumbai</p>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <button className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition px-5 py-2 rounded-full font-medium">
-            Edit Profile
-          </button>
-
-          <button
-            onClick={() => setAvailable(!available)}
-            className={`px-6 py-2 rounded-full font-medium transition ${
-              available
-                ? "bg-red-600 hover:bg-red-700"
-                : "bg-gray-600 hover:bg-gray-700"
-            }`}
-          >
-            {available ? "Available" : "Busy"}
-          </button>
-        </div>
+    <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
+      {/* BACKGROUND ACCENTS */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[150px]" />
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        {[
-          { label: "Total Bookings", value: "28" },
-          { label: "Pending Requests", value: "5" },
-          { label: "Accepted", value: "21" },
-          { label: "Revenue", value: "₹0K" },
-        ].map((item, index) => (
-          <div
-            key={index}
-            className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 rounded-2xl hover:border-red-500 transition"
-          >
-            <p className="text-gray-400 text-sm">{item.label}</p>
-            <h2 className="text-3xl font-bold mt-2">{item.value}</h2>
-          </div>
-        ))}
-      </div>
-
-      {/* Booking Requests */}
-      <div className="bg-white/5 backdrop-blur-lg border border-white/10 p-6 sm:p-8 rounded-2xl">
-        <h2 className="text-xl sm:text-2xl font-semibold mb-6">
-          NEW BOOKING REQUESTS
-        </h2>
-
-        {[
-          {
-            name: "Rahul Sharma",
-            details: "Wedding • 12 March • Delhi • ₹90K",
-          },
-          {
-            name: "Anita Verma",
-            details: "Corporate • 20 March • Mumbai • ₹60K",
-          },
-        ].map((req, index) => (
-          <div
-            key={index}
-            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-b border-white/10 py-5"
-          >
-            <div>
-              <p className="font-medium text-lg">{req.name}</p>
-              <p className="text-gray-400 text-sm">{req.details}</p>
+      {/* SIDEBAR */}
+      <motion.aside
+        initial={{ width: isSidebarOpen ? 260 : 80 }}
+        animate={{ width: isSidebarOpen ? 260 : 80 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="hidden md:flex flex-col border-r border-white/10 bg-black/40 backdrop-blur-xl z-20"
+      >
+        {/* Logo Area */}
+        <div className="h-20 flex items-center justify-center border-b border-white/10">
+           <div className={`flex items-center gap-3 ${isSidebarOpen ? 'px-2' : 'justify-center'}`}>
+            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
+              <span className="font-['Syncopate'] font-bold text-white text-[10px]">E365</span>
             </div>
+            {isSidebarOpen && (
+              <span className="font-bold text-lg tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                Artist Panel
+              </span>
+            )}
+           </div>
+        </div>
 
-            <div className="flex items-center flex-wrap gap-3">
-
-              <button className="bg-red-600 hover:bg-red-700 transition px-4 py-1 rounded-full text-sm">
-                Accept
-              </button>
-
-              <button className="border border-gray-500 hover:border-red-500 px-4 py-1 rounded-full text-sm">
-                Reject
-              </button>
-
-              {/* Bot Icon */}
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          {menuItems.map((item) => {
+            const isActive = activeTab === item.id;
+            return (
               <button
-                className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:border-red-500 hover:bg-red-600/20 transition"
-                title="Open Chat"
+                key={item.id}
+                onClick={() => setActiveTab(item.id)}
+                className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all duration-200 group ${
+                  isActive
+                    ? "bg-red-600 text-white shadow-lg shadow-red-600/20"
+                    : "text-gray-400 hover:bg-white/5 hover:text-white"
+                }`}
               >
-                🤖
+                <item.icon
+                  size={20}
+                  className={isActive ? "text-white" : "text-gray-400 group-hover:text-white"}
+                />
+                {isSidebarOpen && (
+                  <span className="font-medium whitespace-nowrap">{item.label}</span>
+                )}
+                {isActive && isSidebarOpen && (
+                  <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-sm" />
+                )}
               </button>
+            );
+          })}
+        </nav>
 
+        {/* Bottom Actions */}
+        <div className="p-4 border-t border-white/10 space-y-2">
+          <button 
+            onClick={() => setShowSettings(true)}
+            className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all"
+          >
+            <Settings size={20} />
+            {isSidebarOpen && <span className="font-medium">Settings</span>}
+          </button>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-4 p-3 rounded-xl text-red-500 hover:bg-red-500/10 transition-all"
+          >
+            <LogOut size={20} />
+            {isSidebarOpen && <span className="font-medium">Logout</span>}
+          </button>
+        </div>
+      </motion.aside>
+      
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+        {/* TOPBAR */}
+        <header className="h-20 border-b border-white/10 bg-black/40 backdrop-blur-xl flex items-center justify-between px-6 z-10">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors md:block hidden"
+            >
+              <Menu size={20} />
+            </button>
+            <div className="block md:hidden">
+              <Menu size={20} className="text-gray-400" />
+            </div>
+
+            <h1 className="text-xl font-bold hidden sm:block">
+              {menuItems.find(m => m.id === activeTab)?.label || 'Dashboard'}
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-6">
+            {/* Availability Toggle */}
+            <div 
+              onClick={() => setAvailable(!available)}
+              className={`cursor-pointer hidden sm:flex items-center gap-3 px-3 py-1.5 rounded-full border transition-all duration-300 ${
+                available ? 'border-green-500/30 bg-green-500/5' : 'border-gray-700 bg-gray-800/20'
+              }`}
+            >
+               <div className={`w-2 h-2 rounded-full ${available ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
+               <span className={`text-xs font-bold uppercase tracking-wider ${available ? 'text-green-400' : 'text-gray-500'}`}>
+                 {available ? "Online" : "Offline"}
+               </span>
+            </div>
+
+            {/* Notifications */}
+            <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
+              <Bell size={20} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full ring-2 ring-black" />
+            </button>
+
+            {/* Profile Pic */}
+            <div className="w-9 h-9 rounded-full border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
+               <img src="/artists/arijit.webp" alt="Profile" className="w-full h-full object-cover" />
             </div>
           </div>
-        ))}
+        </header>
+
+        {/* SCROLLABLE CONTENT */}
+        <main className="flex-1 overflow-y-auto p-6 lg:p-10 scrollbar-hide">
+           {activeTab === 'dashboard' ? (
+             <div className="max-w-7xl mx-auto space-y-8 animate-fade-up">
+               
+               {/* Welcome Banner */}
+               <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mb-8">
+                  <div>
+                    <h2 className="text-3xl font-bold mb-1">Welcome back, Arijit</h2>
+                    <p className="text-gray-400 text-sm">Here's what's happening internally today.</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                     <span className="text-sm text-gray-500">Last updated: Just now</span>
+                  </div>
+               </div>
+
+               {/* Stats Grid */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { label: "Total Bookings", value: stats.totalBookings, trend: "+12%", icon: ListMusic, color: "text-blue-400" },
+                    { label: "Pending Requests", value: stats.pendingRequests, trend: "Action Req", icon: Clock, color: "text-yellow-400" },
+                    { label: "Confirmed", value: stats.acceptedBookings, trend: "This Month", icon: CheckCircle2, color: "text-green-400" },
+                    { label: "Revenue", value: stats.revenue, trend: "+8.5%", icon: CreditCard, color: "text-purple-400" },
+                  ].map((stat, index) => (
+                    <div
+                      key={index}
+                      className="bg-zinc-900/50 border border-white/5 rounded-2xl p-6 backdrop-blur-md hover:border-white/20 transition-all group relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <stat.icon size={60} />
+                      </div>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="p-2.5 rounded-xl bg-white/5 text-white">
+                           <stat.icon size={20} className={stat.color} />
+                        </div>
+                        {stat.trend === "Action Req" ? (
+                          <div className="flex items-center gap-1 text-xs font-bold text-red-400 bg-red-500/10 px-2 py-1 rounded-full animate-pulse">
+                            {stat.trend}
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1 text-xs font-medium text-green-400 bg-green-500/10 px-2 py-1 rounded-full">
+                            {stat.trend}
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-bold text-white">{stat.value}</h3>
+                        <p className="text-sm text-gray-400 mt-1">{stat.label}</p>
+                      </div>
+                    </div>
+                  ))}
+               </div>
+
+               {/* Requests Section */}
+               <section>
+                 <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                       <Ticket size={20} className="text-red-500" /> New Requests
+                    </h3>
+                    <button className="text-sm text-gray-400 hover:text-white transition-colors">See All</button>
+                 </div>
+
+                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                   {requests.map((req, index) => (
+                     <div key={index} className="bg-zinc-900/50 border border-white/5 rounded-2xl p-0 overflow-hidden hover:border-red-500/30 transition-all group">
+                        <div className="flex flex-col sm:flex-row">
+                           {/* Date Stub */}
+                           <div className="sm:w-24 bg-red-900/10 border-b sm:border-b-0 sm:border-r border-white/5 flex flex-col items-center justify-center p-4">
+                              <span className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">{req.date.split(" ")[0]}</span>
+                              <span className="text-2xl font-bold text-white">{req.date.split(" ")[1]}</span>
+                           </div>
+                           
+                           {/* Content */}
+                           <div className="flex-1 p-5">
+                              <div className="flex items-start justify-between mb-4">
+                                 <div className="flex items-center gap-3">
+                                    <img src={req.clientImg} alt="Client" className="w-10 h-10 rounded-full object-cover border border-white/10" />
+                                    <div>
+                                       <h4 className="font-bold text-white text-base">{req.name}</h4>
+                                       <p className="text-xs text-gray-400">{req.location} • {req.eventType}</p>
+                                    </div>
+                                 </div>
+                                 <div className="text-right">
+                                    <span className="block text-xs text-gray-500 uppercase mb-1">Offer</span>
+                                    <span className="block text-lg font-bold text-green-400">{req.offer}</span>
+                                 </div>
+                              </div>
+
+                              <div className="flex gap-3 mt-4 pt-4 border-t border-white/5">
+                                 <button className="flex-1 bg-white text-black hover:bg-red-600 hover:text-white py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors">
+                                    Accept
+                                 </button>
+                                 <button className="px-4 py-2 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors text-gray-400">
+                                    Decline
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                   ))}
+                   {requests.length === 0 && (
+                     <div className="col-span-full p-8 text-center text-gray-500 bg-zinc-900/30 rounded-2xl border border-white/5 border-dashed">
+                        No pending requests at the moment.
+                     </div>
+                   )}
+                 </div>
+               </section>
+
+             </div>
+           ) : activeTab === 'requests' ? (
+             <div className="flex flex-col items-center justify-center h-[50vh] text-center">
+                <Ticket size={48} className="text-gray-700 mb-4" />
+                <h3 className="text-xl font-bold text-gray-500">All Request History</h3>
+                <p className="text-gray-600">This module is under development.</p>
+             </div>
+           ) : (
+            <div className="flex flex-col items-center justify-center h-[50vh] text-center">
+              <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                <Settings size={32} className="text-gray-700" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-500">Coming Soon</h3>
+              <p className="text-gray-600">The {activeTab} module is currently being built.</p>
+           </div>
+           )}
+        </main>
       </div>
 
+      {/* Settings Modal */}
+      <AnimatePresence>
+        {showSettings && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-zinc-900 border border-white/10 rounded-2xl w-full max-w-md p-6 shadow-2xl relative"
+            >
+              <button 
+                onClick={() => setShowSettings(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+              >
+                <XCircle size={20} />
+              </button>
+              
+              <h2 className="text-xl font-bold text-white mb-6 border-b border-white/10 pb-4">Settings</h2>
+              
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-500/10 rounded-lg text-green-400">
+                      <User size={18} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm">Public Visibility</h3>
+                      <p className="text-xs text-gray-500">Allow promoters to find you</p>
+                    </div>
+                  </div>
+                  <div className="w-10 h-5 bg-green-600 rounded-full relative cursor-pointer"><div className="w-3 h-3 bg-white rounded-full absolute top-1 right-1" /></div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                     <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+                       <Bell size={18} />
+                     </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm">Email Notifications</h3>
+                      <p className="text-xs text-gray-500">Get updates on new gigs</p>
+                    </div>
+                  </div>
+                  <div className="w-10 h-5 bg-green-600 rounded-full relative cursor-pointer"><div className="w-3 h-3 bg-white rounded-full absolute top-1 right-1" /></div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                     <div className="p-2 bg-purple-500/10 rounded-lg text-purple-400">
+                       <CreditCard size={18} />
+                     </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm">Payout Methods</h3>
+                      <p className="text-xs text-gray-500">Manage bank accounts</p>
+                    </div>
+                  </div>
+                  <ChevronRight size={16} className="text-gray-500" />
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-white/10 text-center">
+                <p className="text-xs text-gray-600 font-mono">E365 dashboard v2.1.0</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
