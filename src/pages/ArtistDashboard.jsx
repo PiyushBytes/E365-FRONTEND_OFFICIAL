@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   LayoutDashboard,
   Calendar,
@@ -20,14 +21,19 @@ import {
   Ticket
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import api from "../api/axios";
+import ArtistNotification from "../components/ArtistNotification";
 
 const ArtistDashboard = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [available, setAvailable] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   
   const [stats, setStats] = useState({
     totalBookings: 0,
@@ -46,6 +52,29 @@ const ArtistDashboard = () => {
   ];
 
   useEffect(() => {
+    // Fetch notifications using the new endpoint
+    const fetchNotifications = async () => {
+      try {
+        // Headers are automatically handled by axios interceptor in api/axios.js
+        const response = await api.get("/artist/notify-artist/", {
+          params: { username: user?.username } 
+        });
+        console.log("Fetched notifications:", response.data);
+        
+        if (response.data && Array.isArray(response.data.notifications)) {
+          setNotifications(response.data.notifications);
+        } else if (Array.isArray(response.data)) {
+           setNotifications(response.data);
+        }
+      } catch (err) {
+        console.error("Error fetching notifications:", err);
+      }
+    };
+
+    if (user) {
+        fetchNotifications();
+    }
+
     fetch("/static/artist_dashboard_count.json")
       .then((res) => res.json())
       .then((data) => {
@@ -62,10 +91,10 @@ const ArtistDashboard = () => {
         setRequests(enrichedRequests);
       })
       .catch((err) => console.error("Error fetching dashboard data:", err));
-  }, []);
+  }, [user]);
 
   const handleLogout = () => {
-    navigate("/");
+    logout();
   };
 
   const menuItems = [
@@ -79,8 +108,8 @@ const ArtistDashboard = () => {
     <div className="flex h-screen bg-black text-white font-sans overflow-hidden">
       {/* BACKGROUND ACCENTS */}
       <div className="fixed inset-0 pointer-events-none -z-10">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[150px]" />
+        <div className="absolute top-0 right-0 w-500px h-500px bg-red-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-600px h-600px bg-red-900/10 rounded-full blur-[150px]" />
       </div>
 
       {/* SIDEBAR */}
@@ -187,14 +216,56 @@ const ArtistDashboard = () => {
             </div>
 
             {/* Notifications */}
-            <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full ring-2 ring-black" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <Bell size={20} />
+                {notifications.length > 0 && (
+                  <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full ring-2 ring-black" />
+                )}
+              </button>
+
+              <AnimatePresence>
+                {showNotifications && (
+                   <motion.div
+                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                     animate={{ opacity: 1, y: 0, scale: 1 }}
+                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                     className="absolute right-0 mt-2 w-80 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 origin-top-right"
+                   >
+                      <div className="p-3 border-b border-white/10 flex justify-between items-center">
+                         <h3 className="font-bold text-sm text-white">Notifications</h3>
+                         <button onClick={() => setNotifications([])} className="text-xs text-blue-400 hover:text-blue-300">Clear all</button>
+                      </div>
+                      <div className="max-h-64 overflow-y-auto">
+                        {notifications.length === 0 ? (
+                           <div className="p-4 text-center text-gray-500 text-xs">No new notifications</div>
+                        ) : (
+                          notifications.map((notif, idx) => (
+                             <div key={idx} className="p-3 border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer flex flex-col gap-1">
+                                <h4 className="text-sm font-bold text-white">{notif.event_type || "Event Request"}</h4>
+                                <div className="flex flex-wrap gap-2 text-xs text-gray-400">
+                                  <span>Offer: {notif.client_offerings}</span>
+                                </div>
+                                <div className="flex flex-wrap gap-2 text-[10px] text-gray-500">
+                                  <span>{notif.event_place}</span>
+                                  <span>•</span>
+                                  <span>{notif.audience_size} ppl</span>
+                                </div>
+                             </div>
+                          ))
+                        )}
+                      </div>
+                   </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Profile Pic */}
-            <div className="w-9 h-9 rounded-full border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
-               <img src="/artists/arijit.webp" alt="Profile" className="w-full h-full object-cover" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
+               {user?.username ? user.username.charAt(0).toUpperCase() : 'A'}
             </div>
           </div>
         </header>
@@ -207,7 +278,7 @@ const ArtistDashboard = () => {
                {/* Welcome Banner */}
                <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mb-8">
                   <div>
-                    <h2 className="text-3xl font-bold mb-1">Welcome back, Arijit</h2>
+                    <h2 className="text-3xl font-bold mb-1">Welcome back, {user?.username || 'Artist'}</h2>
                     <p className="text-gray-400 text-sm">Here's what's happening internally today.</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -309,10 +380,27 @@ const ArtistDashboard = () => {
 
              </div>
            ) : activeTab === 'requests' ? (
-             <div className="flex flex-col items-center justify-center h-[50vh] text-center">
-                <Ticket size={48} className="text-gray-700 mb-4" />
-                <h3 className="text-xl font-bold text-gray-500">All Request History</h3>
-                <p className="text-gray-600">This module is under development.</p>
+             <div className="max-w-7xl mx-auto animate-fade-up">
+                <div className="flex items-center justify-between mb-8">
+                   <h2 className="text-3xl font-bold">Request History</h2>
+                   <div className="flex gap-2">
+                      <button className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">Pending</button>
+                      <button className="px-4 py-2 bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">Accepted</button>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {notifications.length > 0 ? (
+                    notifications.map((req, idx) => (
+                      <ArtistNotification key={idx} notification={req} />
+                    ))
+                  ) : (
+                    <div className="col-span-full py-20 text-center text-gray-500 bg-zinc-900/30 rounded-2xl border border-white/5 border-dashed">
+                       <Ticket size={48} className="mx-auto mb-4 opacity-50" />
+                       <p>No requests found matching your criteria.</p>
+                    </div>
+                  )}
+                </div>
              </div>
            ) : (
             <div className="flex flex-col items-center justify-center h-[50vh] text-center">
@@ -333,7 +421,7 @@ const ArtistDashboard = () => {
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }}

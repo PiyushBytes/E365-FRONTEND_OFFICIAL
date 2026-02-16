@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   LayoutDashboard,
   Calendar,
@@ -23,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
@@ -44,7 +46,7 @@ const ClientDashboard = () => {
   }, []);
 
   const handleLogout = () => {
-    navigate("/");
+    logout();
   };
 
   const menuItems = [
@@ -115,13 +117,11 @@ const ClientDashboard = () => {
         {/* User Mini Profile (Bottom) */}
         {isSidebarOpen && (
            <div className="p-4 mx-4 mb-4 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
-              <img 
-                 src={data.profile?.image} 
-                 alt="Profile" 
-                 className="w-10 h-10 rounded-full object-cover border border-white/20" 
-              />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20">
+                 {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              </div>
               <div className="flex-1 overflow-hidden">
-                 <p className="text-sm font-bold truncate">{data.profile?.name}</p>
+                 <p className="text-sm font-bold truncate">{user?.username || 'Guest User'}</p>
                  <p className="text-xs text-gray-500 truncate">Premium Member</p>
               </div>
            </div>
@@ -183,8 +183,8 @@ const ClientDashboard = () => {
               <Bell size={20} />
               <span className="absolute top-2 right-2 w-2 h-2 bg-red-600 rounded-full ring-2 ring-black" />
             </button>
-            <div className="w-9 h-9 rounded-full border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
-               <img src={data.profile?.image} alt="Profile" className="w-full h-full object-cover" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
+               {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
             </div>
           </div>
         </header>

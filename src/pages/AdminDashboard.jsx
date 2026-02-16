@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminSettings from "../components/AdminSettings";
+import { useAuth } from "../context/AuthContext";
 import {
   LayoutDashboard,
   CalendarDays,
@@ -20,6 +21,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 const AdminDashboard = () => {
+  const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -117,16 +119,12 @@ const AdminDashboard = () => {
         {/* User Profile Snippet */}
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full border border-white/20 overflow-hidden">
-              <img 
-                src="https://media.licdn.com/dms/image/v2/C4D03AQG19-4mRqhVnA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1597841155985?e=2147483647&v=beta&t=HuyZfldZIhPQfC1CEPK3ssqfsdLHZfs090jRbLsAjXk" 
-                alt="Admin Profile" 
-                className="w-full h-full object-cover"
-              />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20 overflow-hidden">
+               {user?.username ? user.username.charAt(0).toUpperCase() : 'A'}
             </div>
             {isSidebarOpen && (
               <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-medium truncate">Kinjal Bhattacharya</p>
+                <p className="text-sm font-medium truncate">{user?.username || 'Admin User'}</p>
                 {/* <p className="text-xs text-gray-500 truncate">[kinjal@gmail.com]</p> */}
               </div>
             )}

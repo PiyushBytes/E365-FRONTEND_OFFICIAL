@@ -11,6 +11,7 @@ import Contact from "./components/Contact";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+import LoginPage from "./pages/LoginPage";
 
 export default function App() {
   const location = useLocation();
@@ -74,6 +75,9 @@ export default function App() {
 
           {/* CLIENT DASHBOARD */}
           <Route path="/client" element={<ClientDashboard />} />
+
+          {/* LOGIN PAGE */}
+          <Route path="/login" element={<LoginPage />} />
 
         </Routes>
       </main>
