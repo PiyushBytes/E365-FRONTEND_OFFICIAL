@@ -23,6 +23,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios";
 import ArtistNotification from "../components/ArtistNotification";
+import { sendMessage } from "../api/chatbot";
 
 const ArtistDashboard = () => {
   const navigate = useNavigate();
@@ -76,14 +77,19 @@ const ArtistDashboard = () => {
     }
 
     fetch("/static/artist_dashboard_count.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setStats({
-          totalBookings: data.totalBookings,
-          pendingRequests: data.pendingRequests,
-          acceptedBookings: data.acceptedBookings,
-          revenue: data.revenue,
-        });
+  .then((res) => {
+    if (!res.ok) throw new Error("JSON load failed");
+    return res.json();
+  })
+  .then((data) => {
+    setStats({
+      totalBookings: data?.totalBookings ?? 0,
+      pendingRequests: data?.pendingRequests ?? 0,
+      acceptedBookings: data?.acceptedBookings ?? 0,
+      revenue: data?.revenue ?? "₹0K",
+    });
+
+       
         const enrichedRequests = (data.requests || []).map((req, i) => ({
           ...req,
           clientImg: clientImages[i % clientImages.length]
@@ -96,6 +102,24 @@ const ArtistDashboard = () => {
   const handleLogout = () => {
     logout();
   };
+  const handleAccept = async (req) => {
+  try {
+    const response = await sendMessage({
+      role: "artist",
+      message: "Booking accepted",
+      artist_name: user?.username,
+      client_name: req.name,
+      event_type: req.eventType,
+      offer: req.offer
+    });
+
+    console.log("Bot response:", response.data);
+
+  } catch (error) {
+    console.error("Error sending bot message:", error);
+  }
+};
+
 
   const menuItems = [
     { id: "dashboard", icon: LayoutDashboard, label: "Dashboard" },
@@ -359,7 +383,9 @@ const ArtistDashboard = () => {
                               </div>
 
                               <div className="flex gap-3 mt-4 pt-4 border-t border-white/5">
-                                 <button className="flex-1 bg-white text-black hover:bg-red-600 hover:text-white py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors">
+                                 <button 
+                                 onClick={() => handleAccept(req)}
+                                 className="flex-1 bg-white text-black hover:bg-red-600 hover:text-white py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors">
                                     Accept
                                  </button>
                                  <button className="px-4 py-2 border border-white/10 hover:border-red-500/50 hover:text-red-400 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors text-gray-400">

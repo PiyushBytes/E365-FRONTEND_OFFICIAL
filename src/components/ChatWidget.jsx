@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { initChatbot, sendMessage } from "../api/chatbot";
+import { useAuth } from "../context/AuthContext";
+
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -8,8 +10,10 @@ export default function ChatWidget() {
 
   const [messages, setMessages] = useState([]);
 
+  const { user } = useAuth();
   const scrollRef = useRef(null);
-  const session_id = "demosk";
+  const session_id = user?.username;
+
 
   
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsTyping(true);
-    fetchBotReply(input);
+    fetchBotReply(userMsg.text);
   };
 
   const handleOptionClick = (option) => {

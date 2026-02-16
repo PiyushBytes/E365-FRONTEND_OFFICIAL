@@ -21,6 +21,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ChatWidget from "../components/ChatWidget";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ClientDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [showSettings, setShowSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
   
   const [data, setData] = useState({
     profile: {},
@@ -383,11 +385,16 @@ const ClientDashboard = () => {
 
               <div className="mt-8 pt-6 border-t border-white/10 text-center">
                 <p className="text-xs text-gray-600 font-mono">E365 dashboard v2.1.0</p>
+                
+
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+      <ChatWidget />
+
+
     </div>
   );
 };
