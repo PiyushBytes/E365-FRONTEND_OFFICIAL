@@ -1,0 +1,52 @@
+[
+  {
+    "clientName": "Rahul Sharma",
+    "clientImage": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+    "artistName": "Arijit Singh",
+    "artistImage": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=150&h=150&fit=crop",
+    "eventType": "Wedding",
+    "date": "12 March",
+    "signingAmount": "₹90K",
+    "status": "Pending"
+  },
+  {
+    "clientName": "Anita Verma",
+    "clientImage": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+    "artistName": "DJ Nova",
+    "artistImage": "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?w=150&h=150&fit=crop",
+    "eventType": "Corporate",
+    "date": "20 March",
+    "signingAmount": "₹60K",
+    "status": "Accepted"
+  },
+  {
+    "clientName": "Vikram Singh",
+    "clientImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+    "artistName": "Sonu Nigam",
+    "artistImage": "https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=150&h=150&fit=crop",
+    "eventType": "Birthday",
+    "date": "25 March",
+    "signingAmount": "₹1.5L",
+    "status": "Pending"
+  },
+  {
+    "clientName": "Priya Patel",
+    "clientImage": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+    "artistName": "Shreya Ghoshal",
+    "artistImage": "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=150&h=150&fit=crop",
+    "eventType": "Sangeet",
+    "date": "02 April",
+    "signingAmount": "₹2L",
+    "status": "Accepted"
+  },
+  {
+    "clientName": "Arjun Mehta",
+    "clientImage": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop",
+    "artistName": "Badshah",
+    "artistImage": "https://images.unsplash.com/photo-1514525253440-b393452e8d26?w=150&h=150&fit=crop",
+    "eventType": "Concert",
+    "date": "15 April",
+    "signingAmount": "₹5L",
+    "status": "Rejected"
+  }
+]

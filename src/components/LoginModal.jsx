@@ -20,9 +20,8 @@ export default function LoginModal({ isOpen, setIsOpen }) {
       }`}
     >
       <div className="bg-black/90 backdrop-blur-xl border border-red-500/20 rounded-lg shadow-lg p-2 flex flex-col gap-1">
-        
         <button
-          onClick={() => handleNavigate("/")}
+          onClick={() => handleNavigate("/client")}
           className="text-white text-sm py-2 rounded-md hover:bg-red-600 transition"
         >
           Login as Client
@@ -41,7 +40,6 @@ export default function LoginModal({ isOpen, setIsOpen }) {
         >
           Admin Login
         </button>
-
       </div>
     </div>
   );

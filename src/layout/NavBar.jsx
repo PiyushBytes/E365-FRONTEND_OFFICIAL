@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import LoginModal from "../components/LoginModal";
 import ArtistsPanel from "../components/ArtistsPanel";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
-  const [showLogin, setShowLogin] = useState(false);
   const [showArtists, setShowArtists] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <>
@@ -34,16 +34,25 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* LOGIN BUTTON + DROPDOWN */}
+          {/* LOGIN / LOGOUT BUTTON */}
           <div className="relative">
-            <button
-              onClick={() => setShowLogin(!showLogin)}
-              className="bg-red-600 hover:bg-red-500 text-white text-[10px] font-black px-5 py-2 rounded-full shadow-[0_4px_12px_rgba(255,0,60,0.3)] transition-all transform active:scale-95 uppercase"
-            >
-              Login
-            </button>
+            {isAuthenticated ? (
+              <button
+                onClick={logout}
+                className="bg-red-600 hover:bg-red-500 text-white text-[10px] font-black px-6 py-2 rounded-full shadow-[0_4px_12px_rgba(255,0,60,0.3)] transition-all transform active:scale-98 uppercase flex items-center gap-4 flex-wrap justify-center"
+              >
+                Logout
+              </button>
+            ) : (
+              <a
+                href="/login"
+                className="bg-red-600 hover:bg-red-500 text-white text-[10px] font-black px-6 py-2 rounded-full shadow-[0_4px_12px_rgba(255,0,60,0.3)] transition-all transform active:scale-98 uppercase flex items-center gap-4 flex-wrap justify-center"
+              >
+                Login
+              </a>
+            )}
 
-            <LoginModal isOpen={showLogin} />
+
           </div>
         </nav>
       </div>

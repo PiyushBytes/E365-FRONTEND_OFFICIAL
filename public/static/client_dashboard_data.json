@@ -1,0 +1,84 @@
+{
+  "profile": {
+    "name": "Rohan Mehta",
+    "email": "rohan.mehta@example.com",
+    "image": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop",
+    "memberSince": "Jan 2024"
+  },
+  "stats": {
+    "totalSpent": "₹4.5L",
+    "activeBookings": 2,
+    "completedEvents": 8,
+    "savedArtists": 12
+  },
+  "activeBookings": [
+    {
+      "id": 1,
+      "artistName": "Arijit Singh",
+      "eventType": "Wedding Reception",
+      "date": "2024-12-15",
+      "status": "Confirmed",
+      "amount": "₹25,00,000",
+      "image": "/artists/arijit.webp"
+    },
+    {
+      "id": 2,
+      "artistName": "DJ Snake",
+      "eventType": "New Year Bash",
+      "date": "2024-12-31",
+      "status": "Pending",
+      "amount": "₹45,00,000",
+      "image": "https://images.unsplash.com/photo-1571266028243-3716f02d2d2e?w=150&h=150&fit=crop"
+    }
+  ],
+  "recommendedArtists": [
+    {
+      "id": 101,
+      "name": "Shreya Ghoshal",
+      "category": "Singer",
+      "rating": 4.9,
+      "price": "₹22L",
+      "image": "https://images.unsplash.com/photo-1516280440614-6697288d5d38?w=150&h=150&fit=crop"
+    },
+    {
+      "id": 102,
+      "name": "Kenny Sebastian",
+      "category": "Comedian",
+      "rating": 4.8,
+      "price": "₹8L",
+      "image": "https://images.unsplash.com/photo-1525362081669-2b476bb628c3?w=150&h=150&fit=crop"
+    },
+    {
+      "id": 103,
+      "name": "Ritviz",
+      "category": "Musician/DJ",
+      "rating": 4.7,
+      "price": "₹15L",
+      "image": "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=150&h=150&fit=crop"
+    },
+    {
+      "id": 104,
+      "name": "Zakir Khan",
+      "category": "Comedian",
+      "rating": 4.9,
+      "price": "₹12L",
+      "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=150&h=150&fit=crop"
+    }
+  ],
+  "messages": [
+    {
+      "id": 1,
+      "sender": "Arijit Singh Manager",
+      "subject": "Re: Song Request List",
+      "time": "2 hrs ago",
+      "preview": "We have received your list and Arijit is happy to..."
+    },
+    {
+      "id": 2,
+      "sender": "E365 Support",
+      "subject": "Invoice #4920 Paid",
+      "time": "Yesterday",
+      "preview": "Thank you for your payment. Your invoice is attached..."
+    }
+  ]
+}

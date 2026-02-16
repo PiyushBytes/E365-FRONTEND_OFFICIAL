@@ -1,103 +1,98 @@
 import { useState, useEffect, useRef } from "react";
+import { initChatbot, sendMessage } from "../api/chatbot";
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  const [messages, setMessages] = useState([
-    {
-      role: "bot",
-      text: "👋 Hi! I'm the E365 Assistant. How can I help you plan your event today?",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const scrollRef = useRef(null);
+  const session_id = "demosk";
 
-  // 👉 change this to your backend API
-  const API_URL = "http://192.168.1.11:5000/api/bot/message";
-
-  // session id for conversation memory
-  const sessionId = "demo1";
-
+  
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
 
-  // ✅ API CALL FUNCTION
+  
+  useEffect(() => {
+    if (open && messages.length === 0) {
+      setIsTyping(true);
+      initChatbot({ session_id, message: "start" })
+        .then((res) => {
+          const data = res.data;
+          setIsTyping(false);
+          if (data.reply) {
+            setMessages((prev) => [
+              ...prev,
+              { role: "bot", text: data.reply },
+            ]);
+          }
+          if (data.type === "options" && data.options) {
+             setMessages((prev) => [
+               ...prev,
+               { role: "options", options: data.options },
+             ]);
+           }
+        })
+        .catch((err) => {
+          console.error("Initialization sync failed:", err);
+          setIsTyping(false);
+        });
+    }
+  }, [open, messages.length]);
+
+ 
   const fetchBotReply = async (userMessage) => {
     try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sessionId: sessionId,
-          message: userMessage,
-        }),
+      const res = await sendMessage({
+        session_id: session_id,
+        message: userMessage,
       });
 
-      const data = await res.json();
-
+      const data = res.data;
       setIsTyping(false);
 
-      // add bot reply
       if (data.reply) {
         setMessages((prev) => [
           ...prev,
-          {
-            role: "bot",
-            text: data.reply,
-          },
+          { role: "bot", text: data.reply },
         ]);
       }
 
-      // if backend sends options → show as clickable buttons
       if (data.type === "options" && data.options) {
         setMessages((prev) => [
           ...prev,
-          {
-            role: "options",
-            options: data.options,
-          },
+          { role: "options", options: data.options },
         ]);
       }
     } catch (error) {
       setIsTyping(false);
-
+      console.error("Chat Error:", error);
       setMessages((prev) => [
         ...prev,
-        {
-          role: "bot",
-          text: "⚠️ Server error. Please try again.",
-        },
+        { role: "bot", text: "⚠️ Server error. Please try again." },
       ]);
     }
   };
 
-  // ✅ SEND MESSAGE
   const handleSend = () => {
     if (!input.trim()) return;
-
     const userMsg = { role: "user", text: input };
-
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsTyping(true);
-
     fetchBotReply(input);
   };
 
-  // when user clicks option button
   const handleOptionClick = (option) => {
     const userMsg = { role: "user", text: option };
-
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
-
     fetchBotReply(option);
   };
 
@@ -114,22 +109,14 @@ export default function ChatWidget() {
                 E365 Assistant
               </span>
             </div>
-
-            <button
-              onClick={() => setOpen(false)}
-              className="text-slate-400 hover:text-white"
-            >
+            <button onClick={() => setOpen(false)} className="text-slate-400 hover:text-white">
               ✕
             </button>
           </div>
 
           {/* CHAT BODY */}
-          <div
-            ref={scrollRef}
-            className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-900 scroll-smooth"
-          >
+          <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-900 scroll-smooth">
             {messages.map((msg, i) => {
-              // user / bot messages
               if (msg.role === "user" || msg.role === "bot") {
                 return (
                   <div
@@ -145,7 +132,6 @@ export default function ChatWidget() {
                 );
               }
 
-              // options buttons
               if (msg.role === "options") {
                 return (
                   <div key={i} className="flex flex-wrap gap-2">
@@ -153,7 +139,7 @@ export default function ChatWidget() {
                       <button
                         key={idx}
                         onClick={() => handleOptionClick(opt)}
-                        className="bg-slate-700 text-white px-3 py-2 rounded-lg text-xs hover:bg-slate-600"
+                        className="bg-slate-700 text-white px-3 py-2 rounded-lg text-xs hover:bg-slate-600 transition-colors"
                       >
                         {opt}
                       </button>
@@ -161,11 +147,9 @@ export default function ChatWidget() {
                   </div>
                 );
               }
-
               return null;
             })}
 
-            {/* typing animation */}
             {isTyping && (
               <div className="bg-slate-800 text-slate-200 self-start p-3 rounded-2xl rounded-tl-none flex gap-1">
                 <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>
@@ -184,13 +168,9 @@ export default function ChatWidget() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 placeholder="Ask about artists..."
-                className="w-full pl-4 pr-10 py-3 bg-slate-900 border border-slate-600 rounded-xl text-sm text-white focus:outline-none"
+                className="w-full pl-4 pr-10 py-3 bg-slate-900 border border-slate-600 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500"
               />
-
-              <button
-                onClick={handleSend}
-                className="absolute right-3 text-blue-500 hover:text-blue-400"
-              >
+              <button onClick={handleSend} className="absolute right-3 text-blue-500 hover:text-blue-400">
                 ➤
               </button>
             </div>
@@ -201,7 +181,7 @@ export default function ChatWidget() {
       {/* OPEN BUTTON */}
       <button
         onClick={() => setOpen(!open)}
-        className="group flex items-center gap-2 bg-white text-black pl-5 pr-6 py-3 rounded-full shadow-xl"
+        className="group flex items-center gap-2 bg-white text-black pl-5 pr-6 py-3 rounded-full shadow-xl hover:scale-105 transition-transform"
       >
         <span className="bg-black text-white p-1 rounded-full">💬</span>
         <span className="font-bold text-xs uppercase tracking-widest">
