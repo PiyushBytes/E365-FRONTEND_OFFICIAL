@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { initChatbot, sendMessage } from "../api/chatbot";
 import { useAuth } from "../context/AuthContext";
 
 
-export default function ChatWidget() {
+const ChatWidget = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -14,6 +14,18 @@ export default function ChatWidget() {
   const scrollRef = useRef(null);
   const session_id = user?.username;
 
+  useImperativeHandle(ref, () => ({
+    open: (initialMessage) => {
+      setOpen(true);
+      if (initialMessage) {
+        // Optionally handle initial message or context here
+        // For now, we just open the chat
+        // You could also auto-send a message:
+        // handleSend(initialMessage); 
+      }
+    },
+    close: () => setOpen(false)
+  }));
 
   
   useEffect(() => {
@@ -103,7 +115,7 @@ export default function ChatWidget() {
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
       {open && (
-        <div className="w-80 h-[500px] bg-[#0f172a] border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4">
+        <div className="w-80 h-500px bg-[#0f172a] border border-slate-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4">
           
           {/* HEADER */}
           <div className="p-4 bg-slate-800 border-b border-slate-700 flex items-center justify-between shrink-0">
@@ -194,4 +206,6 @@ export default function ChatWidget() {
       </button>
     </div>
   );
-}
+});
+
+export default ChatWidget;

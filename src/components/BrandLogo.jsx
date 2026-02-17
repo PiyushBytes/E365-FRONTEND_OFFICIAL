@@ -1,6 +1,6 @@
 export default function BrandLogo() {
   return (
-    <div className="fixed top-8 left-10 z-[200] hidden lg:block group cursor-pointer pointer-events-auto">
+    <div className="fixed top-8 left-10 z-200 hidden lg:block group cursor-pointer pointer-events-auto">
       
       {/* Premium Glass Frame Container */}
       <div className="relative flex items-center gap-4 p-2 pr-6 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-red-500/30 hover:bg-black/40 hover:shadow-[0_0_40px_rgba(255,0,60,0.15)] overflow-hidden">

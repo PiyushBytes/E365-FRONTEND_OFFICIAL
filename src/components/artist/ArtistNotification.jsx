@@ -1,8 +1,6 @@
 import React from 'react';
 import { 
-  Sparkles, 
   Calendar, 
-  CreditCard, 
   MapPin, 
   Users, 
   Building2, 
