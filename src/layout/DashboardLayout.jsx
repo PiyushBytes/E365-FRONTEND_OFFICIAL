@@ -50,11 +50,11 @@ const DashboardLayout = ({
     <div className="flex h-screen bg-black text-white font-sans overflow-hidden font-['Plus_Jakarta_Sans']">
       {/* BACKGROUND ACCENTS */}
       <div className="fixed inset-0 pointer-events-none -z-10">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-red-900/10 rounded-full blur-[150px]" />
+        <div className="absolute top-0 right-0 w-500px h-500px bg-red-600/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-600px h-600px bg-red-900/10 rounded-full blur-[150px]" />
       </div>
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR (Desktop) */}
       <motion.aside
         initial={{ width: isSidebarOpen ? 260 : 80 }}
         animate={{ width: isSidebarOpen ? 260 : 80 }}
@@ -64,7 +64,7 @@ const DashboardLayout = ({
         {/* Logo Area */}
         <div className="h-24 flex items-center justify-center border-b border-white/10">
           <div className={`flex items-center gap-3 ${isSidebarOpen ? 'px-2' : 'justify-center'}`}>
-            <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
+            <div className="w-10 h-10 bg-linear-to-b from-red-600 to-black rounded-xl flex items-center justify-center shadow-lg shadow-red-900/20">
               <span className="font-['Syncopate'] font-bold text-white text-[10px]">E365</span>
             </div>
             {isSidebarOpen && (
@@ -107,7 +107,7 @@ const DashboardLayout = ({
         {/* User Mini Profile (Bottom) */}
         {isSidebarOpen && user && (
           <div className="p-4 mx-4 mb-4 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20">
+            <div className="w-10 h-10 rounded-full bg-linear-to-b from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20">
               {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
             </div>
             <div className="flex-1 overflow-hidden">
@@ -137,6 +137,99 @@ const DashboardLayout = ({
           </button>
         </div>
       </motion.aside>
+
+      {/* SIDEBAR (Mobile) */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSidebarOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-30 md:hidden"
+            />
+            
+            {/* Drawer */}
+            <motion.aside
+              initial={{ x: -300 }}
+              animate={{ x: 0 }}
+              exit={{ x: -300 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-64 bg-zinc-900 border-r border-white/10 z-40 md:hidden flex flex-col"
+            >
+               {/* Mobile Logo Area */}
+              <div className="h-20 flex items-center justify-between px-6 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-linear-to-b from-red-600 to-black rounded-lg flex items-center justify-center shadow-lg shadow-red-900/20">
+                    <span className="font-['Syncopate'] font-bold text-white text-[8px]">E365</span>
+                  </div>
+                  <span className="font-bold text-lg tracking-wider text-white">
+                    {title || "Dashboard"}
+                  </span>
+                </div>
+                <button 
+                  onClick={() => setIsSidebarOpen(false)}
+                  className="p-1 text-gray-400 hover:text-white"
+                >
+                  <XCircle size={24} />
+                </button>
+              </div>
+
+              {/* Mobile Navigation */}
+              <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+                {menuItems.map((item) => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        onTabChange(item.id);
+                        setIsSidebarOpen(false); // Close sidebar on selection
+                      }}
+                      className={`w-full flex items-center gap-4 p-3 rounded-xl transition-all duration-200 ${
+                        isActive
+                          ? "bg-red-600 text-white shadow-lg shadow-red-600/20"
+                          : "text-gray-400 hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <item.icon
+                        size={20}
+                        className={isActive ? "text-white" : "text-gray-400"}
+                      />
+                      <span className="font-medium">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              {/* Mobile Bottom Actions */}
+              <div className="p-4 border-t border-white/10 space-y-2 bg-black/20">
+                {setShowSettings && (
+                  <button
+                    onClick={() => {
+                      setShowSettings(true);
+                      setIsSidebarOpen(false);
+                    }}
+                    className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-all"
+                  >
+                    <Settings size={20} />
+                    <span className="font-medium">Settings</span>
+                  </button>
+                )}
+                <button
+                  onClick={onLogout}
+                  className="w-full flex items-center gap-4 p-3 rounded-xl text-red-500 hover:bg-red-500/10 transition-all"
+                >
+                  <LogOut size={20} />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
@@ -212,7 +305,7 @@ const DashboardLayout = ({
               </AnimatePresence>
             </div>
 
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
+            <div className="w-9 h-9 rounded-full bg-linear-to-b from-gray-700 to-gray-900 flex items-center justify-center text-white font-bold border border-white/20 overflow-hidden cursor-pointer hover:border-red-500 transition-colors">
               {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
             </div>
           </div>

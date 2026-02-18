@@ -10,7 +10,7 @@ const AdminQuickActions = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Add New Artist */}
-      <div className="bg-gradient-to-br from-red-600/20 to-zinc-900 border border-red-500/20 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-red-500/50 transition-all">
+      <div className="bg-linear-to-b from-red-600/20 to-zinc-900 border border-red-500/20 rounded-2xl p-6 relative overflow-hidden group cursor-pointer hover:border-red-500/50 transition-all">
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
           <UserPlus size={80} />
         </div>

@@ -42,7 +42,7 @@ export default function App() {
             <source src="/Logos/video1.mp4" type="video/mp4" />
           </video>
 
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/95" />
+          <div className="absolute inset-0 bg-linear-to-b from-black/80 via-transparent to-black/95" />
         </div>
       )}
 

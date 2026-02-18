@@ -31,7 +31,7 @@ const LiveBookingsTable = ({ bookings }) => {
               <tr key={i} className="hover:bg-white/5 transition-colors group">
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center text-xs font-bold">
+                    <div className="w-8 h-8 rounded-full bg-linear-to-b from-gray-700 to-gray-600 flex items-center justify-center text-xs font-bold">
                       {booking.client.charAt(0)}
                     </div>
                     <span className="font-medium text-white">{booking.client}</span>

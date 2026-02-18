@@ -106,7 +106,7 @@ export default function LoginPage() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="w-16 h-16 bg-gradient-to-br from-red-600 to-black rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-900/40 mb-4"
+              className="w-16 h-16 bg-linear-to-b from-red-600 to-black rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-900/40 mb-4"
             >
                <span className="font-['Syncopate'] font-bold text-white text-xs">E365</span>
             </motion.div>
