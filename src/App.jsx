@@ -11,6 +11,7 @@ import Contact from "./components/Contact";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
+import ProjectManagerDashboard from "./pages/ProjectManagerDashboard";
 import LoginPage from "./pages/LoginPage";
 
 export default function App() {
@@ -20,7 +21,8 @@ export default function App() {
   const isDashboard =
     location.pathname === "/artist" ||
     location.pathname === "/admin" ||
-    location.pathname === "/client";
+    location.pathname === "/client" ||
+    location.pathname === "/project-manager";
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-red-500/30">
@@ -75,6 +77,9 @@ export default function App() {
 
           {/* CLIENT DASHBOARD */}
           <Route path="/client" element={<ClientDashboard />} />
+
+          {/* PROJECT MANAGER DASHBOARD */}
+          <Route path="/project-manager" element={<ProjectManagerDashboard />} />
 
           {/* LOGIN PAGE */}
           <Route path="/login" element={<LoginPage />} />
