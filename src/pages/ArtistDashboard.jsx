@@ -10,8 +10,7 @@ import {
   CheckCircle2,
   ListMusic,
 } from "lucide-react";
-import api from "../api/axios";
-import { sendMessage } from "../api/chatbot";
+import { getBookings, respondToBooking } from "../api/booking";
 import DashboardLayout from "../layout/DashboardLayout";
 import StatsCard from "../components/common/StatsCard";
 import ArtistNotification from "../components/artist/ArtistNotification";
@@ -52,10 +51,8 @@ const ArtistDashboard = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
         try {
-            const response = await api.get("/artist/notify-artist/", {
-                params: { username: user?.username } 
-            });
-            console.log("Fetched notifications:", response.data);
+            const response = await getBookings({ username: user?.username });
+            console.log("Fetched bookings:", response.data);
             
             if (response.data && Array.isArray(response.data.notifications)) {
                 setNotifications(response.data.notifications);
@@ -99,19 +96,19 @@ const ArtistDashboard = () => {
 
   const handleAccept = async (req) => {
   try {
-    const response = await sendMessage({
-      role: "artist",
-      message: "Booking accepted",
+    const response = await respondToBooking(req.id, {
+      action: "accept",
       artist_name: user?.username,
-      client_name: req.name,
-      event_type: req.eventType,
-      offer: req.offer
+      client_name: req.name || req.client_name,
+      event_type: req.eventType || req.event_type
     });
 
-    console.log("Bot response:", response.data);
+    console.log("Booking accepted response:", response.data);
+    
+    // Optionally remove from pending requests UI
 
   } catch (error) {
-    console.error("Error sending bot message:", error);
+    console.error("Error accepting booking:", error);
   }
 };
 

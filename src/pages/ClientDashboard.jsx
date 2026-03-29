@@ -11,9 +11,10 @@ import {
 } from "lucide-react";
 import DashboardLayout from "../layout/DashboardLayout";
 import StatsCard from "../components/common/StatsCard";
-import ActiveBookingCard from "../components/client/ActiveBookingCard";
 import RecommendedArtistCard from "../components/client/RecommendedArtistCard";
 import ChatWidget from "../components/ChatWidget";
+import { getChatboxSummary } from "../api/chatbot";
+import { processPayment } from "../api/booking";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -30,15 +31,35 @@ const ClientDashboard = () => {
     messages: []
   });
 
+  const [querySummary, setQuerySummary] = useState(null);
+
   useEffect(() => {
     fetch("/static/client_dashboard_data.json")
       .then((res) => res.json())
       .then((fetchedData) => setData(fetchedData))
       .catch((err) => console.error("Error fetching client dashboard data:", err));
+
+    const chatboxId = localStorage.getItem('chatboxId');
+    if (chatboxId) {
+      getChatboxSummary(chatboxId)
+        .then(res => setQuerySummary(res.data))
+        .catch(err => console.error("Error fetching query summary:", err));
+    }
   }, []);
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handlePayment = async (bookingId) => {
+    try {
+      const response = await processPayment(bookingId, { amount: 10000 }); // Mock amount, adapt as needed
+      console.log("Payment initialized:", response.data);
+      alert("Payment successful / initiated!");
+    } catch(err) {
+      console.error("Payment error:", err);
+      alert("Failed to process payment");
+    }
   };
 
   const menuItems = [
@@ -94,6 +115,16 @@ const ClientDashboard = () => {
                 ))}
             </div>
 
+            {/* Query Summary Notification */}
+            {querySummary && (
+                <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-6 mb-6">
+                    <h3 className="text-xl font-bold text-blue-400 mb-2">Current Query Status</h3>
+                    <p className="text-gray-300">
+                        {querySummary.summary || "Your request is currently being processed by the agent. Check back for updates!"}
+                    </p>
+                </div>
+            )}
+
             {/* Active Bookings Preview */}
             <section>
                 <div className="flex items-center justify-between mb-6">
@@ -105,7 +136,14 @@ const ClientDashboard = () => {
                 
                 <div className="space-y-4">
                 {data.activeBookings?.map((booking) => (
-                    <ActiveBookingCard key={booking.id} booking={booking} />
+                    <div key={booking.id} className="relative">
+                        <ActiveBookingCard booking={booking} />
+                        {booking.status === 'Accepted' && (
+                           <button onClick={() => handlePayment(booking.id)} className="absolute bottom-4 right-4 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase">
+                             Pay Now
+                           </button>
+                        )}
+                    </div>
                 ))}
                 </div>
             </section>

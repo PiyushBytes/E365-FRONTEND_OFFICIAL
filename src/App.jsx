@@ -13,6 +13,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import ProjectManagerDashboard from "./pages/ProjectManagerDashboard";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 export default function App() {
   const location = useLocation();
@@ -83,6 +84,9 @@ export default function App() {
 
           {/* LOGIN PAGE */}
           <Route path="/login" element={<LoginPage />} />
+
+          {/* REGISTER PAGE */}
+          <Route path="/register" element={<RegisterPage />} />
 
         </Routes>
       </main>

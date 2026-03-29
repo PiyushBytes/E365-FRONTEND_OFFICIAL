@@ -207,10 +207,9 @@ export default function LoginPage() {
               )}
             </button>
             
-            {/* Footer */}
             <div className="flex items-center justify-between text-xs text-gray-400 pt-2">
                <a href="#" className="hover:text-white transition-colors">Forgot Password?</a>
-               <span>Don't have an account? <a href="#" className="text-red-400 hover:text-red-300 font-bold transition-colors">Sign Up</a></span>
+               <span>Don't have an account? <a href="/register" className="text-red-400 hover:text-red-300 font-bold transition-colors">Sign Up</a></span>
             </div>
 
           </form>

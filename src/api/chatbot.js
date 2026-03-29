@@ -1,8 +1,13 @@
 import api from './axios';
-// API FOR ARTIST
-export const initChatbot = (data) => api.post('/client/bot/', data);
 
-export const sendMessage = (data) => api.post('/client/bot/', data);
-// API FOR CLIENT
+// API FOR CLIENT CHAT
+export const initChatbox = () => api.post('/chat/chatboxes/');
 
-export const notifyArtist = (data) => api.get('/artist/notify-artist/', { artist_name : data });
+export const sendChatMessage = (chatboxId, text) =>
+  api.post(`/chat/chatboxes/${chatboxId}/messages/`, { text });
+
+export const getChatboxSummary = (chatboxId) =>
+  api.get(`/query/chatboxes/${chatboxId}/query/summary/`);
+
+// API FOR NOTIFICATIONS / ARTIST (will be replaced by websockets/proper endpoints)
+export const notifyArtist = (data) => api.get('/artist/notify-artist/', { artist_name: data });

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../api/axios';
+import { loginUser, registerUser } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext(null);
@@ -31,9 +31,39 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, [token]);
 
+  const register = async (userData) => {
+    try {
+      // POST /api/auth/register/ -> get tokens
+      const response = await registerUser(userData);
+      
+      const { access, refresh, role, user_id, ...restData } = response.data;
+      const authToken = access || response.data.token || response.data.access_token || response.data.key;
+      
+      if (authToken) {
+        localStorage.setItem('token', authToken);
+        setToken(authToken);
+        
+        const userObj = { role: role || userData.role || 'client', id: user_id, ...userData, ...restData };
+        localStorage.setItem('user', JSON.stringify(userObj));
+        setUser(userObj);
+        setIsAuthenticated(true);
+        
+        return { success: true, role: userObj.role };
+      } else {
+         return { success: false, error: 'No token received during registration' };
+      }
+    } catch (error) {
+      console.error("Registration failed", error);
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || error.response?.data?.message || 'Registration failed' 
+      };
+    }
+  };
+
   const login = async (username, password) => {
     try {
-      const response = await api.post('/auth/login/', { username, password });
+      const response = await loginUser({ username, password });
       
       console.log("Full Login Response:", response);
       console.log("Response Data:", response.data);
@@ -86,7 +116,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, login, register, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
