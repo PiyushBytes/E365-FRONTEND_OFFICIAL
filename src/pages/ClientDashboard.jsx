@@ -8,17 +8,22 @@ import {
   MessageSquare,
   Star,
   CheckCircle2,
+  ChevronLeft,
 } from "lucide-react";
+
 import DashboardLayout from "../layout/DashboardLayout";
 import StatsCard from "../components/common/StatsCard";
 import RecommendedArtistCard from "../components/client/RecommendedArtistCard";
+import ActiveBookingCard from "../components/client/ActiveBookingCard";
 import ChatWidget from "../components/ChatWidget";
-import { getChatboxSummary } from "../api/chatbot";
+
+import { getChatboxSummary, getAllChatboxes, getChatMessages } from "../api/chatbot";
 import { processPayment } from "../api/booking";
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoading } = useAuth();
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showSettings, setShowSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,35 +33,71 @@ const ClientDashboard = () => {
     stats: {},
     activeBookings: [],
     recommendedArtists: [],
-    messages: []
+    messages: [],
   });
 
   const [querySummary, setQuerySummary] = useState(null);
 
+  // ✅ Messages tab ke liye new states
+  const [chatboxes, setChatboxes] = useState([]);
+  const [selectedChatbox, setSelectedChatbox] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+
+  // ✅ Initial data fetch
   useEffect(() => {
     fetch("/static/client_dashboard_data.json")
       .then((res) => res.json())
       .then((fetchedData) => setData(fetchedData))
       .catch((err) => console.error("Error fetching client dashboard data:", err));
 
-    const chatboxId = localStorage.getItem('chatboxId');
+    const chatboxId = localStorage.getItem("chatboxId");
     if (chatboxId) {
       getChatboxSummary(chatboxId)
-        .then(res => setQuerySummary(res.data))
-        .catch(err => console.error("Error fetching query summary:", err));
+        .then((res) => setQuerySummary(res.data))
+        .catch((err) => console.error("Error fetching query summary:", err));
     }
   }, []);
 
-  const handleLogout = () => {
-    logout();
+  // ✅ Jab Messages tab open ho → saare chatboxes load karo
+  useEffect(() => {
+    if (activeTab === "messages") {
+      getAllChatboxes()
+        .then((res) => setChatboxes(res.data))
+        .catch((err) => console.error("Error fetching chatboxes:", err));
+    }
+  }, [activeTab]);
+
+  // ✅ Jab koi chatbox select ho → uski messages load karo
+  const handleSelectChatbox = async (chatbox) => {
+    setSelectedChatbox(chatbox);
+    setLoadingMessages(true);
+    try {
+      const res = await getChatMessages(chatbox.id);
+      const formatted = res.data.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "bot",
+        text: msg.content,
+        time: msg.created_at,
+      }));
+      setChatMessages(formatted);
+    } catch (err) {
+      console.error("Error fetching chat messages:", err);
+    } finally {
+      setLoadingMessages(false);
+    }
   };
+
+  if (isLoading) return <div className="text-white p-10">Loading...</div>;
+  if (!user) return <div className="text-white p-10">User not found</div>;
+
+  const handleLogout = () => logout();
 
   const handlePayment = async (bookingId) => {
     try {
-      const response = await processPayment(bookingId, { amount: 10000 }); // Mock amount, adapt as needed
+      const response = await processPayment(bookingId, { amount: 10000 });
       console.log("Payment initialized:", response.data);
-      alert("Payment successful / initiated!");
-    } catch(err) {
+      alert("Payment successful!");
+    } catch (err) {
       console.error("Payment error:", err);
       alert("Failed to process payment");
     }
@@ -69,11 +110,125 @@ const ClientDashboard = () => {
     { id: "payments", icon: CreditCard, label: "Payments" },
   ];
 
+  // ================= MESSAGES TAB UI =================
+  const renderMessagesTab = () => {
+    // Ek chatbox selected hai → uski messages dikhao
+    if (selectedChatbox) {
+      return (
+        <div className="max-w-3xl mx-auto">
+
+          {/* Back button */}
+          <button
+            onClick={() => { setSelectedChatbox(null); setChatMessages([]); }}
+            className="flex items-center gap-2 text-gray-400 hover:text-white mb-6"
+          >
+            <ChevronLeft size={18} /> Back to all chats
+          </button>
+
+          {/* Chat Header */}
+          <div className="bg-slate-800 rounded-xl p-4 mb-4 border border-slate-700">
+            <h3 className="text-white font-bold text-lg">
+              Chat #{selectedChatbox.id}
+            </h3>
+            <p className="text-gray-400 text-sm">
+              {new Date(selectedChatbox.created_at).toLocaleDateString("en-IN", {
+                day: "numeric", month: "long", year: "numeric"
+              })}
+            </p>
+          </div>
+
+          {/* Messages */}
+          <div className="flex flex-col gap-3">
+            {loadingMessages ? (
+              <div className="text-gray-400 text-center py-10">Loading messages...</div>
+            ) : chatMessages.length === 0 ? (
+              <div className="text-gray-400 text-center py-10">No messages found</div>
+            ) : (
+              chatMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`p-3 rounded-xl max-w-[75%] text-white text-sm ${
+                    msg.role === "user"
+                      ? "bg-blue-600 self-end ml-auto"
+                      : "bg-slate-700 self-start"
+                  }`}
+                >
+                  {msg.text}
+                  {msg.time && (
+                    <div className="text-xs text-gray-300 mt-1 text-right">
+                      {new Date(msg.time).toLocaleTimeString("en-IN", {
+                        hour: "2-digit", minute: "2-digit"
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Chatbox list dikhao
+    return (
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-2xl font-bold mb-6">My Conversations</h2>
+
+        {chatboxes.length === 0 ? (
+          <div className="text-gray-400 text-center py-20">
+            <MessageSquare size={48} className="mx-auto mb-4 opacity-30" />
+            <p>No conversations yet.</p>
+            <p className="text-sm mt-1">Start a chat using the 💬 button!</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {chatboxes.map((chatbox) => (
+              <button
+                key={chatbox.id}
+                onClick={() => handleSelectChatbox(chatbox)}
+                className="bg-slate-800 hover:bg-slate-700 transition border border-slate-700 rounded-xl p-5 text-left"
+              >
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="text-white font-semibold">
+                      Chat #{chatbox.id}
+                    </p>
+                    <p className="text-gray-400 text-sm mt-1">
+                      {chatbox.last_message || "Click to view conversation"}
+                    </p>
+                  </div>
+                  <div className="text-gray-500 text-xs text-right">
+                    {chatbox.created_at
+                      ? new Date(chatbox.created_at).toLocaleDateString("en-IN", {
+                          day: "numeric", month: "short"
+                        })
+                      : ""}
+                    <div className="mt-2">
+                      {chatbox.request_submitted && (
+                        <span className="bg-green-600/20 text-green-400 text-xs px-2 py-1 rounded-full">
+                          ✅ Request Sent
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <DashboardLayout
       menuItems={menuItems}
       activeTab={activeTab}
-      onTabChange={setActiveTab}
+      onTabChange={(tab) => {
+        setActiveTab(tab);
+        setSelectedChatbox(null); // tab change pe selected chat reset
+        setChatMessages([]);
+      }}
       user={user}
       title="Client Hub"
       onLogout={handleLogout}
@@ -82,122 +237,70 @@ const ClientDashboard = () => {
       searchQuery={searchQuery}
       onSearchChange={setSearchQuery}
     >
-        {activeTab === 'dashboard' ? (
-            <div className="max-w-7xl mx-auto space-y-10 animate-fade-up">
-            
-            {/* Welcome Banner */}
-            <div className="relative rounded-3xl overflow-hidden p-8 lg:p-12 border border-white/10 group">
-                <div className="absolute inset-0 bg-gradient-to-r from-red-900/80 to-black z-10" />
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&auto=format&fit=crop" alt="Concert" className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" />
-                
-                <div className="relative z-20 max-w-2xl">
-                    <h2 className="text-4xl lg:text-5xl font-black font-['Syncopate'] mb-4 uppercase leading-tight">
-                    Plan Your Next <span className="text-red-500">Big Event</span>
-                    </h2>
-                    <p className="text-gray-300 text-lg mb-8">
-                    Connect with top-tier artists and make your event unforgettable. Browse 100+ new exclusive listings today.
-                    </p>
-                    <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-all shadow-lg shadow-red-900/50">
-                    Explore Artists
-                    </button>
-                </div>
-            </div>
+      {/* ===== DASHBOARD TAB ===== */}
+      {activeTab === "dashboard" && (
+        <div className="max-w-7xl mx-auto space-y-10">
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                { label: "Total Spent", value: data.stats?.totalSpent, icon: CreditCard, color: "text-green-400", bg: "bg-green-500/10" },
-                { label: "Active Bookings", value: data.stats?.activeBookings, icon: Calendar, color: "text-blue-400", bg: "bg-blue-500/10" },
-                { label: "Completed Events", value: data.stats?.completedEvents, icon: CheckCircle2, color: "text-purple-400", bg: "bg-purple-500/10" },
-                { label: "Saved Artists", value: data.stats?.savedArtists, icon: Star, color: "text-yellow-400", bg: "bg-yellow-500/10" },
-                ].map((stat, index) => (
-                    <StatsCard key={index} {...stat} />
-                ))}
+          {/* Banner */}
+          <div className="relative rounded-3xl overflow-hidden p-8 border border-white/10">
+            <img
+              src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30"
+              alt="Concert"
+              className="absolute inset-0 w-full h-full object-cover opacity-40"
+            />
+            <div className="relative z-10">
+              <h2 className="text-4xl font-bold mb-4">
+                Plan Your Next <span className="text-red-500">Event</span>
+              </h2>
+              <p className="text-gray-300">Connect with top artists easily.</p>
             </div>
+          </div>
 
-            {/* Query Summary Notification */}
-            {querySummary && (
-                <div className="bg-blue-600/20 border border-blue-500/30 rounded-2xl p-6 mb-6">
-                    <h3 className="text-xl font-bold text-blue-400 mb-2">Current Query Status</h3>
-                    <p className="text-gray-300">
-                        {querySummary.summary || "Your request is currently being processed by the agent. Check back for updates!"}
-                    </p>
-                </div>
-            )}
+          {/* Stats */}
+          <div className="grid grid-cols-4 gap-6">
+            {[
+              { label: "Total Spent", value: data.stats?.totalSpent, icon: CreditCard },
+              { label: "Active Bookings", value: data.stats?.activeBookings, icon: Calendar },
+              { label: "Completed Events", value: data.stats?.completedEvents, icon: CheckCircle2 },
+              { label: "Saved Artists", value: data.stats?.savedArtists, icon: Star },
+            ].map((stat, index) => (
+              <StatsCard key={index} {...stat} />
+            ))}
+          </div>
 
-            {/* Active Bookings Preview */}
-            <section>
-                <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                    Active Bookings
-                </h3>
-                <button className="text-sm text-red-500 hover:text-red-400 transition-colors font-bold uppercase tracking-wide">View All</button>
-                </div>
-                
-                <div className="space-y-4">
-                {data.activeBookings?.map((booking) => (
-                    <div key={booking.id} className="relative">
-                        <ActiveBookingCard booking={booking} />
-                        {booking.status === 'Accepted' && (
-                           <button onClick={() => handlePayment(booking.id)} className="absolute bottom-4 right-4 bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-lg text-xs font-bold uppercase">
-                             Pay Now
-                           </button>
-                        )}
-                    </div>
-                ))}
-                </div>
-            </section>
+          {/* Query Summary */}
+          {querySummary?.summary && (
+            <div className="bg-blue-600/20 p-6 rounded-xl">
+              <h3 className="text-blue-400 font-bold mb-3">Query Summary</h3>
+              <p>📅 Date: {querySummary.summary.event_date}</p>
+              <p>📍 Location: {querySummary.summary.event_location}</p>
+              <p>🎉 Type: {querySummary.summary.event_type}</p>
+              <p>💰 Budget: {querySummary.summary.budget}</p>
+              <p>⏱ Duration: {querySummary.summary.duration_hours}</p>
+              <p>🎤 Genre: {querySummary.summary.artist_genre}</p>
+              <p>📝 Notes: {querySummary.summary.additional_notes}</p>
+            </div>
+          )}
 
-            {/* Recommended Artists */}
-            <section>
-                <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-white">Recommended For You</h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {data.recommendedArtists?.map((artist) => (
-                    <RecommendedArtistCard key={artist.id} artist={artist} />
-                ))}
-                </div>
-            </section>
+          {/* Bookings */}
+          <section>
+            <h3 className="text-xl font-bold mb-4">Active Bookings</h3>
+            {data?.activeBookings?.map((booking) => (
+              <div key={booking.id}>
+                <ActiveBookingCard booking={booking} />
+              </div>
+            ))}
+          </section>
+        </div>
+      )}
 
-            </div>
-        ) : activeTab === 'bookings' ? (
-            <div className="flex flex-col items-center justify-center h-[50vh] text-center animate-fade-up">
-            <Calendar size={64} className="text-gray-800 mb-6" />
-            <h3 className="text-2xl font-bold text-gray-500">My Bookings</h3>
-            <p className="text-gray-600 max-w-md mx-auto mt-2">View details of your past and upcoming events, manage contracts, and track payments.</p>
-            </div>
-        ) : activeTab === 'messages' ? (
-            <div className="max-w-4xl mx-auto animate-fade-up">
-            <h3 className="text-2xl font-bold text-white mb-6">Messages</h3>
-            <div className="space-y-2">
-                {data.messages?.map((msg) => (
-                    <div key={msg.id} className="bg-zinc-900/30 border border-white/5 p-4 rounded-xl flex items-center justify-between hover:bg-zinc-900/60 cursor-pointer transition-colors">
-                        <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-red-600/20 flex items-center justify-center text-red-500 font-bold">
-                            {msg.sender[0]}
-                        </div>
-                        <div>
-                            <h4 className="font-bold text-white text-sm">{msg.sender}</h4>
-                            <p className="text-xs text-gray-400">{msg.subject}</p>
-                        </div>
-                        </div>
-                        <div className="text-right">
-                            <span className="text-xs text-gray-500 block mb-1">{msg.time}</span>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            </div>
-        ) : (
-            <div className="flex flex-col items-center justify-center h-[50vh] text-center">
-            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-6">
-                <CreditCard size={40} className="text-gray-600" />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-500">Coming Soon</h3>
-            <p className="text-gray-600">The {activeTab} module is currently being built.</p>
-            </div>
-        )}
+      {/* ===== MESSAGES TAB ===== */}
+      {activeTab === "messages" && renderMessagesTab()}
+
+      {/* ===== OTHER TABS ===== */}
+      {activeTab === "bookings" && <div className="text-white">Coming Soon</div>}
+      {activeTab === "payments" && <div className="text-white">Coming Soon</div>}
+
       <ChatWidget />
     </DashboardLayout>
   );

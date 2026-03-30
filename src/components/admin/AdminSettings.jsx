@@ -22,7 +22,7 @@ const AdminSettings = () => {
             <section className="bg-zinc-900/50 border border-white/5 rounded-3xl p-8 backdrop-blur-md">
                 <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center gap-4">
-                        <div className="bg-linear-to-b from-red-600 to-red-900 p-[2px] rounded-full">
+                        <div className="bg-linear-to-b from-red-600 to-red-900 p-[0.5px] rounded-full">
                             <div className="w-20 h-20 rounded-full border-4 border-black overflow-hidden">
                                 <img 
                                     src="https://media.licdn.com/dms/image/v2/C4D03AQG19-4mRqhVnA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1597841155985?e=2147483647&v=beta&t=HuyZfldZIhPQfC1CEPK3ssqfsdLHZfs090jRbLsAjXk" 
