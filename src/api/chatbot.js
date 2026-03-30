@@ -1,13 +1,48 @@
 import api from './axios';
 
-// API FOR CLIENT CHAT
-export const initChatbox = () => api.post('/chat/chatboxes/');
+// ================= CREATE CHATBOX =================
+export const initChatbox = () => {
+  return api.post('/api/chat/chatboxes/');
+};
 
-export const sendChatMessage = (chatboxId, text) =>
-  api.post(`/chat/chatboxes/${chatboxId}/messages/`, { text });
+// ================= SEND MESSAGE =================
+export const sendChatMessage = (chatboxId, message) => {
+  return api.post(
+    `/api/chat/chatboxes/${chatboxId}/messages/`,
+    {
+      content: message,
+    }
+  );
+};
 
-export const getChatboxSummary = (chatboxId) =>
-  api.get(`/query/chatboxes/${chatboxId}/query/summary/`);
+// ================= GET SUMMARY =================
+export const getChatboxSummary = (chatboxId) => {
+  return api.get(
+    `/api/query/chatboxes/${chatboxId}/query/summary/`
+  );
+};
 
-// API FOR NOTIFICATIONS / ARTIST (will be replaced by websockets/proper endpoints)
-export const notifyArtist = (data) => api.get('/artist/notify-artist/', { artist_name: data });
+// ================= NOTIFY ARTIST =================
+export const notifyArtist = (data) => {
+  return api.get('/api/artist/notify-artist/', {
+    params: {
+      artist_name: data,
+    },
+  });
+};
+
+// ================= GET ALL CHATBOXES (Client ke saare chats) =================
+export const getAllChatboxes = () => {
+  return api.get('/api/chat/chatboxes/');
+};
+
+// ================= GET MESSAGES OF A CHATBOX =================
+export const getChatMessages = (chatboxId) => {
+  return api.get(`/api/chat/chatboxes/${chatboxId}/messages/`);
+};
+
+// ================= SUBMIT REQUEST TO PM =================
+// Jab client saari details de de, yeh call hoga
+export const submitRequestToPM = (chatboxId) => {
+  return api.post(`/api/chat/chatboxes/${chatboxId}/submit-request/`);
+};
