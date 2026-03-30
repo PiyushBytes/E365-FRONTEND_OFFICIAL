@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Lock, ArrowRight, Music2, ShieldCheck, Eye, EyeOff, Mail } from 'lucide-react';
+import { User, Lock, ArrowRight, Music2, ShieldCheck, Eye, EyeOff, Mail, Phone } from 'lucide-react';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState('client');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -26,14 +27,14 @@ export default function RegisterPage() {
     setIsLoading(true);
     setError('');
 
-    if (!username || !email || !password) {
+    if (!username || !email || !phone || !password) {
       setError('Please fill in all fields.');
       setIsLoading(false);
       return;
     }
 
     try {
-      const result = await register({ username, email, password, role });
+      const result = await register({ username, email, phone, password, role });
       
       if (result.success) {
         const targetRole = result.role || role; 
@@ -127,6 +128,19 @@ export default function RegisterPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-black/40 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-transparent transition-all"
                   placeholder="Email Address"
+                />
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Phone className="h-5 w-5 text-gray-500" />
+                </div>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-3 border border-white/10 rounded-xl bg-black/40 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:border-transparent transition-all"
+                  placeholder="Phone Number"
                 />
               </div>
 
