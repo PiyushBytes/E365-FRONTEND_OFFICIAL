@@ -32,13 +32,7 @@ export default function App() {
 
       {showMarketingShell && (
         <div className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-50"
-          >
+          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-50">
             <source src="/Logos/video1.mp4" type="video/mp4" />
           </video>
 
@@ -76,17 +70,8 @@ export default function App() {
             <Route path="/client" element={<ClientDashboard />} />
           </Route>
 
-          <Route
-            element={
-              <ProtectedRoute
-                allowedRoles={["project_manager", "project-manager"]}
-              />
-            }
-          >
-            <Route
-              path="/project-manager"
-              element={<ProjectManagerDashboard />}
-            />
+          <Route element={<ProtectedRoute allowedRoles={["project_manager", "project-manager"]} />}>
+            <Route path="/project-manager" element={<ProjectManagerDashboard />} />
           </Route>
         </Routes>
       </main>

@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  User,
-  Lock,
-  ArrowRight,
-  Music2,
-  ShieldCheck,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { User, Lock, ArrowRight, Music2, ShieldCheck, Eye, EyeOff } from "lucide-react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -26,12 +18,7 @@ export default function LoginPage() {
   const roles = [
     { id: "client", label: "Client", icon: User, color: "text-blue-400" },
     { id: "artist", label: "Artist", icon: Music2, color: "text-red-400" },
-    {
-      id: "admin",
-      label: "Admin",
-      icon: ShieldCheck,
-      color: "text-purple-400",
-    },
+    { id: "admin", label: "Admin", icon: ShieldCheck, color: "text-purple-400" },
   ];
 
   const handleLogin = async (e) => {
@@ -49,9 +36,7 @@ export default function LoginPage() {
       const result = await login(username.trim(), password);
 
       if (!result.success) {
-        setError(
-          result.error || "Login failed. Please check your credentials.",
-        );
+        setError(result.error || "Login failed. Please check your credentials.");
         return;
       }
 
@@ -113,17 +98,11 @@ export default function LoginPage() {
               transition={{ delay: 0.2 }}
               className="w-16 h-16 bg-gradient-to-b from-red-600 to-black rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-900/40 mb-4"
             >
-              <span className="font-['Syncopate'] font-bold text-white text-xs">
-                E365
-              </span>
+              <span className="font-['Syncopate'] font-bold text-white text-xs">E365</span>
             </motion.div>
 
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              Welcome Back
-            </h2>
-            <p className="text-gray-400 text-sm mt-2">
-              Access your dashboard to manage events
-            </p>
+            <h2 className="text-3xl font-bold text-white tracking-tight">Welcome Back</h2>
+            <p className="text-gray-400 text-sm mt-2">Access your dashboard to manage events</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -139,10 +118,7 @@ export default function LoginPage() {
                       : "hover:bg-white/5 opacity-60 hover:opacity-100"
                   }`}
                 >
-                  <r.icon
-                    size={18}
-                    className={`mb-1 ${role === r.id ? r.color : "text-gray-400"}`}
-                  />
+                  <r.icon size={18} className={`mb-1 ${role === r.id ? r.color : "text-gray-400"}`} />
                   <span
                     className={`text-[10px] font-bold uppercase tracking-wider ${
                       role === r.id ? "text-white" : "text-gray-500"
@@ -217,10 +193,7 @@ export default function LoginPage() {
               ) : (
                 <div className="flex items-center gap-2">
                   <span>Sign In</span>
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               )}
             </button>
@@ -231,10 +204,7 @@ export default function LoginPage() {
               </a>
               <span>
                 Don&apos;t have an account?{" "}
-                <Link
-                  to="/register"
-                  className="text-red-400 hover:text-red-300 font-bold transition-colors"
-                >
+                <Link to="/register" className="text-red-400 hover:text-red-300 font-bold transition-colors">
                   Sign Up
                 </Link>
               </span>
