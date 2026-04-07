@@ -12,6 +12,19 @@ dist
 dist-ssr
 *.local
 
+# ─── Environment files — NEVER commit real secrets ──────────────────────────
+.env.production
+.env.local
+.env.*.local
+
+# Keep these (they are safe templates / dev configs):
+# .env.example         ✓ safe — no real values
+# .env.development     ✓ safe — only local IP addresses
+
+# ─── Temp / build artifacts ──────────────────────────────────────────────────
+lint.txt
+lint_output.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

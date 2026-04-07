@@ -1,48 +1,41 @@
-import api from './axios';
+// ─── api/chatbot.js ───────────────────────────────────────────────────────────
+// Client aur Project Manager ke beech ki saari chat functionality yahan hai.
+// Flow: Client chatbot se baat karta hai → summary banta hai → PM ko submit hota hai.
+// Yeh ChatWidget.jsx, MessagesTab.jsx, aur PMChatModal.jsx mein use hota hai.
+import api from "./axios";
 
-// ================= CREATE CHATBOX =================
-export const initChatbox = () => {
-  return api.post('/api/chat/chatboxes/');
-};
+// Naya chatbox shuru karo — client jab pehli baar chat start kare
+// Response mein chatbox ID milta hai jise localStorage mein save karo
+export const initChatbox = () =>
+  api.post("/api/chat/chatboxes/");
 
-// ================= SEND MESSAGE =================
-export const sendChatMessage = (chatboxId, message) => {
-  return api.post(
-    `/api/chat/chatboxes/${chatboxId}/messages/`,
-    {
-      content: message,
-    }
-  );
-};
+// Chatbox mein ek message send karo
+// chatboxId = konsa chat, message = user ne kya likha
+export const sendChatMessage = (chatboxId, message) =>
+  api.post(`/api/chat/chatboxes/${chatboxId}/messages/`, { content: message });
 
-// ================= GET SUMMARY =================
-export const getChatboxSummary = (chatboxId) => {
-  return api.get(
-    `/api/query/chatboxes/${chatboxId}/query/summary/`
-  );
-};
+// Chatbox ka AI-generated summary fetch karo
+// Summary mein event details hoti hain — event type, date, budget, etc.
+// PM dashboard mein yahi data cards pe dikhta hai
+export const getChatboxSummary = (chatboxId) =>
+  api.get(`/api/query/chatboxes/${chatboxId}/query/summary/`);
 
-// ================= NOTIFY ARTIST =================
-export const notifyArtist = (data) => {
-  return api.get('/api/artist/notify-artist/', {
-    params: {
-      artist_name: data,
-    },
-  });
-};
+// Kisi specific artist ko notify karo
+// data = artist ka naam (string)
+export const notifyArtist = (data) =>
+  api.get("/api/artist/notify-artist/", { params: { artist_name: data } });
 
-// ================= GET ALL CHATBOXES (Client ke saare chats) =================
-export const getAllChatboxes = () => {
-  return api.get('/api/chat/chatboxes/');
-};
+// Client ke saare active chatboxes ki list lao
+// Messages tab mein inbox dikhane ke liye use hota hai
+export const getAllChatboxes = () =>
+  api.get("/api/chat/chatboxes/");
 
-// ================= GET MESSAGES OF A CHATBOX =================
-export const getChatMessages = (chatboxId) => {
-  return api.get(`/api/chat/chatboxes/${chatboxId}/messages/`);
-};
+// Ek specific chatbox ke saare messages fetch karo
+// User jab kisi chat pe click kare, toh conversation history load hogi
+export const getChatMessages = (chatboxId) =>
+  api.get(`/api/chat/chatboxes/${chatboxId}/messages/`);
 
-// ================= SUBMIT REQUEST TO PM =================
-// Jab client saari details de de, yeh call hoga
-export const submitRequestToPM = (chatboxId) => {
-  return api.post(`/api/chat/chatboxes/${chatboxId}/submit-request/`);
-};
+// Client ne saari details confirm kar li — ab formally PM ko request bhejo
+// Iske baad PM dashboard pe nai notification dikhi degi
+export const submitRequestToPM = (chatboxId) =>
+  api.post(`/api/chat/chatboxes/${chatboxId}/submit-request/`);
