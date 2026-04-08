@@ -1,8 +1,10 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { XCircle, Settings, LogOut } from "lucide-react";
+import { XCircle, Settings, LogOut, Home } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function MobileSidebar({ isSidebarOpen, setIsSidebarOpen, title, menuItems, activeTab, onTabChange, setShowSettings, onLogout }) {
+  const navigate = useNavigate();
   return (
     <AnimatePresence>
       {isSidebarOpen && (
@@ -22,8 +24,14 @@ export default function MobileSidebar({ isSidebarOpen, setIsSidebarOpen, title, 
               ))}
             </nav>
             <div className="p-4 border-t border-white/10 space-y-2 bg-black/20">
+              <button 
+                onClick={() => { navigate("/"); setIsSidebarOpen(false); }} 
+                className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
+              >
+                <Home size={20} /><span>Back to Home</span>
+              </button>
               {setShowSettings && (
-                <button onClick={() => { setShowSettings(true); setIsSidebarOpen(false); }} className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400"><Settings size={20} /><span>Settings</span></button>
+                <button onClick={() => { setShowSettings(true); setIsSidebarOpen(false); }} className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors"><Settings size={20} /><span>Settings</span></button>
               )}
               <button onClick={onLogout} className="w-full flex items-center gap-4 p-3 rounded-xl text-red-500"><LogOut size={20} /><span>Logout</span></button>
             </div>

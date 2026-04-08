@@ -9,8 +9,7 @@ import api from "./axios";
 export const initChatbox = () =>
   api.post("/api/chat/chatboxes/");
 
-// Chatbox mein ek message send karo
-// chatboxId = konsa chat, message = user ne kya likha
+// Chatbox mein ek message send karo (This triggers the bot via the nested messages route per API doc)
 export const sendChatMessage = (chatboxId, message) =>
   api.post(`/api/chat/chatboxes/${chatboxId}/messages/`, { content: message });
 

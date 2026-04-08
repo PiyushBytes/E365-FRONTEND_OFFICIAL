@@ -7,7 +7,7 @@ export function useClientData(activeTab) {
   const [data, setData] = useState({ profile: {}, stats: {}, activeBookings: [], recommendedArtists: [], messages: [] });
   // Event query details store karne ke liye
   const [querySummary, setQuerySummary] = useState(null);
-  
+
   // Dm/chat se related saari states hain yeh
   const [chatboxes, setChatboxes] = useState([]);
   const [selectedChatbox, setSelectedChatbox] = useState(null);
@@ -40,4 +40,9 @@ export function useClientData(activeTab) {
 
   // Jo bhi chahiye data aur functions woh pass return karlo taki UI me use ho sake
   return { data, querySummary, chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox };
+}
+  };
+
+// Jo bhi chahiye data aur functions woh pass return karlo taki UI me use ho sake
+return { data, querySummary, chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox };
 }

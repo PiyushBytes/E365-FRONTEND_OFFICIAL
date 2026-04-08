@@ -10,7 +10,7 @@ const CSP = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com blob:",
-  "connect-src 'self' http://192.168.1.11:8000 https://e365-backend.onrender.com ws://localhost:5173",
+  "connect-src 'self' http://192.168.1.11:8000 https://e365-backend.onrender.com http://localhost:* http://127.0.0.1:* ws://localhost:* ws://127.0.0.1:*",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -22,9 +22,9 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    // Security headers in dev server — same policy as production
+    // Dev mein CSP nahi lagega — woh API calls silently block karta hai.
+    // Production mein vercel.json / hosting headers handle karenge.
     headers: {
-      "Content-Security-Policy": CSP,
       "X-Frame-Options": "DENY",
       "X-Content-Type-Options": "nosniff",
       "Referrer-Policy": "strict-origin-when-cross-origin",

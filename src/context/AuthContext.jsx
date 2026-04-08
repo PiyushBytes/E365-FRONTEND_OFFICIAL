@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser, logoutUser, getMe } from "../api/auth";
-
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -116,6 +115,8 @@ export const AuthProvider = ({ children }) => {
         errorMessage = backendError.error;
       } else if (backendError?.message) {
         errorMessage = backendError.message;
+      } else if (error?.userMessage) {
+        errorMessage = error.userMessage;
       }
 
       return {
@@ -155,6 +156,7 @@ export const AuthProvider = ({ children }) => {
           backendError?.error ||
           backendError?.message ||
           backendError?.detail ||
+          error?.userMessage ||
           "Login failed. Please check your credentials.",
       };
     }

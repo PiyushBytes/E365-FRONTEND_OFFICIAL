@@ -1,42 +1,54 @@
-/* ALL IMPORTS MUST BE FIRST */
+/* Sabse pehle fonts aur Tailwind import karo */
 @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
 @import "tailwindcss";
 
-/* CUSTOM VARIABLES */
+/* Branding ke liye custom CSS variables */
 :root {
   --primary-red: #ff003c;
   --glow-red: rgba(255, 0, 60, 0.4);
 }
 
-/* GLOBAL STYLES */
+/* Global styles — sabke liye apply hoga */
 body {
-  @apply bg-black text-white;
+  background-color: #000000;
+  color: #ffffff;
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: #050505;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Mobile safe area insets (iPhone notch, etc.) */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-h1,
-h2 {
+/* Heading fonts — uppercase Syncopate */
+h1, h2 {
   font-family: 'Syncopate', sans-serif;
   text-transform: uppercase;
 }
 
+/* Reusable input class */
 .input-style {
-  @apply bg-black/40 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-red-500;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+.input-style:focus {
+  outline: none;
+  border-color: #ef4444;
 }
 
+/* Custom scrollbar hide (dashboards mein clean look ke liye) */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Fade + slide animation */
 @keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
+.animate-fade { animation: fadeSlide 0.5s ease-in-out; }
 
-.animate-fade {
-  animation: fadeSlide 0.5s ease-in-out;
-}
+/* Touch devices ke liye — tap highlight hatao */
+* { -webkit-tap-highlight-color: transparent; }
