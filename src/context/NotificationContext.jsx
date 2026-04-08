@@ -18,11 +18,12 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
-    // 1. Fetch historical notifications
+    // 1. Fetch historical notifications (Works fine with Gunicorn)
     const fetchHistory = async () => {
       try {
         const response = await getNotificationHistory();
-        setNotifications(response.data.notifications || response.data || []);
+        const data = response.data.notifications || response.data || [];
+        setNotifications(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch notification history:", err);
       }
@@ -30,34 +31,31 @@ export const NotificationProvider = ({ children }) => {
 
     fetchHistory();
 
-    // 2. Establish live WebSocket for notifications
-    const wsBaseUrl = import.meta.env.VITE_WS_URL || "ws://localhost:8000/ws";
-    const userUid = user.id || user.username; // fallback to username if id not present
-
-    if (userUid && !wsRef.current) {
+    // 2. Live WebSocket (DISABLED FOR DEMO TO PREVENT CONSOLE ERRORS)
+    /*
+    const connectWS = () => {
+      const wsBaseUrl = import.meta.env.VITE_WS_URL || "ws://localhost:8000/ws";
+      const userUid = user.id || user.username;
+      if (userUid && !wsRef.current) {
         const ws = new WebSocket(`${wsBaseUrl}/notifications/${userUid}/`);
         wsRef.current = ws;
-
         ws.onmessage = (event) => {
-            try {
-                const newNotification = JSON.parse(event.data);
-                console.log("Live Notification received:", newNotification);
-                setNotifications(prev => [newNotification, ...prev]);
-            } catch (e) {
-                console.error("Error parsing notification:", e);
-            }
+          try {
+            const newNotification = JSON.parse(event.data);
+            setNotifications(prev => [newNotification, ...prev]);
+          } catch (e) { console.error(e); }
         };
-
-        ws.onerror = (error) => {
-            console.error("Notification WebSocket error:", error);
-        };
-    }
+        ws.onclose = () => { wsRef.current = null; };
+      }
+    };
+    connectWS(); 
+    */
 
     return () => {
-        if (wsRef.current) {
-            wsRef.current.close();
-            wsRef.current = null;
-        }
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
   }, [isAuthenticated, user]);
 

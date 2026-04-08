@@ -13,8 +13,8 @@ import {
 const PMNotification = ({ notification, onOpenChat, onCancel }) => {
   // Format price helper
   const formatPrice = (price) => {
-    if (!price) return "Negotiable";
-    return isNaN(price) ? price : `₹${Number(price).toLocaleString()}`;
+    if (!price || price === "-") return "Negotiable";
+    return isNaN(price) ? price : `₹${Number(price).toLocaleString('en-IN')}`;
   };
 
   return (
@@ -27,7 +27,9 @@ const PMNotification = ({ notification, onOpenChat, onCancel }) => {
       <div className="flex justify-between items-start mb-6 relative z-10">
         <div>
           <div className="flex items-center gap-3 mb-1">
-             <h3 className="text-xl font-bold text-white tracking-tight">Request for {notification.artist_name || "Artist"}</h3>
+             <h3 className="text-xl font-bold text-white tracking-tight">
+               Request for {notification.artist_name || "Artist"}
+             </h3>
              <span className="px-2 py-0.5 rounded-md bg-purple-500 text-white text-[10px] font-bold uppercase tracking-wider">
                New Request
              </span>
@@ -73,7 +75,9 @@ const PMNotification = ({ notification, onOpenChat, onCancel }) => {
             </div>
             <div>
                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-wide">Location</div>
-               <div className="text-xs font-semibold text-gray-200 mt-0.5">{notification.event_place || "Remote"}</div>
+               <div className="text-xs font-semibold text-gray-200 mt-0.5">
+                 {notification.event_place || "Remote"}
+               </div>
             </div>
          </div>
 
@@ -83,7 +87,9 @@ const PMNotification = ({ notification, onOpenChat, onCancel }) => {
             </div>
             <div>
                <div className="text-[10px] text-gray-500 uppercase font-bold tracking-wide">Audience</div>
-               <div className="text-xs font-semibold text-gray-200 mt-0.5">{notification.audience_size || "0"}</div>
+               <div className="text-xs font-semibold text-gray-200 mt-0.5">
+                 {notification.audience_size || "0"}
+               </div>
             </div>
          </div>
 
@@ -102,7 +108,6 @@ const PMNotification = ({ notification, onOpenChat, onCancel }) => {
 
       {/* Actions */}
       <div className="flex gap-2 relative z-10">
-        
         <button 
           onClick={() => onOpenChat && onOpenChat(notification)}
           className="flex-1 bg-white border border-white/10 text-black py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-all flex items-center justify-center gap-2"

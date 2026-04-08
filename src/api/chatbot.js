@@ -38,3 +38,18 @@ export const getChatMessages = (chatboxId) =>
 // Iske baad PM dashboard pe nai notification dikhi degi
 export const submitRequestToPM = (chatboxId) =>
   api.post(`/api/chat/chatboxes/${chatboxId}/submit-request/`);
+
+// ─── PROJECT MANAGER HANDOFF ENDPOINTS ────────────────────────────────────────
+
+// PM chatbox mein enter karta hai — BOT pause ho jayega
+export const enterChatbox = (chatboxId) => 
+  api.post(`/api/chat/chatboxes/${chatboxId}/em-enter/`);
+
+// PM chatbox se exit karta hai — BOT resume ho jayega
+export const exitChatbox = (chatboxId) => 
+  api.post(`/api/chat/chatboxes/${chatboxId}/em-exit/`);
+
+// PM client ko direct message bhejta hai (Bot silence rahega)
+// Body: { content: "message string" }
+export const sendPMReply = (chatboxId, message) => 
+  api.post(`/api/chat/chatboxes/${chatboxId}/pm-reply/`, { content: message });

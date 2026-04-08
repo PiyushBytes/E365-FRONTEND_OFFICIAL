@@ -20,7 +20,12 @@ export default function ProtectedRoute({ allowedRoles = [] }) {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
+  // CASE-INSENSITIVE FIX:
+  // Convert user role and allowed roles to lowercase for a perfect match
+  const userRole = user?.role?.toLowerCase();
+  const normalizedAllowedRoles = allowedRoles.map(role => role.toLowerCase());
+
+  if (allowedRoles.length > 0 && !normalizedAllowedRoles.includes(userRole)) {
     return <Navigate to="/" replace />;
   }
 

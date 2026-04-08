@@ -30,19 +30,33 @@ export function useClientData(activeTab) {
 
   // Handle function: jab user kisi chat ko click karke open karta hai
   const handleSelectChatbox = async (chatbox) => {
-    setSelectedChatbox(chatbox); setLoadingMessages(true);
+    setSelectedChatbox(chatbox); 
+    setLoadingMessages(true);
     try {
       const res = await getChatMessages(chatbox.id);
       // Backend api ko apne UI message format mein map kar diya hai
-      setChatMessages(res.data.map((msg) => ({ role: msg.sender === "user" ? "user" : "bot", text: msg.content, time: msg.created_at })));
-    } catch (err) { console.error(err); } finally { setLoadingMessages(false); }
+      setChatMessages(res.data.map((msg) => ({ 
+        role: msg.sender === "user" ? "user" : "bot", 
+        text: msg.content, 
+        time: msg.created_at 
+      })));
+    } catch (err) { 
+      console.error(err); 
+    } finally { 
+      setLoadingMessages(false); 
+    }
   };
 
   // Jo bhi chahiye data aur functions woh pass return karlo taki UI me use ho sake
-  return { data, querySummary, chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox };
-}
+  return { 
+    data, 
+    querySummary, 
+    chatboxes, 
+    selectedChatbox, 
+    setSelectedChatbox, 
+    chatMessages, 
+    setChatMessages, 
+    loadingMessages, 
+    handleSelectChatbox 
   };
-
-// Jo bhi chahiye data aur functions woh pass return karlo taki UI me use ho sake
-return { data, querySummary, chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox };
 }
