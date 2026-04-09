@@ -34,12 +34,17 @@ export function useClientData(activeTab) {
     setLoadingMessages(true);
     try {
       const res = await getChatMessages(chatbox.id);
-      // Backend api ko apne UI message format mein map kar diya hai
-      setChatMessages(res.data.map((msg) => ({ 
-        role: msg.sender === "user" ? "user" : "bot", 
-        text: msg.content, 
-        time: msg.created_at 
-      })));
+      const rawData = res.data?.results || res.data?.messages || res.data || [];
+      const messagesArray = Array.isArray(rawData) ? rawData : [];
+      setChatMessages(messagesArray.map((msg) => {
+        const type = msg.sender_type?.toLowerCase() || msg.sender?.toLowerCase();
+        return { 
+          role: (type === "client" || type === "user") ? "user" : (type === "event_manager" || type === "pm") ? "pm" : "bot", 
+          text: msg.content, 
+          time: msg.created_at,
+          username: msg.sender_username
+        };
+      }));
     } catch (err) { 
       console.error(err); 
     } finally { 

@@ -31,25 +31,6 @@ export const NotificationProvider = ({ children }) => {
 
     fetchHistory();
 
-    // 2. Live WebSocket (DISABLED FOR DEMO TO PREVENT CONSOLE ERRORS)
-    /*
-    const connectWS = () => {
-      const wsBaseUrl = import.meta.env.VITE_WS_URL || "ws://localhost:8000/ws";
-      const userUid = user.id || user.username;
-      if (userUid && !wsRef.current) {
-        const ws = new WebSocket(`${wsBaseUrl}/notifications/${userUid}/`);
-        wsRef.current = ws;
-        ws.onmessage = (event) => {
-          try {
-            const newNotification = JSON.parse(event.data);
-            setNotifications(prev => [newNotification, ...prev]);
-          } catch (e) { console.error(e); }
-        };
-        ws.onclose = () => { wsRef.current = null; };
-      }
-    };
-    connectWS(); 
-    */
 
     return () => {
       if (wsRef.current) {

@@ -29,10 +29,36 @@ export const notifyArtist = (data) =>
 export const getAllChatboxes = () =>
   api.get("/api/chat/chatboxes/");
 
-// Ek specific chatbox ke saare messages fetch karo
-// User jab kisi chat pe click kare, toh conversation history load hogi
-export const getChatMessages = (chatboxId) =>
-  api.get(`/api/chat/chatboxes/${chatboxId}/messages/`);
+// Full history fetch — used ONCE on chat open (fetches all pages)
+export const getChatMessages = async (chatboxId) => {
+  let url = `/api/chat/chatboxes/${chatboxId}/messages/list/`;
+  let allMessages = [];
+  let fetchedUrls = new Set();
+  while (url && !fetchedUrls.has(url)) {
+    fetchedUrls.add(url);
+    const res = await api.get(url);
+    const results = res.data?.results || res.data?.messages || res.data || [];
+    allMessages = [...allMessages, ...(Array.isArray(results) ? results : [])];
+    url = res.data?.next;
+  }
+  return { data: allMessages };
+};
+
+// Fast poll — fetches ONLY the latest page to check for new messages
+// This prevents re-fetching entire history on every interval tick
+export const getLatestMessages = async (chatboxId) => {
+  const res = await api.get(`/api/chat/chatboxes/${chatboxId}/messages/list/`);
+  // Walk to the last page using 'next' to get freshest messages
+  let data = res.data;
+  let fetchedUrls = new Set([`/api/chat/chatboxes/${chatboxId}/messages/list/`]);
+  while (data?.next && !fetchedUrls.has(data.next)) {
+    fetchedUrls.add(data.next);
+    const next = await api.get(data.next);
+    data = next.data;
+  }
+  const results = data?.results || data?.messages || data || [];
+  return { data: Array.isArray(results) ? results : [] };
+};
 
 // Client ne saari details confirm kar li — ab formally PM ko request bhejo
 // Iske baad PM dashboard pe nai notification dikhi degi
@@ -52,4 +78,4 @@ export const exitChatbox = (chatboxId) =>
 // PM client ko direct message bhejta hai (Bot silence rahega)
 // Body: { content: "message string" }
 export const sendPMReply = (chatboxId, message) => 
-  api.post(`/api/chat/chatboxes/${chatboxId}/pm-reply/`, { content: message });
+  api.post(`/api/chat/chatboxes/${chatboxId}/em-reply/`, { content: message });

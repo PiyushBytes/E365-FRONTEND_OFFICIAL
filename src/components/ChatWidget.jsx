@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MessageCircle } from "lucide-react";
 import ChatOverlay from "./chat/ChatOverlay";
@@ -7,6 +7,11 @@ const ChatWidget = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
 
   useImperativeHandle(ref, () => ({ open: () => setOpen(true), close: () => setOpen(false) }));
+  useEffect(() => {
+    const handleOpen = () => setOpen(true);
+    window.addEventListener("open-chat-widget", handleOpen);
+    return () => window.removeEventListener("open-chat-widget", handleOpen);
+  }, []);
 
   return (
     <>

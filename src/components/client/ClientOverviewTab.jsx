@@ -13,12 +13,12 @@ export default function ClientOverviewTab({ data, querySummary }) {
       <div className="grid grid-cols-4 gap-6">
         {[ { label: "Total Spent", value: data.stats?.totalSpent, icon: CreditCard }, { label: "Active Bookings", value: data.stats?.activeBookings, icon: Calendar }, { label: "Completed Events", value: data.stats?.completedEvents, icon: CheckCircle2 }, { label: "Saved Artists", value: data.stats?.savedArtists, icon: Star } ].map((stat, i) => <StatsCard key={i} {...stat} />)}
       </div>
-      {querySummary?.summary && (
+      {/* querySummary?.summary && (
         <div className="bg-blue-600/20 p-6 rounded-xl">
           <h3 className="text-blue-400 font-bold mb-3">Query Summary</h3>
           <p>📅 Date: {querySummary.summary.event_date}</p><p>📍 Location: {querySummary.summary.event_location}</p><p>🎉 Type: {querySummary.summary.event_type}</p><p>💰 Budget: {querySummary.summary.budget}</p><p>⏱ Duration: {querySummary.summary.duration_hours}</p><p>🎤 Genre: {querySummary.summary.artist_genre}</p><p>📝 Notes: {querySummary.summary.additional_notes}</p>
         </div>
-      )}
+      ) */}
       <section>
         <h3 className="text-xl font-bold mb-4">Active Bookings</h3>
         {data?.activeBookings?.map((booking) => <ActiveBookingCard key={booking.id} booking={booking} />)}

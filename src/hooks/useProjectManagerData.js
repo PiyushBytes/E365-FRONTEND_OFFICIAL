@@ -11,12 +11,29 @@ export function useProjectManagerData(activeTab, searchQuery) {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const res = await getPMRequests();
+      const res = await getPMRequests(); // Array of chatboxes
       const detailedRequests = await Promise.all(
         res.data.map(async (chatbox) => {
           try {
-            const detail = await getPMRequestDetail(chatbox.id);
-            const summaryData = await getChatboxSummary(chatbox.id);
+            // Check global cache on window object to persist across re-renders
+            window.__pmCache = window.__pmCache || new Map();
+            let detailData = null;
+            let summaryData = null;
+
+            if (window.__pmCache.has(chatbox.id)) {
+              const cached = window.__pmCache.get(chatbox.id);
+              detailData = cached.detailData;
+              summaryData = cached.summaryData;
+            } else {
+              const [detailRes, summaryRes] = await Promise.all([
+                getPMRequestDetail(chatbox.id).catch(() => null),
+                getChatboxSummary(chatbox.id).catch(() => null)
+              ]);
+              detailData = detailRes;
+              summaryData = summaryRes;
+              window.__pmCache.set(chatbox.id, { detailData, summaryData });
+            }
+
             const summary = summaryData?.data?.summary; 
             
             return {
@@ -24,8 +41,7 @@ export function useProjectManagerData(activeTab, searchQuery) {
               created_at: chatbox.created_at, 
               status: chatbox.status, 
               is_read: chatbox.event_manager_active,
-              // Mapping client name from nested detail object
-              client_name: detail.data?.client?.username || detail.data?.username || "Client", 
+              client_name: detailData?.data?.client?.username || detailData?.data?.username || "Client", 
               company_name: summary?.company_name || "-",
               artist_name: summary?.artist_genre || "Pending", 
               client_offerings: summary?.budget || "-",
