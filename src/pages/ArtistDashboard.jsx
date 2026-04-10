@@ -21,12 +21,13 @@ export default function ArtistDashboard() {
   const dataHooks = useArtistData(user);
   const chatRef = useRef(null);
 
-  const handleNegotiate = (notif) => chatRef.current?.open(`Negotiating: ${notif.event_name}`);
+  const handleNegotiate = (notif) => chatRef.current?.open(`Hi, I'd like to negotiate the request for ${notif.event_name}`);
+  const handleAccept = (notif) => alert(`You have accepted the request for ${notif.event_name}`);
 
   return (
     <DashboardLayout menuItems={MENU_ITEMS} activeTab={activeTab} onTabChange={setActiveTab} user={user} title="Artist Panel" notifications={dataHooks.notifications} onLogout={logout} showSettings={showSettings} setShowSettings={setShowSettings}>
       {activeTab === "dashboard" && <ArtistOverviewTab user={user} {...dataHooks} />}
-      {activeTab === "requests" && <RequestsTab notifications={dataHooks.notifications} handleNegotiate={handleNegotiate} />}
+      {activeTab === "requests" && <RequestsTab notifications={dataHooks.notifications} handleNegotiate={handleNegotiate} handleAccept={handleAccept} />}
       {["calendar", "payments"].includes(activeTab) && <div className="text-white text-center mt-20">Coming Soon...</div>}
       <ChatWidget ref={chatRef} />
     </DashboardLayout>

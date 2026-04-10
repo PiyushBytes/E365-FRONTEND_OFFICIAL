@@ -1,10 +1,12 @@
 import React from 'react';
 
+// RequestCard - Yeh ek chota card UI hai jo client ki event booking details aur unka offer dikhata hai
 const RequestCard = ({ req, onAccept, onDecline }) => {
   return (
     <div className="bg-zinc-900/50 border border-white/5 rounded-2xl p-0 overflow-hidden hover:border-red-500/30 transition-all group">
+      {/* Card ka main wrapper */}
       <div className="flex flex-col sm:flex-row">
-        {/* Date Stub */}
+        {/* Date Stub - side mein date show karne ke liye */}
         <div className="sm:w-24 bg-red-900/10 border-b sm:border-b-0 sm:border-r border-white/5 flex flex-col items-center justify-center p-4">
           <span className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1">
             {req.date.split(" ")[0]}
@@ -14,7 +16,7 @@ const RequestCard = ({ req, onAccept, onDecline }) => {
           </span>
         </div>
 
-        {/* Content */}
+        {/* Content area jaha client name, location aur offer display hota hai */}
         <div className="flex-1 p-5">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">

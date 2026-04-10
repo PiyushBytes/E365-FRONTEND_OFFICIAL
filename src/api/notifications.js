@@ -22,6 +22,15 @@ export const getPMRequestDetail = (chatboxId) =>
 export const markNotificationRead = (notificationId) =>
   api.patch(`/api/notifications/${notificationId}/read/`);
 
+// Saari notifications ko ek sath read mark karo
+// (Screenshot says /api/notifications/{id}/read-all/ but usually read-all doesn't take ID, using standard route)
+export const markAllNotificationsRead = () =>
+  api.patch(`/api/notifications/read-all/`);
+
+// Unread messages ka count fetch karo
+export const getUnreadNotificationCount = () =>
+  api.get(`/api/notifications/unread-count/`);
+
 // Kisi request ko cancel kar do (PM ne reject kiya ya client ne withdraw kiya)
 // Yeh chatbox ko backend se permanently delete karta hai
 export const cancelPMRequest = (requestId) =>

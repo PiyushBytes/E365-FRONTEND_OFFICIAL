@@ -5,17 +5,34 @@ import ChatOverlay from "./chat/ChatOverlay";
 
 const ChatWidget = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
+  const [initialMsg, setInitialMsg] = useState("");
 
-  useImperativeHandle(ref, () => ({ open: () => setOpen(true), close: () => setOpen(false) }));
+  useImperativeHandle(ref, () => ({ 
+    open: (msg) => {
+      if (typeof msg === "string") {
+        localStorage.removeItem("chatboxId");
+        setInitialMsg(msg);
+      }
+      setOpen(true);
+    }, 
+    close: () => setOpen(false) 
+  }));
+
   useEffect(() => {
-    const handleOpen = () => setOpen(true);
+    const handleOpen = (e) => {
+      setOpen(true);
+      if (e.detail?.msg) {
+        localStorage.removeItem("chatboxId");
+        setInitialMsg(e.detail.msg);
+      }
+    };
     window.addEventListener("open-chat-widget", handleOpen);
     return () => window.removeEventListener("open-chat-widget", handleOpen);
   }, []);
 
   return (
     <>
-      <ChatOverlay open={open} onClose={() => setOpen(false)} />
+      <ChatOverlay open={open} onClose={() => setOpen(false)} initialMsg={initialMsg} onMsgProcessed={() => setInitialMsg("")} />
       <div className="fixed bottom-6 right-6 z-[9999]">
         <motion.button
           whileHover={{ scale: 1.05 }}

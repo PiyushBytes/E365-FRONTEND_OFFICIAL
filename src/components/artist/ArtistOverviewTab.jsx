@@ -3,7 +3,9 @@ import StatsCard from "../common/StatsCard";
 import RequestCard from "./RequestCard";
 import { Ticket, ListMusic, Clock, CheckCircle2, CreditCard } from "lucide-react";
 
+// ArtistOverviewTab - Yeh artist ka main dashboard view hai, jisme stats aur requests ki short details dikhti hain
 export default function ArtistOverviewTab({ user, available, setAvailable, stats, requests, handleAccept }) {
+  // Dashboard ke upar wale 4 stat cards ka data yaha array me define kiya gaya hai
   const statsData = [
     { label: "Total Bookings", value: stats.totalBookings, trend: "+12%", icon: ListMusic, color: "text-blue-400" },
     { label: "Pending Requests", value: stats.pendingRequests, trend: "Action Req", icon: Clock, color: "text-yellow-400" },
@@ -15,6 +17,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
     <div className="max-w-7xl mx-auto space-y-8 animate-fade-up">
       <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-4 mb-8">
         <div><h2 className="text-3xl font-bold mb-1">Welcome back, {user?.username}</h2><p className="text-gray-400 text-sm">Here's your summary.</p></div>
+        {/* Toggle button - Isse artist apna status Online/Offline change kar sakta hai */}
         <div onClick={() => setAvailable(!available)} className={`cursor-pointer flex items-center gap-3 px-3 py-1.5 rounded-full border ${available ? 'border-green-500/30 bg-green-500/5' : 'border-gray-700 bg-gray-800/20'}`}>
           <div className={`w-2 h-2 rounded-full ${available ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
           <span className={`text-xs font-bold uppercase tracking-wider ${available ? 'text-green-400' : 'text-gray-500'}`}>{available ? "Online" : "Offline"}</span>
@@ -28,6 +31,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           <h3 className="text-lg font-bold text-white flex items-center gap-2"><Ticket size={20} className="text-red-500" /> New Requests</h3>
         </div>
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {/* Agar requests array me kuch hai toh map karke dikhao, warna "No pending requests" message dikhao */}
           {requests.length ? requests.map((req, i) => <RequestCard key={i} req={req} onAccept={handleAccept} onDecline={() => {}} />) : <div className="col-span-full p-8 text-center text-gray-500 bg-zinc-900/30 rounded-2xl border border-white/5 border-dashed">No pending requests.</div>}
         </div>
       </section>

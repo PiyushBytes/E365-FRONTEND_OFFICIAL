@@ -5,6 +5,7 @@ import axios from "axios";
 import { env, isDev } from "../config/env";
 import { handleTokenRefresh, clearAuth } from "./tokenRefresh";
 import { handleServerRetry } from "./retryHandler";
+import { secureStorage } from "../utils/secureStorage";
 
 if (!env.API_URL) throw new Error("[axios] VITE_API_BASE_URL not set");
 
@@ -16,7 +17,7 @@ const api = axios.create({
 
 // ─── Request: JWT token attach karo har call pe ──────────────────────────────
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = secureStorage.getItem("token");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   if (isDev) console.debug(`[API] ${config.method?.toUpperCase()} ${config.url}`);
   return config;
@@ -27,18 +28,18 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     const req = error.config;
-    // Network offline / server unreachable
+    // Network offline hai ya server tak request nahi jaa rahi
     if (!error.response) {
       const msg = navigator.onLine ? "Server unreachable." : "No internet.";
       return Promise.reject({ ...error, isNetworkError: true, userMessage: msg });
     }
     const { status } = error.response;
-    // 401 → auto refresh (skip login/refresh endpoints to avoid loops)
+    // 401 → automatic refresh karo (login aur refresh endpoints chhodkar taaki loop na bane)
     if (status === 401 && !req._retry && !req.url?.includes("/auth/login") && !req.url?.includes("/auth/token/refresh"))
       return handleTokenRefresh(req, api);
-    // 500/502/503 → retry with backoff
+    // 500/502/503 → backoff ke saath phir se retry karo
     if ([500, 502, 503].includes(status)) return handleServerRetry(error, api);
-    // 403/429 → log-only in dev
+    // 403/429 → development mein sirf log karo
     if (isDev && status === 403) console.warn("[API] 403 Forbidden");
     if (isDev && status === 429) console.warn("[API] 429 Rate limited");
     return Promise.reject(error);

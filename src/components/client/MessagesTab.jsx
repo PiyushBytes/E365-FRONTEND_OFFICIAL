@@ -2,14 +2,9 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, MessageSquare, Edit2, Check, MessageCircle } from "lucide-react";
 
 export default function MessagesTab({ chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox }) {
-  const [titles, setTitles] = useState({});
+  const [titles, setTitles] = useState(() => JSON.parse(localStorage.getItem("chatTitles") || "{}"));
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState("");
-
-  useEffect(() => {
-    const savedTitles = JSON.parse(localStorage.getItem("chatTitles") || "{}");
-    setTitles(savedTitles);
-  }, []);
 
   const saveTitle = (id) => {
     const newTitles = { ...titles, [id]: editValue };

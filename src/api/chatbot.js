@@ -6,8 +6,10 @@ import api from "./axios";
 
 // Naya chatbox shuru karo — client jab pehli baar chat start kare
 // Response mein chatbox ID milta hai jise localStorage mein save karo
-export const initChatbox = () =>
-  api.post("/api/chat/chatboxes/");
+export const initChatbox = (initialMessage = "") => {
+  const payload = initialMessage ? { initial_message: initialMessage } : {};
+  return api.post("/api/chat/chatboxes/", payload);
+};
 
 // Chatbox mein ek message send karo (This triggers the bot via the nested messages route per API doc)
 export const sendChatMessage = (chatboxId, message) =>
@@ -29,35 +31,19 @@ export const notifyArtist = (data) =>
 export const getAllChatboxes = () =>
   api.get("/api/chat/chatboxes/");
 
-// Full history fetch — used ONCE on chat open (fetches all pages)
+// Full history fetch (or general chatbox detail sync)
 export const getChatMessages = async (chatboxId) => {
-  let url = `/api/chat/chatboxes/${chatboxId}/messages/list/`;
-  let allMessages = [];
-  let fetchedUrls = new Set();
-  while (url && !fetchedUrls.has(url)) {
-    fetchedUrls.add(url);
-    const res = await api.get(url);
-    const results = res.data?.results || res.data?.messages || res.data || [];
-    allMessages = [...allMessages, ...(Array.isArray(results) ? results : [])];
-    url = res.data?.next;
-  }
-  return { data: allMessages };
+  const res = await api.get(`/api/chat/chatboxes/${chatboxId}/`);
+  // Handle backend returning { messages: [...] } or just the array directly
+  const messages = res.data?.messages || (Array.isArray(res.data) ? res.data : []);
+  return { data: messages };
 };
 
-// Fast poll — fetches ONLY the latest page to check for new messages
-// This prevents re-fetching entire history on every interval tick
+// Fast poll — Ab hum single detail route se hi saara historical + naya data lenge
 export const getLatestMessages = async (chatboxId) => {
-  const res = await api.get(`/api/chat/chatboxes/${chatboxId}/messages/list/`);
-  // Walk to the last page using 'next' to get freshest messages
-  let data = res.data;
-  let fetchedUrls = new Set([`/api/chat/chatboxes/${chatboxId}/messages/list/`]);
-  while (data?.next && !fetchedUrls.has(data.next)) {
-    fetchedUrls.add(data.next);
-    const next = await api.get(data.next);
-    data = next.data;
-  }
-  const results = data?.results || data?.messages || data || [];
-  return { data: Array.isArray(results) ? results : [] };
+  const res = await api.get(`/api/chat/chatboxes/${chatboxId}/`);
+  const messages = res.data?.messages || (Array.isArray(res.data) ? res.data : []);
+  return { data: messages };
 };
 
 // Client ne saari details confirm kar li — ab formally PM ko request bhejo
@@ -78,4 +64,4 @@ export const exitChatbox = (chatboxId) =>
 // PM client ko direct message bhejta hai (Bot silence rahega)
 // Body: { content: "message string" }
 export const sendPMReply = (chatboxId, message) => 
-  api.post(`/api/chat/chatboxes/${chatboxId}/em-reply/`, { content: message });
+  api.post(`/api/chat/chatboxes/${chatboxId}/pm-reply/`, { content: message });

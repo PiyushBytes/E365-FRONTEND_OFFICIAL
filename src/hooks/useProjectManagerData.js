@@ -62,8 +62,6 @@ export function useProjectManagerData(activeTab, searchQuery) {
 
   useEffect(() => { 
     fetchRequests(); 
-    const interval = setInterval(fetchRequests, 30000); 
-    return () => clearInterval(interval); 
   }, []);
   
   useEffect(() => { if (activeTab === "requests") fetchRequests(); }, [activeTab]);

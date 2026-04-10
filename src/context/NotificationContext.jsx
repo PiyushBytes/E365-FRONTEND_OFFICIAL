@@ -18,7 +18,7 @@ export const NotificationProvider = ({ children }) => {
       return;
     }
 
-    // 1. Fetch historical notifications (Works fine with Gunicorn)
+    // 1. Fetch historical notifications 
     const fetchHistory = async () => {
       try {
         const response = await getNotificationHistory();

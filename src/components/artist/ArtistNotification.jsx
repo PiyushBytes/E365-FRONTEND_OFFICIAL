@@ -10,20 +10,18 @@ import {
   MessageCircle
 } from 'lucide-react';
 
-const ArtistNotification = ({ notification, onNegotiate }) => {
-  // Format price helper
+// Artist notification component - Yeh component artist ko aane wali event requests dikhata hai
+const ArtistNotification = ({ notification, onNegotiate, onAccept }) => {
+  // Price ko format karne wala helper function, agar price nahi hai toh "Negotiable" dikhayega
   const formatPrice = (price) => {
     if (!price) return "Negotiable";
     return isNaN(price) ? price : `₹${Number(price).toLocaleString()}`;
   };
 
   return (
-    <div className="relative bg-zinc-900/40 border border-white/5 rounded-3xl p-6 overflow-hidden hover:border-red-500/20 transition-all duration-300 group shadow-lg hover:shadow-red-900/5">
-      
-      {/* Glow Effect */}
-      <div className="absolute top-0 right-0 p-20 bg-red-500/5 blur-[80px] rounded-full pointer-events-none -mr-10 -mt-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <div className="relative bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl p-6 overflow-hidden hover:border-zinc-800 transition-all duration-300">
 
-      {/* Header */}
+      {/* Header section - Yaha event ka naam aur company details show hote hain */}
       <div className="flex justify-between items-start mb-6 relative z-10">
         <div>
           <div className="flex items-center gap-3 mb-1">
@@ -47,10 +45,10 @@ const ArtistNotification = ({ notification, onNegotiate }) => {
         </div>
       </div>
       
-      {/* Details Grid */}
+      {/* Details Grid - Event ki date, location, audience aur description grid me set karte hain */}
       <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
-         <div className="p-3 bg-white/5 rounded-xl border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors">
-            <div className="p-2 bg-black/40 rounded-lg text-blue-400">
+         <div className="p-3 bg-[#111111] rounded-xl border border-[#1a1a1a] flex items-start gap-3">
+            <div className="p-2 bg-black rounded-lg text-white">
                <Calendar size={16} />
             </div>
             <div>
@@ -64,8 +62,8 @@ const ArtistNotification = ({ notification, onNegotiate }) => {
             </div>
          </div>
 
-         <div className="p-3 bg-white/5 rounded-xl border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors">
-            <div className="p-2 bg-black/40 rounded-lg text-purple-400">
+         <div className="p-3 bg-[#111111] rounded-xl border border-[#1a1a1a] flex items-start gap-3">
+            <div className="p-2 bg-black rounded-lg text-white">
                <MapPin size={16} />
             </div>
             <div>
@@ -75,8 +73,8 @@ const ArtistNotification = ({ notification, onNegotiate }) => {
             </div>
          </div>
 
-         <div className="p-3 bg-white/5 rounded-xl border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors">
-            <div className="p-2 bg-black/40 rounded-lg text-yellow-400">
+         <div className="p-3 bg-[#111111] rounded-xl border border-[#1a1a1a] flex items-start gap-3">
+            <div className="p-2 bg-black rounded-lg text-white">
                <Users size={16} />
             </div>
             <div>
@@ -85,8 +83,8 @@ const ArtistNotification = ({ notification, onNegotiate }) => {
             </div>
          </div>
 
-         <div className="p-3 bg-white/5 rounded-xl border border-white/5 flex items-start gap-3 hover:bg-white/10 transition-colors">
-            <div className="p-2 bg-black/40 rounded-lg text-gray-400">
+         <div className="p-3 bg-[#111111] rounded-xl border border-[#1a1a1a] flex items-start gap-3">
+            <div className="p-2 bg-black rounded-lg text-white">
                <Info size={16} />
             </div>
             <div>
@@ -98,22 +96,25 @@ const ArtistNotification = ({ notification, onNegotiate }) => {
          </div>
       </div>
 
-      {/* Actions */}
+      {/* Action buttons - Accept, Negotiate ya Reject karne ke options */}
       <div className="flex gap-2 relative z-10">
-        <button className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group/btn">
-           <Check size={16} className="group-hover/btn:scale-110 transition-transform" />
+        <button 
+          onClick={() => onAccept && onAccept(notification)}
+          className="flex-1 bg-white text-black py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+        >
+           <Check size={16} />
            <span>Accept</span>
         </button>
         
         <button 
           onClick={() => onNegotiate && onNegotiate(notification)}
-          className="flex-1 bg-white/5 border border-white/10 text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-600/20 hover:border-blue-500/50 hover:text-blue-400 transition-all flex items-center justify-center gap-2"
+          className="flex-1 bg-[#111111] border border-[#1a1a1a] text-white py-3 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-[#1a1a1a] transition-all flex items-center justify-center gap-2"
         >
            <MessageCircle size={16} />
            <span>Negotiate</span>
         </button>
         
-        <button className="px-4 bg-white/5 border border-white/10 text-gray-400 py-3 rounded-xl hover:bg-red-500/10 hover:border-red-500/50 hover:text-red-500 transition-all">
+        <button className="px-4 bg-[#111111] border border-[#1a1a1a] text-gray-400 py-3 rounded-xl hover:bg-[#1a1a1a] hover:text-white transition-all">
            <X size={18} />
         </button>
       </div>

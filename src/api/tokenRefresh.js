@@ -3,6 +3,7 @@
 // Hum sirf EK baar refresh call maarte hain, baaki requests queue mein hold hoti hain.
 import axios from "axios";
 import { env, isDev } from "../config/env";
+import { secureStorage } from "../utils/secureStorage";
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -29,13 +30,20 @@ export async function handleTokenRefresh(originalRequest, api) {
 
   originalRequest._retry = true;
   isRefreshing = true;
-  const refreshToken = localStorage.getItem("refresh");
+  const refreshToken = secureStorage.getItem("refresh");
 
   if (!refreshToken) { clearAuth(); return Promise.reject(new Error("No refresh token")); }
 
   try {
     const { data } = await axios.post(`${env.API_URL}/api/auth/token/refresh/`, { refresh: refreshToken });
-    localStorage.setItem("token", data.access);
+    secureStorage.setItem("token", data.access);
+    if (data.refresh) {
+      secureStorage.setItem("refresh", data.refresh);
+    }
+    
+    // Event dispatch karo taaki AuthContext ka token state automatically update ho jaye
+    window.dispatchEvent(new CustomEvent('token_refreshed', { detail: { token: data.access } }));
+
     processQueue(null, data.access);
     originalRequest.headers.Authorization = `Bearer ${data.access}`;
     return api(originalRequest);
@@ -48,6 +56,8 @@ export async function handleTokenRefresh(originalRequest, api) {
 
 // Auth clear + login pe redirect
 export function clearAuth() {
-  ["token", "refresh", "user", "chatboxId"].forEach(k => localStorage.removeItem(k));
+  ["token", "refresh", "user"].forEach(k => secureStorage.removeItem(k));
+  // Agar chatboxId jaisi cheezein bachaani hain toh bas inko chhod do, ya phir inko bhi saaf kardo
+  localStorage.removeItem("chatboxId");
   window.location.href = "/login";
 }

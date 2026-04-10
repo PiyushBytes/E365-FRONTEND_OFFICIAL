@@ -1,25 +1,26 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser, logoutUser, getMe } from "../api/auth";
+import { secureStorage } from "../utils/secureStorage";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = secureStorage.getItem("user");
     if (!storedUser) return null;
 
     try {
-      return JSON.parse(storedUser);
+      return typeof storedUser === 'string' ? JSON.parse(storedUser) : storedUser;
     } catch (error) {
       console.error("Failed to parse stored user:", error);
-      localStorage.removeItem("user");
+      secureStorage.removeItem("user");
       return null;
     }
   });
 
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token, setToken] = useState(() => secureStorage.getItem("token"));
   const [isLoading, setIsLoading] = useState(true);
 
   const isAuthenticated = Boolean(token && user);
@@ -33,18 +34,18 @@ export const AuthProvider = ({ children }) => {
       throw new Error("Invalid auth response from server.");
     }
 
-    localStorage.setItem("token", accessToken);
-    localStorage.setItem("refresh", refreshToken);
-    localStorage.setItem("user", JSON.stringify(userObj));
+    secureStorage.setItem("token", accessToken);
+    secureStorage.setItem("refresh", refreshToken);
+    secureStorage.setItem("user", userObj);
 
     setToken(accessToken);
     setUser(userObj);
   };
 
   const clearAuth = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
-    localStorage.removeItem("user");
+    secureStorage.removeItem("token");
+    secureStorage.removeItem("refresh");
+    secureStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
@@ -52,8 +53,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const bootstrapAuth = async () => {
-      const storedToken = localStorage.getItem("token");
-      const storedUser = localStorage.getItem("user");
+      const storedToken = secureStorage.getItem("token");
+      const storedUser = secureStorage.getItem("user");
 
       if (!storedToken || !storedUser) {
         clearAuth();
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }) => {
         const backendUser = response?.data?.user;
 
         if (backendUser) {
-          localStorage.setItem("user", JSON.stringify(backendUser));
+          secureStorage.setItem("user", backendUser);
           setUser(backendUser);
           setToken(storedToken);
         } else {
@@ -81,6 +82,14 @@ export const AuthProvider = ({ children }) => {
     };
 
     bootstrapAuth();
+
+    const handleTokenRefreshed = (e) => {
+      if (e.detail?.token) {
+        setToken(e.detail.token);
+      }
+    };
+    window.addEventListener('token_refreshed', handleTokenRefreshed);
+    return () => window.removeEventListener('token_refreshed', handleTokenRefreshed);
   }, []);
 
   const register = async (userData) => {
@@ -164,7 +173,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const refreshToken = localStorage.getItem("refresh");
+      const refreshToken = secureStorage.getItem("refresh");
 
       if (refreshToken) {
         await logoutUser(refreshToken);
@@ -188,6 +197,7 @@ export const AuthProvider = ({ children }) => {
       logout,
       setUser,
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [user, token, isAuthenticated, isLoading]
   );
 
