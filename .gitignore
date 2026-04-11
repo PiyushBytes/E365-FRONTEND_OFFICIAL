@@ -12,10 +12,7 @@ dist
 dist-ssr
 *.local
 
-# ─── Environment files — NEVER commit real secrets ──────────────────────────
-.env
-.env.*
-!.env.example
+# ─── Environment files — (Currently tracking all env files) ──────────────────
 
 # ─── Temp / build artifacts ──────────────────────────────────────────────────
 lint.txt
