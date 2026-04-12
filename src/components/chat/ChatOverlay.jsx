@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useChatEngine } from "../../hooks/useChatEngine";
 import ChatHeader from "./ChatHeader";
@@ -8,6 +8,7 @@ import ChatInput from "./ChatInput";
 
 export default function ChatOverlay({ open, onClose, initialMsg, onMsgProcessed }) {
   const engine = useChatEngine();
+  const initCalledRef = useRef(false);
 
   useEffect(() => { 
     if (open) {
@@ -15,12 +16,14 @@ export default function ChatOverlay({ open, onClose, initialMsg, onMsgProcessed 
         engine.reset();
         engine.send(initialMsg);
         if (onMsgProcessed) onMsgProcessed();
-      } else {
+      } else if (!initCalledRef.current) {
+        initCalledRef.current = true;
         engine.init();
       }
-    } 
-  }, [open, initialMsg, engine, onMsgProcessed]);
-
+    } else {
+      initCalledRef.current = false;
+    }
+  }, [open, initialMsg, onMsgProcessed]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <AnimatePresence>
       {open && (
