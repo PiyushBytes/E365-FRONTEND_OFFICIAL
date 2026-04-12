@@ -15,17 +15,29 @@ export const useChatState = () => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, isTyping]);
 
-  // Chat ko clear karke home pe aana
+  // Chat ko clear karna (New Chat initiate karne ki preparation)
   const reset = () => {
     setChatboxId(null);
     localStorage.removeItem("chatboxId");
     setMessages([]);
     setSubmitted(false);
-    setView("home");
+    setView("chat"); // Directly switch to chat view to skip home
   };
 
   return {
-    input, setInput, isTyping, setIsTyping, chatboxId, setChatboxId,
-    messages, setMessages, submitted, setSubmitted, view, setView, scrollRef, reset
+    input,
+    setInput,
+    isTyping,
+    setIsTyping,
+    chatboxId,
+    setChatboxId,
+    messages,
+    setMessages,
+    submitted,
+    setSubmitted,
+    view,
+    setView,
+    scrollRef,
+    reset,
   };
 };
