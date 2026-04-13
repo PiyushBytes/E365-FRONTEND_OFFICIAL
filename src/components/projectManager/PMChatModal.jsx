@@ -9,7 +9,7 @@ import { usePMChat } from "../../hooks/projectManager/usePMChat";
 const PMChatModal = ({ notification, onClose }) => {
   const { 
     messages, input, setInput, isTyping, loading, 
-    hasJoined, scrollRef, join, leave, send, setMessages 
+    hasJoined, scrollRef, join, leave, send, setMessages, loadMessages 
   } = usePMChat(notification.id);
   
   const cName = notification.client_name || "Client";
@@ -20,7 +20,10 @@ const PMChatModal = ({ notification, onClose }) => {
     onClose();
   };
 
-  const handleRefresh = () => setMessages([]); // Clear locally
+  const handleRefresh = () => {
+    setMessages([]);
+    loadMessages();
+  };
 
   return (
     <PMChatLayout>

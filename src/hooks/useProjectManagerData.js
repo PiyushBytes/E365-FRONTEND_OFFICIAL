@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getPMRequests, getPMRequestDetail, markNotificationRead, cancelPMRequest } from "../api/notifications";
 import { getChatboxSummary } from "../api/chatbot";
 
@@ -7,6 +7,7 @@ export function useProjectManagerData(activeTab, searchQuery) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const cacheRef = useRef(new Map());
 
   const fetchRequests = async () => {
     setLoading(true);
@@ -15,13 +16,12 @@ export function useProjectManagerData(activeTab, searchQuery) {
       const detailedRequests = await Promise.all(
         res.data.map(async (chatbox) => {
           try {
-            // Check global cache on window object to persist across re-renders
-            window.__pmCache = window.__pmCache || new Map();
+            // Check cache to persist across re-renders
             let detailData = null;
             let summaryData = null;
 
-            if (window.__pmCache.has(chatbox.id)) {
-              const cached = window.__pmCache.get(chatbox.id);
+            if (cacheRef.current.has(chatbox.id)) {
+              const cached = cacheRef.current.get(chatbox.id);
               detailData = cached.detailData;
               summaryData = cached.summaryData;
             } else {
@@ -31,7 +31,7 @@ export function useProjectManagerData(activeTab, searchQuery) {
               ]);
               detailData = detailRes;
               summaryData = summaryRes;
-              window.__pmCache.set(chatbox.id, { detailData, summaryData });
+              cacheRef.current.set(chatbox.id, { detailData, summaryData });
             }
 
             const summary = summaryData?.data?.summary; 
@@ -62,7 +62,7 @@ export function useProjectManagerData(activeTab, searchQuery) {
 
 // Unconditional fetch on mount removed to prevent unnecessary API calls
   
-  useEffect(() => { if (activeTab === "requests") fetchRequests(); }, [activeTab]);
+  useEffect(() => { if (activeTab === "requests" || activeTab === "dashboard") fetchRequests(); }, [activeTab]);
 
   const filteredNotifications = notifications.filter(n => 
     !searchQuery || 

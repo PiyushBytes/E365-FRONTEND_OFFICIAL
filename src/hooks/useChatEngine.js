@@ -35,7 +35,7 @@ export function useChatEngine() {
     st.setIsTyping(false); // Stop typing indicator whenever a new message organically arrives
   }, [st.setMessages, st.setIsTyping]);
 
-  const shouldConnectWS = Boolean(st.chatboxId && st.view === "chat");
+  const shouldConnectWS = Boolean(st.chatboxId);
   useChatWebSocket(st.chatboxId, handleNewMessage, shouldConnectWS);
 
   return { 

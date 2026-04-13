@@ -41,14 +41,14 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
   let activePMName = "Project Manager";
   
   for (let i = messages.length - 1; i >= 0; i--) {
-    const text = messages[i].text;
-    if (text) {
-      if (/has joined the chat/i.test(text)) {
+    const msg = messages[i];
+    if (msg.role === "system" || (msg.role === "pm" && /has joined|has left/i.test(msg.text))) {
+      if (/has joined/i.test(msg.text)) {
         isPMActive = true;
-        const match = text.match(/^\[(.*?)\] \((.*?)\)/);
+        const match = msg.text.match(/^\[(.*?)\] \((.*?)\)/);
         if (match && match[2]) activePMName = match[2];
         break;
-      } else if (/has left the chat/i.test(text)) {
+      } else if (/has left/i.test(msg.text)) {
         isPMActive = false;
         break;
       }
@@ -62,7 +62,7 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
       className="h-full px-6 py-6 overflow-y-auto flex flex-col gap-3 scrollbar-hide max-w-3xl mx-auto w-full"
     >
       {filtered.map((msg, i) => {
-        const isSystem = /has joined the chat|has left the chat|continue assisting you/i.test(msg.text);
+        const isSystem = msg.role === "system" || /has joined the chat|has left the chat|continue assisting you/i.test(msg.text);
 
         // ── SYSTEM EVENT PILL ────────────────────────────────────────────
         if (isSystem) {

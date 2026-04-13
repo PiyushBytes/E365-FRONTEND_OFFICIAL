@@ -1,8 +1,9 @@
 // Yeh hook Admin dashboard ke statistics aur bookings ka data handle karta hai
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreditCard, Users, Calendar, TrendingUp } from "lucide-react";
+import api from "../api/axios";
 
-// Fake data jo admin ko dikhana hai
+// Fallback data jo tab aayega jab backend endopint fully ready nahi hoga
 const INITIAL_BOOKINGS = [
   { client: "Stark Industries", artist: "The Weeknd", date: "Oct 24, 2023", status: "Confirmed", amount: "$150,000" },
   { client: "Wayne Ent.", artist: "Dua Lipa", date: "Nov 02, 2023", status: "Pending", amount: "$120,000" },
@@ -19,10 +20,34 @@ const STATS_DATA = [
 ];
 
 export function useAdminData(searchQuery) {
-  const [bookings] = useState(INITIAL_BOOKINGS);
-  // Agar kisi ne search bar me kuch type kiya hai, toh client ya artist ke naam se filter karo
-  const filteredBookings = bookings.filter(b => b.client.toLowerCase().includes((searchQuery || "").toLowerCase()) || b.artist.toLowerCase().includes((searchQuery || "").toLowerCase()));
+  const [bookings, setBookings] = useState([]);
+  const [stats, setStats] = useState(STATS_DATA);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await api.get("/api/admin/dashboard/");
+        if (res.data?.bookings) {
+          setBookings(res.data.bookings);
+        } else {
+          setBookings(INITIAL_BOOKINGS);
+        }
+        if (res.data?.stats) {
+          setStats(res.data.stats);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch admin data, using fallback.", err);
+        setBookings(INITIAL_BOOKINGS);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const filteredBookings = bookings.filter(b => b.client?.toLowerCase().includes((searchQuery || "").toLowerCase()) || b.artist?.toLowerCase().includes((searchQuery || "").toLowerCase()));
   
-  // Stats aur filter ki hui list return karo UI ke liye
-  return { statsData: STATS_DATA, filteredBookings };
+  return { statsData: stats, filteredBookings, loading };
 }

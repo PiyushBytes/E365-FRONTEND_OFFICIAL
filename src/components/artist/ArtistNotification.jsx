@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 
 // Artist notification component - Yeh component artist ko aane wali event requests dikhata hai
-const ArtistNotification = ({ notification, onNegotiate, onAccept }) => {
+const ArtistNotification = ({ notification, onNegotiate, onAccept, onReject }) => {
   // Price ko format karne wala helper function, agar price nahi hai toh "Negotiable" dikhayega
   const formatPrice = (price) => {
     if (!price) return "Negotiable";
@@ -114,7 +114,10 @@ const ArtistNotification = ({ notification, onNegotiate, onAccept }) => {
            <span>Negotiate</span>
         </button>
         
-        <button className="px-4 bg-[#111111] border border-[#1a1a1a] text-gray-400 py-3 rounded-xl hover:bg-[#1a1a1a] hover:text-white transition-all">
+        <button 
+          onClick={() => onReject && onReject(notification)}
+          className="px-4 bg-[#111111] border border-[#1a1a1a] text-gray-400 py-3 rounded-xl hover:bg-[#1a1a1a] hover:text-white transition-all"
+        >
            <X size={18} />
         </button>
       </div>

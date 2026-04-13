@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { NotificationProvider } from "../context/NotificationContext";
 
 export default function ProtectedRoute({ allowedRoles = [] }) {
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -29,5 +30,9 @@ export default function ProtectedRoute({ allowedRoles = [] }) {
     return <Navigate to="/" replace />;
   }
 
-  return <Outlet />;
+  return (
+    <NotificationProvider>
+      <Outlet />
+    </NotificationProvider>
+  );
 }
