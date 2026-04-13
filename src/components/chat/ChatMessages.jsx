@@ -37,6 +37,24 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
     return true;
   });
 
+  let isPMActive = false;
+  let activePMName = "Project Manager";
+  
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const text = messages[i].text;
+    if (text) {
+      if (/has joined the chat/i.test(text)) {
+        isPMActive = true;
+        const match = text.match(/^\[(.*?)\] \((.*?)\)/);
+        if (match && match[2]) activePMName = match[2];
+        break;
+      } else if (/has left the chat/i.test(text)) {
+        isPMActive = false;
+        break;
+      }
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
@@ -137,15 +155,17 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           className="flex items-end gap-2.5"
         >
-          <BotAvatar />
+          {isPMActive ? <PMAvatar /> : <BotAvatar />}
           <div className="px-5 py-4 rounded-2xl rounded-bl-sm flex gap-1.5 items-center"
             style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}
           >
-            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-            <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+            <span className={`w-2 h-2 ${isPMActive ? "bg-amber-500" : "bg-blue-400"} rounded-full animate-bounce`} style={{ animationDelay: "0ms" }} />
+            <span className={`w-2 h-2 ${isPMActive ? "bg-amber-500" : "bg-blue-400"} rounded-full animate-bounce`} style={{ animationDelay: "150ms" }} />
+            <span className={`w-2 h-2 ${isPMActive ? "bg-amber-500" : "bg-blue-400"} rounded-full animate-bounce`} style={{ animationDelay: "300ms" }} />
           </div>
-          <span className="text-[11px] text-slate-500 mb-1">E365 AI is typing…</span>
+          <span className="text-[11px] text-slate-500 mb-1">
+            {isPMActive ? `${activePMName} is typing…` : "E365 AI is typing…"}
+          </span>
         </motion.div>
       )}
     </motion.div>

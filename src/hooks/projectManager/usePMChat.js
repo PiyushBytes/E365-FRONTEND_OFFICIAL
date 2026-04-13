@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { getChatMessages, enterChatbox, exitChatbox, sendPMReply } from "../../api/chatbot";
+import { useChatWebSocket } from "../chat/useChatWebSocket";
+import { secureStorage } from "../../utils/secureStorage";
 
 // PM dashboard ki aadhi chat functions isme handle hain
 export const usePMChat = (notificationId) => {
@@ -11,6 +13,30 @@ export const usePMChat = (notificationId) => {
   const scrollRef = useRef(null);
 
   const fetchedIdRef = useRef(null);
+
+  const handleNewMessage = useCallback((newMessage) => {
+    setMessages((prev) => {
+      const type = newMessage.sender_type?.toLowerCase() || newMessage.sender?.toLowerCase();
+      const role = (type === "client" || type === "user") ? "user" : (type === "pm" || type === "event_manager") ? "pm" : "bot";
+      const incomingText = (newMessage.content || newMessage.text || "").trim();
+      
+      // Deduplicate optimistic messages
+      const isDupe = prev.slice(-3).some(m => m.role === role && ((m.text || "").trim() === incomingText || (m.content || "").trim() === incomingText));
+      if (isDupe) return prev;
+
+      return [
+        ...prev,
+        {
+          id: newMessage.id || "ws-" + Date.now() + Math.floor(Math.random()*100),
+          role: role,
+          text: incomingText,
+          time: newMessage.created_at
+        }
+      ];
+    });
+  }, []);
+
+  useChatWebSocket(notificationId, handleNewMessage, hasJoined);
 
   // Sirf chat history load karo bina enter kiye
   useEffect(() => {
@@ -35,6 +61,11 @@ export const usePMChat = (notificationId) => {
               text: m.content || m.text,
               time: m.created_at,
             };
+          }).filter((msg, index, self) => {
+            if (index > 0 && self[index - 1].role === msg.role && (self[index - 1].text || "").trim() === (msg.text || "").trim()) {
+              return false; // Skip consecutive duplicates
+            }
+            return true;
           })
         );
       } catch (err) {
@@ -55,15 +86,38 @@ export const usePMChat = (notificationId) => {
     try {
       await enterChatbox(notificationId);
       setHasJoined(true);
+      
+      const storedUser = secureStorage.getItem("user");
+      let pmName = "Event Manager";
+      if (storedUser) {
+        try {
+          const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
+          pmName = parsed?.first_name || parsed?.username || "Event Manager";
+        } catch (e) { }
+      }
+      
+      await sendPMReply(notificationId, `[Project Manager] (${pmName}) has joined the chat and typing for your smooth solution`);
     } catch (e) {
       console.error(e);
     }
   };
   const leave = async () => {
-    if (hasJoined)
-      await exitChatbox(notificationId).catch((err) => {
+    if (hasJoined) {
+      try {
+        const storedUser = secureStorage.getItem("user");
+        let pmName = "Event Manager";
+        if (storedUser) {
+          try {
+            const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
+            pmName = parsed?.first_name || parsed?.username || "Event Manager";
+          } catch (e) { }
+        }
+        await sendPMReply(notificationId, `[Project Manager] (${pmName}) has left the chat. I'll continue assisting you.`);
+        await exitChatbox(notificationId);
+      } catch (err) {
         console.error(err);
-      });
+      }
+    }
   };
 
   const send = async () => {

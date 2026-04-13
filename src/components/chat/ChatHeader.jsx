@@ -1,4 +1,4 @@
-import { Zap, RefreshCw, X } from "lucide-react";
+import { Zap, MessageSquarePlus, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ChatHeader({ onClose, onReset }) {
@@ -34,11 +34,11 @@ export default function ChatHeader({ onClose, onReset }) {
       <div className="flex items-center gap-2">
         <button
           onClick={onReset}
-          title="New Conversation"
+          title="New Chat"
           className="w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 group"
           style={{ background: "rgba(30,64,175,0.12)", border: "1px solid rgba(59,130,246,0.2)" }}
         >
-          <RefreshCw size={15} className="text-blue-400 group-hover:text-white transition-colors" />
+          <MessageSquarePlus size={16} className="text-blue-400 group-hover:text-white transition-colors" />
         </button>
         <button
           onClick={onClose}

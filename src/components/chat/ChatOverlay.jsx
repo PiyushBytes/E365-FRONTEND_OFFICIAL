@@ -38,7 +38,10 @@ export default function ChatOverlay({ open, onClose, initialMsg, onMsgProcessed 
           <div className="absolute top-0 left-0 right-0 h-px bg-zinc-900 pointer-events-none" />
 
           <div className="w-full h-full max-w-6xl mx-auto flex flex-col relative z-10">
-            <ChatHeader onClose={onClose} onReset={engine.reset} />
+            <ChatHeader onClose={onClose} onReset={async () => {
+              engine.reset();
+              await engine.init(true);
+            }} />
 
             {/* Divider */}
             <div className="mx-8 h-px bg-zinc-900" />

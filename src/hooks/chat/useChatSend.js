@@ -34,10 +34,16 @@ export const useChatSend = (st) => {
       const { data: d } = await sendChatMessage(cid, msg);
       if (d?.bot_reply) {
         st.setIsTyping(false);
-        st.setMessages((p) => [
-          ...p,
-          { id: "tb-" + Date.now(), role: "bot", text: d.bot_reply, isLocal: true },
-        ]);
+        st.setMessages((p) => {
+          const incoming = (d.bot_reply || "").trim();
+          const isDupe = p.slice(-3).some(m => m.role === "bot" && (m.text || "").trim() === incoming);
+          if (isDupe) return p;
+          
+          return [
+            ...p,
+            { id: "tb-" + Date.now(), role: "bot", text: d.bot_reply, isLocal: true },
+          ];
+        });
       }
       if (d?.all_fields_collected && !st.submitted) {
         st.setSubmitted(true);

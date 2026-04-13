@@ -64,4 +64,4 @@ export const exitChatbox = (chatboxId) =>
 // PM client ko direct message bhejta hai (Bot silence rahega)
 // Body: { content: "message string" }
 export const sendPMReply = (chatboxId, message) => 
-  api.post(`/api/chat/chatboxes/${chatboxId}/pm-reply/`, { content: message });
+  api.post(`/api/chat/chatboxes/${chatboxId}/em-reply/`, { content: message });
