@@ -60,9 +60,7 @@ export function useProjectManagerData(activeTab, searchQuery) {
     } catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
-  useEffect(() => { 
-    fetchRequests(); 
-  }, []);
+// Unconditional fetch on mount removed to prevent unnecessary API calls
   
   useEffect(() => { if (activeTab === "requests") fetchRequests(); }, [activeTab]);
 

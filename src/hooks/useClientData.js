@@ -14,12 +14,26 @@ export function useClientData(activeTab) {
   const [chatMessages, setChatMessages] = useState([]);
   const [loadingMessages, setLoadingMessages] = useState(false);
 
-  // Component start hote hi user ka summary details fetch karo
+  // Component start hote hi ya jab dashboard tab khula ho, user ka basic static data data fetch karo
+  // (API data like chatbox summary will not be called automatically to prevent unnecessary requests)
   useEffect(() => {
-    fetch("/static/client_dashboard_data.json").then((res) => res.json()).then(setData).catch(console.error);
+    if (activeTab === "dashboard") {
+      fetch("/static/client_dashboard_data.json").then((res) => res.json()).then(setData).catch(console.error);
+    }
+  }, [activeTab]);
+
+  // Expose function so it can be called manually if needed later on
+  const fetchQuerySummary = async () => {
     const chatboxId = localStorage.getItem("chatboxId");
-    if (chatboxId) getChatboxSummary(chatboxId).then((res) => setQuerySummary(res.data)).catch(console.error);
-  }, []);
+    if (chatboxId) {
+      try {
+        const res = await getChatboxSummary(chatboxId);
+        setQuerySummary(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   // Agar user 'messages' tab me jata hai, to saare chats list laao background mein
   useEffect(() => {

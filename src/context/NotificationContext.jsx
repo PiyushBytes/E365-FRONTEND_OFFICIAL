@@ -9,6 +9,18 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const wsRef = useRef(null);
 
+  // Expose fetch function so components can fetch on demand
+  const fetchNotifications = async () => {
+    if (!isAuthenticated || !user) return;
+    try {
+      const response = await getNotificationHistory();
+      const data = response.data.notifications || response.data || [];
+      setNotifications(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to fetch notification history:", err);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated || !user) {
       if (wsRef.current) {
@@ -17,20 +29,6 @@ export const NotificationProvider = ({ children }) => {
       }
       return;
     }
-
-    // 1. Fetch historical notifications 
-    const fetchHistory = async () => {
-      try {
-        const response = await getNotificationHistory();
-        const data = response.data.notifications || response.data || [];
-        setNotifications(Array.isArray(data) ? data : []);
-      } catch (err) {
-        console.error("Failed to fetch notification history:", err);
-      }
-    };
-
-    fetchHistory();
-
 
     return () => {
       if (wsRef.current) {
@@ -41,7 +39,7 @@ export const NotificationProvider = ({ children }) => {
   }, [isAuthenticated, user]);
 
   return (
-    <NotificationContext.Provider value={{ notifications, setNotifications }}>
+    <NotificationContext.Provider value={{ notifications, setNotifications, fetchNotifications }}>
       {children}
     </NotificationContext.Provider>
   );

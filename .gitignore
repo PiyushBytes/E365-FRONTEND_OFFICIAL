@@ -12,8 +12,12 @@ dist
 dist-ssr
 *.local
 
-# ─── Environment files — (Currently tracking all env files) ──────────────────
-
+# ─── Environment files — (Ignoring all env files) ──────────────────
+.env
+.env.*
+!.env.example
+.env.development
+.env.production
 # ─── Temp / build artifacts ──────────────────────────────────────────────────
 lint.txt
 lint_output.txt

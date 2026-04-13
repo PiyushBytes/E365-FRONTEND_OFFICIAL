@@ -18,7 +18,7 @@ export default function ArtistDashboard() {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showSettings, setShowSettings] = useState(false);
-  const dataHooks = useArtistData(user);
+  const dataHooks = useArtistData(user, activeTab);
   const chatRef = useRef(null);
 
   const handleNegotiate = (notif) => chatRef.current?.open(`Hi, I'd like to negotiate the request for ${notif.event_name}`);
