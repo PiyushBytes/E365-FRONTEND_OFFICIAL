@@ -28,7 +28,7 @@ export default function ProjectManagerDashboard() {
       {activeTab === "requests" && <PMRequestsTab {...pmData} />}
       {activeTab === "settings" && <div className="flex flex-col items-center justify-center h-[50vh] text-center"><h3 className="text-2xl font-bold text-gray-500">Settings</h3></div>}
       {!["dashboard", "requests", "settings"].includes(activeTab) && <div className="flex flex-col items-center justify-center h-[50vh] text-center"><Activity size={40} className="text-gray-600 mb-6" /><h3 className="text-2xl font-bold text-gray-500">Coming Soon</h3></div>}
-      {pmData.selectedChat && <PMChatModal notification={pmData.selectedChat} onClose={() => pmData.setSelectedChat(null)} />}
+      {pmData.selectedChat && <PMChatModal notification={pmData.selectedChat} onClose={() => pmData.setSelectedChat(null)} onJoinChat={() => { if (!pmData.selectedChat.is_read) pmData.markChatAsRead(pmData.selectedChat.id); }} />}
       <ChatWidget ref={chatRef} />
     </DashboardLayout>
   );

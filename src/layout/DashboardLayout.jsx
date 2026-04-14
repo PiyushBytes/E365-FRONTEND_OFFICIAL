@@ -1,4 +1,4 @@
-// Dashboard ka main layout — sidebar + header + content area
+// Dashboard Layout — Spotify-style with #121212 content bg
 import React, { useState } from "react";
 import DesktopSidebar from "./dashboard/DesktopSidebar";
 import MobileSidebar from "./dashboard/MobileSidebar";
@@ -7,7 +7,6 @@ import SettingsModal from "../components/common/SettingsModal";
 import { AnimatePresence } from "framer-motion";
 
 export default function DashboardLayout({ children, menuItems, activeTab, onTabChange, user, title, notifications = [], onLogout, showSettings, setShowSettings, SettingsComponent, searchQuery, onSearchChange }) {
-  // Sidebar toggle state
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [internalSearch, setInternalSearch] = useState("");
   const currentSearch = onSearchChange ? searchQuery : internalSearch;
@@ -16,16 +15,14 @@ export default function DashboardLayout({ children, menuItems, activeTab, onTabC
 
   return (
     <div className="flex h-[100dvh] bg-black text-white overflow-hidden">
-      {/* Desktop sidebar — bade screens ke liye */}
       <DesktopSidebar isSidebarOpen={isSidebarOpen} title={title} menuItems={menuItems} activeTab={activeTab} onTabChange={onTabChange} user={user} setShowSettings={setShowSettings} onLogout={onLogout} />
-      {/* Mobile drawer sidebar */}
       <MobileSidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} title={title} menuItems={menuItems} activeTab={activeTab} onTabChange={onTabChange} setShowSettings={setShowSettings} onLogout={onLogout} />
-      {/* Content area — header + scrollable main */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        <DashboardHeader isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} activeTabLabel={activeLabel} searchQuery={currentSearch} handleSearchChange={handleSearch} notifications={notifications} user={user} />
-        <main className="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-10 scrollbar-hide">{children}</main>
+        <div className="flex-1 overflow-y-auto relative bg-[#121212] rounded-lg m-2 ml-0 scrollbar-custom">
+          <DashboardHeader isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} activeTabLabel={activeLabel} searchQuery={currentSearch} handleSearchChange={handleSearch} notifications={notifications} user={user} />
+          <main className="p-4 pt-20 sm:p-6 sm:pt-24 lg:p-10 lg:pt-24">{children}</main>
+        </div>
       </div>
-      {/* Settings modal */}
       <AnimatePresence>
         {showSettings && <SettingsModal onClose={() => setShowSettings(false)}>{SettingsComponent && <SettingsComponent />}</SettingsModal>}
       </AnimatePresence>

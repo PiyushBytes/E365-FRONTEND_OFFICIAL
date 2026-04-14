@@ -1,68 +1,57 @@
-import { useState, useEffect, useRef } from "react";
-import { getPMRequests, getPMRequestDetail, markNotificationRead, cancelPMRequest } from "../api/notifications";
-import { getChatboxSummary } from "../api/chatbot";
+import { useState, useEffect } from "react";
+import { getAllQueries, markNotificationRead, cancelPMRequest } from "../api/notifications";
 
 export function useProjectManagerData(activeTab, searchQuery) {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
-  const cacheRef = useRef(new Map());
 
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const res = await getPMRequests(); // Array of chatboxes
-      const detailedRequests = await Promise.all(
-        res.data.map(async (chatbox) => {
-          try {
-            // Check cache to persist across re-renders
-            let detailData = null;
-            let summaryData = null;
+      const res = await getAllQueries(); // GET /api/query/all/ fetches all queries in one go
+      
+      // Backend uses { count, queries: [...] } wrapper
+      const rawData = res.data;
+      const queriesList = Array.isArray(rawData) ? rawData : (rawData?.queries || rawData?.results || rawData?.data || []);
+      
+      const detailedRequests = queriesList.map((query) => {
+        // Handle chatbox ID (it comes as a UUID string in this API)
+        const chatboxId = typeof query.chatbox === "string" ? query.chatbox : (query.chatbox?.id || query.id);
+        
+        return {
+          id: chatboxId, // Needed for opening chat/cancel interactions
+          query_id: query.id,
+          created_at: query.created_at || new Date().toISOString(),
+          status: query.is_complete ? "Complete" : "Pending",
+          is_read: true, // Assuming true since we don't have event_manager_active here directly
+          client_name: "Client", // Add client username from chatbox relation if needed later
+          company_name: "-",
+          artist_name: query.artist_genre || "Pending",
+          client_offerings: query.budget || "-",
+          event_date: query.event_date || "-",
+          event_place: query.event_location || "-",
+          audience_size: query.event_type || "-", // mapped event type to show some detail
+          event_description: query.additional_notes || "Details missing",
+        };
+      });
 
-            if (cacheRef.current.has(chatbox.id)) {
-              const cached = cacheRef.current.get(chatbox.id);
-              detailData = cached.detailData;
-              summaryData = cached.summaryData;
-            } else {
-              const [detailRes, summaryRes] = await Promise.all([
-                getPMRequestDetail(chatbox.id).catch(() => null),
-                getChatboxSummary(chatbox.id).catch(() => null)
-              ]);
-              detailData = detailRes;
-              summaryData = summaryRes;
-              cacheRef.current.set(chatbox.id, { detailData, summaryData });
-            }
-
-            const summary = summaryData?.data?.summary; 
-            
-            return {
-              id: chatbox.id, 
-              created_at: chatbox.created_at, 
-              status: chatbox.status, 
-              is_read: chatbox.event_manager_active,
-              client_name: detailData?.data?.client?.username || detailData?.data?.username || "Client", 
-              company_name: summary?.company_name || "-",
-              artist_name: summary?.artist_genre || "Pending", 
-              client_offerings: summary?.budget || "-",
-              event_date: summary?.event_date || chatbox.created_at, 
-              event_place: summary?.event_location || "-",
-              audience_size: summary?.audience_size || "-", 
-              event_description: summary?.additional_notes || "Details missing",
-            };
-          } catch {
-            return { ...chatbox, client_name: "Client", artist_name: "Pending" };
-          }
-        })
-      );
-      setNotifications(detailedRequests);
-      setUnreadCount(detailedRequests.filter(n => !n.is_read).length);
-    } catch (err) { console.error(err); } finally { setLoading(false); }
+      // Filter out any invalid malformed records just in case
+      const validRequests = detailedRequests.filter(r => r.id);
+      
+      setNotifications(validRequests);
+      setUnreadCount(validRequests.filter(n => !n.is_read).length);
+    } catch (err) { 
+      console.error("Failed to fetch PM inquiries:", err); 
+    } finally { 
+      setLoading(false); 
+    }
   };
 
 // Unconditional fetch on mount removed to prevent unnecessary API calls
   
-  useEffect(() => { if (activeTab === "requests" || activeTab === "dashboard") fetchRequests(); }, [activeTab]);
+  useEffect(() => { if (activeTab === "requests") fetchRequests(); }, [activeTab]);
 
   const filteredNotifications = notifications.filter(n => 
     !searchQuery || 
@@ -72,13 +61,13 @@ export function useProjectManagerData(activeTab, searchQuery) {
 
   const handleOpenChat = async (n) => {
     setSelectedChat(n);
-    if (!n.is_read) {
-      try {
-        await markNotificationRead(n.id);
-        setNotifications(prev => prev.map(p => p.id === n.id ? { ...p, is_read: true } : p));
-        setUnreadCount(prev => Math.max(0, prev - 1));
-      } catch (err) { console.error(err); }
-    }
+  };
+
+  const markChatAsRead = async (id) => {
+    try {
+      setNotifications(prev => prev.map(p => p.id === id ? { ...p, is_read: true } : p));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) { console.error(err); }
   };
 
   const handleCancel = async (n) => {
@@ -89,5 +78,5 @@ export function useProjectManagerData(activeTab, searchQuery) {
     } catch (err) { console.error(err); }
   };
 
-  return { notifications: filteredNotifications, unreadCount, loading, selectedChat, setSelectedChat, fetchRequests, handleOpenChat, handleCancel };
+  return { notifications: filteredNotifications, unreadCount, loading, selectedChat, setSelectedChat, fetchRequests, handleOpenChat, handleCancel, markChatAsRead };
 }

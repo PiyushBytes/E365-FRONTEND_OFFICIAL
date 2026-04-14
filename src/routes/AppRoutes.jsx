@@ -10,6 +10,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import NotFoundPage from "../pages/NotFoundPage";
+import MakeProfilePage from "../pages/MakeProfilePage";
 
 // ─── Route-level infrastructure ──────────────────────────────────────────────
 import PageLoader from "./PageLoader";
@@ -64,6 +65,12 @@ export default function AppRoutes() {
 
       {/* ── Role-gated lazy dashboards ── */}
       
+      {/* Artist Profile Setup / Edit */}
+      <Route element={<ProtectedRoute allowedRoles={["artist"]} />}>
+        <Route path="/make-profile" element={<MakeProfilePage />} />
+        <Route path="/edit-profile" element={<MakeProfilePage />} />
+      </Route>
+
       {/* Artist Dashboard */}
       <Route element={<ProtectedRoute allowedRoles={["artist"]} />}>
         <Route path="/artist" element={<LazyRoute><ArtistDashboard /></LazyRoute>} />

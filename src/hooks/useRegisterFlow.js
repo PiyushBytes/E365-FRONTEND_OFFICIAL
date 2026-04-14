@@ -28,31 +28,14 @@ export function useRegisterFlow() {
       const result = await register({ username, email, phone, password, role });
       
       if (result.success) {
-        const targetRole = (result.role || role).toLowerCase();
-        let redirectPath = "/";
-
-        switch (targetRole) {
-          case "artist":
-            redirectPath = "/artist";
-            break;
-          case "admin":
-            redirectPath = "/admin";
-            break;
-          case "client":
-            redirectPath = "/client";
-            break;
-          case "project_manager":
-          case "project-manager":
-          case "manager":
-          case "pm":
-          case "event_manager":
-            redirectPath = "/event_manager";
-            break;
-          default:
-            redirectPath = "/"; 
+        const targetRole = result.role || role;
+        if (targetRole === "artist") {
+          // Naye artist ko main landing page par bhej rahe hain
+          navigate("/");
+        } else {
+          // Baki users ko unke specific dashboard par bhejenge
+          navigate(["client", "admin"].includes(targetRole) ? `/${targetRole}` : "/");
         }
-
-        navigate(redirectPath, { replace: true });
       } else setError(result.error || "Registration failed.");
     } catch (err) { 
       setError("Unexpected error."); 

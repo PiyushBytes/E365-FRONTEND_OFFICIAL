@@ -10,6 +10,7 @@ export const usePMChat = (notificationId) => {
   const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hasJoined, setHasJoined] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
   const scrollRef = useRef(null);
 
   const fetchedIdRef = useRef(null);
@@ -17,7 +18,7 @@ export const usePMChat = (notificationId) => {
   const handleNewMessage = useCallback((newMessage) => {
     setMessages((prev) => {
       const type = newMessage.sender_type?.toLowerCase() || newMessage.sender?.toLowerCase();
-      const role = (type === "client" || type === "user") ? "user" : (type === "pm" || type === "event_manager") ? "pm" : type === "system" ? "system" : "bot";
+      const role = (type === "client" || type === "user") ? "user" : (type === "pm" || type === "event_manager") ? "pm" : "bot";
       const incomingText = (newMessage.content || newMessage.text || "").trim();
       
       // Deduplicate optimistic messages
@@ -38,61 +39,85 @@ export const usePMChat = (notificationId) => {
 
   useChatWebSocket(notificationId, handleNewMessage, hasJoined);
 
-  const loadMessages = async () => {
-    setLoading(true);
-    try {
-      const res = await getChatMessages(notificationId);
-      const raw = Array.isArray(res.data) ? res.data : [];
-      setMessages(
-        raw.map((m) => {
-          const t = m.sender_type?.toLowerCase() || m.sender?.toLowerCase();
-          return {
-            id: m.id,
-            role:
-              t === "client" || t === "user"
-                ? "user"
-                : t === "pm" || t === "event_manager"
-                  ? "pm"
-                  : t === "system" ? "system" : "bot",
-            text: m.content || m.text,
-            time: m.created_at,
-          };
-        }).filter((msg, index, self) => {
-          if (index > 0 && self[index - 1].role === msg.role && (self[index - 1].text || "").trim() === (msg.text || "").trim()) {
-            return false; // Skip consecutive duplicates
-          }
-          return true;
-        })
-      );
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Sirf chat history load karo bina enter kiye
   useEffect(() => {
     if (fetchedIdRef.current === notificationId) return;
     fetchedIdRef.current = notificationId;
-    loadMessages();
+
+    const load = async () => {
+      try {
+        const res = await getChatMessages(notificationId);
+        const raw = Array.isArray(res.data) ? res.data : [];
+        setMessages(
+          raw.map((m) => {
+            const t = m.sender_type?.toLowerCase() || m.sender?.toLowerCase();
+            return {
+              id: m.id,
+              role:
+                t === "client" || t === "user"
+                  ? "user"
+                  : t === "pm" || t === "event_manager"
+                    ? "pm"
+                    : "bot",
+              text: m.content || m.text,
+              time: m.created_at,
+            };
+          }).filter((msg, index, self) => {
+            if (index > 0 && self[index - 1].role === msg.role && (self[index - 1].text || "").trim() === (msg.text || "").trim()) {
+              return false; // Skip consecutive duplicates
+            }
+            return true;
+          })
+        );
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
   }, [notificationId]);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, isTyping]);
 
+  // Join button dbane pe call hoga aur footer change ho jayega
   const join = async () => {
+    if (isJoining || hasJoined) return;
+    setIsJoining(true);
     try {
       await enterChatbox(notificationId);
       setHasJoined(true);
+      
+      const storedUser = secureStorage.getItem("user");
+      let pmName = "Event Manager";
+      if (storedUser) {
+        try {
+          const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
+          pmName = parsed?.first_name || parsed?.username || "Event Manager";
+        } catch (e) { }
+      }
+      
+      await sendPMReply(notificationId, `[Project Manager] (${pmName}) has joined the chat and typing for your smooth solution`);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsJoining(false);
     }
   };
   const leave = async () => {
     if (hasJoined) {
       try {
+        const storedUser = secureStorage.getItem("user");
+        let pmName = "Event Manager";
+        if (storedUser) {
+          try {
+            const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
+            pmName = parsed?.first_name || parsed?.username || "Event Manager";
+          } catch (e) { }
+        }
+        await sendPMReply(notificationId, `[Project Manager] (${pmName}) has left the chat. I'll continue assisting you.`);
         await exitChatbox(notificationId);
       } catch (err) {
         console.error(err);
@@ -134,6 +159,6 @@ export const usePMChat = (notificationId) => {
     leave,
     send,
     setMessages,
-    loadMessages,
+    isJoining,
   };
 };

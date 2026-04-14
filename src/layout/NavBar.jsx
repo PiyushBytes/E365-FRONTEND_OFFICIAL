@@ -93,21 +93,17 @@ export default function Navbar() {
                 
                 {/* Menu Items */}
                 <div className="p-2 space-y-1 bg-[#0A0A0A]">
-                  <a
-                    href={`/${user?.role || 'client'}`}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors group"
-                  >
-                    <LayoutDashboard size={16} className="text-gray-500 group-hover:text-white transition-colors" />
-                    My Dashboard
-                  </a>
-                  
-                  <a
-                    href="/edit-profile"
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors group"
-                  >
-                    <Settings size={16} className="text-gray-500 group-hover:text-white transition-colors" />
-                    Edit Profile
-                  </a>
+                  {/* Naye artist jinka profile complete nahi hai unhe Dashboard hide kar rahe hain */}
+                  {!(user?.role === "artist" && !user?.is_profile_complete) && (
+                    <a
+                      href={`/${user?.role || 'client'}`}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-md text-[13px] font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors group"
+                    >
+                      <LayoutDashboard size={16} className="text-gray-500 group-hover:text-white transition-colors" />
+                      My Dashboard
+                    </a>
+                  )}
+                  {/* Edit profile is now moved to the Dashboard Settings */}
                 </div>
 
                 {/* Logout Action */}

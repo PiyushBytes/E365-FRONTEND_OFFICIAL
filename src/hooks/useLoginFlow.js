@@ -29,32 +29,8 @@ export function useLoginFlow() {
       // Agar login fail ho jaye
       if (!result.success) return setError(result.error || "Login failed.");
 
-      // Determine redirect path based on role
-      let redirectPath = "/";
-      const userRole = result.role?.toLowerCase() || "";
-
-      switch (userRole) {
-        case "artist":
-          redirectPath = "/artist";
-          break;
-        case "admin":
-          redirectPath = "/admin";
-          break;
-        case "client":
-          redirectPath = "/client";
-          break;
-        case "project_manager":
-        case "project-manager":
-        case "manager":
-        case "pm":
-        case "event_manager":
-          redirectPath = "/event_manager";
-          break;
-        default:
-          redirectPath = "/"; // Fallback
-      }
-
-      navigate(redirectPath, { replace: true });
+      // Login done ke baad, user ka role jo bhi ho, use hamesha main landing page par bhejo
+      navigate("/", { replace: true });
     } catch (err) {
       setError("Unexpected error.");
     } finally {

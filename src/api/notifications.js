@@ -8,10 +8,13 @@ import api from "./axios";
 export const getNotificationHistory = () =>
   api.get("/api/notifications/");
 
-// PM ke liye saare incoming chatbox/event requests fetch karo
-// Yeh list PM ke dashboard ka "inbox" hai
+// PM ke liye saare incoming chatbox/event requests fetch karo (old unoptimized way)
 export const getPMRequests = () =>
   api.get("/api/chat/chatboxes/");
+
+// Naya optimized way: PM ke liye saari event queries directly fetch karo
+export const getAllQueries = () =>
+  api.get("/api/query/all/");
 
 // Ek specific request ki poori detail fetch karo
 // Client ka naam, event summary, messages — sab yahan se milta hai

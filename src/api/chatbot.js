@@ -39,6 +39,12 @@ export const getChatMessages = async (chatboxId) => {
   return { data: messages };
 };
 
+// Fast poll — Ab hum single detail route se hi saara historical + naya data lenge
+export const getLatestMessages = async (chatboxId) => {
+  const res = await api.get(`/api/chat/chatboxes/${chatboxId}/`);
+  const messages = res.data?.messages || (Array.isArray(res.data) ? res.data : []);
+  return { data: messages };
+};
 
 // Client ne saari details confirm kar li — ab formally PM ko request bhejo
 // Iske baad PM dashboard pe nai notification dikhi degi

@@ -1,6 +1,7 @@
 // Artist panel ke liye saara fetching logic is hook ke andar hai
 import { useState, useEffect } from "react";
 import { getBookings, respondToBooking } from "../api/booking";
+import { getArtistProfile } from "../api/artistProfile";
 
 const CLIENT_IMAGES = [
   "https://images.unsplash.com/photo-1560250097-0b93528c311a",
@@ -14,6 +15,8 @@ export function useArtistData(user, activeTab) {
   const [requests, setRequests] = useState([]);
   const [stats, setStats] = useState({ totalBookings: 0, pendingRequests: 0, acceptedBookings: 0, revenue: "₹0K" });
   const [available, setAvailable] = useState(true); // Artist abhi available hai ya nahi?
+  const [profile, setProfile] = useState(null); // Artist profile data from backend
+  const [profileLoading, setProfileLoading] = useState(false);
 
   // Jab user login ho aur explicitly requests tab khula ho, uski saari details api se mangwao
   useEffect(() => {
@@ -22,8 +25,20 @@ export function useArtistData(user, activeTab) {
         .then(res => setNotifications(Array.isArray(res.data?.notifications) ? res.data.notifications : (Array.isArray(res.data) ? res.data : [])))
         .catch(console.error);
     }
-    
+
     if (activeTab === "dashboard") {
+      // Artist profile fetch karo
+      setProfileLoading(true);
+      getArtistProfile()
+        .then(data => {
+          setProfile(data);
+          if (data?.is_available !== undefined) {
+            setAvailable(data.is_available);
+          }
+        })
+        .catch(console.error)
+        .finally(() => setProfileLoading(false));
+
       // Stats json se load kar rahe hain (dummy/fallback data)
       fetch("/static/artist_dashboard_count.json")
         .then(res => res.json())
@@ -44,5 +59,5 @@ export function useArtistData(user, activeTab) {
   };
 
   // UI ko chalane ke liye zaroori variables return karo
-  return { notifications, requests, stats, available, setAvailable, handleAccept };
+  return { notifications, requests, stats, available, setAvailable, handleAccept, profile, profileLoading };
 }

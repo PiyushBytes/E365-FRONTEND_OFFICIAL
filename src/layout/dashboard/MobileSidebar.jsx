@@ -9,31 +9,44 @@ export default function MobileSidebar({ isSidebarOpen, setIsSidebarOpen, title, 
     <AnimatePresence>
       {isSidebarOpen && (
         <>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 bg-black/80 backdrop-blur-sm z-30 md:hidden" />
-          <motion.aside initial={{ x: -300 }} animate={{ x: 0 }} exit={{ x: -300 }} className="fixed inset-y-0 left-0 w-64 bg-zinc-900 border-r border-white/10 z-40 md:hidden flex flex-col">
-            <div className="h-20 flex items-center justify-between px-6 border-b border-white/10">
-              <span className="font-bold text-lg text-white">{title || "Dashboard"}</span>
-              <button onClick={() => setIsSidebarOpen(false)} className="text-gray-400 hover:text-white"><XCircle size={24} /></button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsSidebarOpen(false)} className="fixed inset-0 bg-black/80 z-30 md:hidden" />
+          <motion.aside initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }} transition={{ type: "spring", damping: 25, stiffness: 300 }} className="fixed inset-y-0 left-0 w-[280px] bg-black z-40 md:hidden flex flex-col">
+            <div className="h-14 flex items-center justify-between px-4">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                  <span className="font-black text-black text-[8px]">E365</span>
+                </div>
+                <span className="font-bold text-sm text-white">{title || "Dashboard"}</span>
+              </div>
+              <button onClick={() => setIsSidebarOpen(false)} className="text-zinc-500 hover:text-white"><XCircle size={20} /></button>
             </div>
-            <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+            <div className="mx-2 bg-[#121212] rounded-lg p-2 mb-2">
               {menuItems.map((item) => (
-                <button key={item.id} onClick={() => { onTabChange(item.id); setIsSidebarOpen(false); }} className={`w-full flex items-center gap-4 p-3 rounded-xl ${activeTab === item.id ? "bg-red-600 text-white" : "text-gray-400 hover:bg-white/5"}`}>
-                  <item.icon size={20} />
-                  <span className="font-medium">{item.label}</span>
+                <button 
+                  key={item.id} 
+                  onClick={() => { onTabChange(item.id); setIsSidebarOpen(false); }} 
+                  className={`w-full flex items-center gap-3 px-3 py-3 rounded-md transition-all ${
+                    activeTab === item.id ? "bg-[#1a1a1a] text-white font-bold" : "text-zinc-400 hover:text-white"
+                  }`}
+                >
+                  <item.icon size={22} />
+                  <span className="text-sm">{item.label}</span>
                 </button>
               ))}
-            </nav>
-            <div className="p-4 border-t border-white/10 space-y-2 bg-black/20">
-              <button 
-                onClick={() => { navigate("/"); setIsSidebarOpen(false); }} 
-                className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors"
-              >
-                <Home size={20} /><span>Back to Home</span>
+            </div>
+            <div className="flex-1" />
+            <div className="mx-2 mb-2 bg-[#121212] rounded-lg p-1.5 space-y-0.5">
+              <button onClick={() => { navigate("/"); setIsSidebarOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-zinc-400 hover:text-white transition-colors">
+                <Home size={20} /><span className="text-[13px]">Home</span>
               </button>
               {setShowSettings && (
-                <button onClick={() => { setShowSettings(true); setIsSidebarOpen(false); }} className="w-full flex items-center gap-4 p-3 rounded-xl text-gray-400 hover:bg-white/5 hover:text-white transition-colors"><Settings size={20} /><span>Settings</span></button>
+                <button onClick={() => { setShowSettings(true); setIsSidebarOpen(false); }} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-zinc-400 hover:text-white transition-colors">
+                  <Settings size={20} /><span className="text-[13px]">Settings</span>
+                </button>
               )}
-              <button onClick={onLogout} className="w-full flex items-center gap-4 p-3 rounded-xl text-red-500"><LogOut size={20} /><span>Logout</span></button>
+              <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-zinc-400 hover:text-white transition-colors">
+                <LogOut size={20} /><span className="text-[13px]">Log out</span>
+              </button>
             </div>
           </motion.aside>
         </>

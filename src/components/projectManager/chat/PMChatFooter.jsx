@@ -1,14 +1,15 @@
 import React from "react";
-import { Send, LogIn } from "lucide-react";
+import { Send, LogIn, Loader2 } from "lucide-react";
 
 // Agar EM ne join nahi kiya to join button, warna input box
 // Pehle purani chat dikhegi bina type box ke, fir "Join Chat" dabane pe type box khulega
-export const PMChatFooter = ({ hasJoined, onJoin, input, setInput, onSend, activeInput }) => {
+export const PMChatFooter = ({ hasJoined, onJoin, input, setInput, onSend, activeInput, isJoining }) => {
   if (!hasJoined) {
     return (
       <div className="px-8 pb-8 pt-4 flex justify-center w-full z-20">
-        <button onClick={onJoin} className="flex items-center gap-2 px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all shadow-md cursor-pointer">
-          <LogIn size={18} /> Join Chat
+        <button onClick={onJoin} disabled={isJoining} className="flex items-center gap-2 px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold transition-all shadow-md cursor-pointer disabled:cursor-not-allowed">
+          {isJoining ? <Loader2 size={18} className="animate-spin" /> : <LogIn size={18} />} 
+          {isJoining ? "Joining..." : "Join Chat"}
         </button>
       </div>
     );

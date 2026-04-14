@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, registerUser, logoutUser, getMe } from "../api/auth";
+import { getArtistProfile } from "../api/artistProfile";
 import { secureStorage } from "../utils/secureStorage";
 const AuthContext = createContext(null);
 
@@ -67,8 +68,22 @@ export const AuthProvider = ({ children }) => {
         const backendUser = response?.data?.user;
 
         if (backendUser) {
-          secureStorage.setItem("user", backendUser);
-          setUser(backendUser);
+          let finalUser = { ...backendUser };
+          
+          // Agar artist hai, toh check karo ki profile exist karta hai ya nahi
+          if (backendUser.role === "artist") {
+            try {
+              await getArtistProfile();
+              // Profile successfully mila — matlab profile complete hai
+              finalUser.is_profile_complete = true;
+            } catch {
+              // Profile nahi mila (404 ya error) — matlab abhi profile nahi bana
+              finalUser.is_profile_complete = false;
+            }
+          }
+          
+          secureStorage.setItem("user", finalUser);
+          setUser(finalUser);
           setToken(storedToken);
         } else {
           clearAuth();
@@ -147,6 +162,19 @@ export const AuthProvider = ({ children }) => {
         };
       }
 
+      let userObj = data?.user;
+
+      // Sync artist profile completeness properly directly after login!
+      if (userObj?.role === "artist") {
+        try {
+          await getArtistProfile();
+          userObj.is_profile_complete = true;
+        } catch {
+          userObj.is_profile_complete = false;
+        }
+      }
+
+      data.user = userObj; // Mutate payload safely before persisting
       persistAuth(data);
 
       return {

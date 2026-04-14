@@ -4,12 +4,6 @@ import { env } from "../../config/env";
 
 export const useChatWebSocket = (chatboxId, onMessage, shouldConnect = true) => {
   const ws = useRef(null);
-  const onMessageRef = useRef(onMessage);
-
-  // Keep the ref updated with the latest onMessage callback
-  useEffect(() => {
-    onMessageRef.current = onMessage;
-  }, [onMessage]);
 
   useEffect(() => {
     if (!chatboxId || !shouldConnect) return;
@@ -34,10 +28,10 @@ export const useChatWebSocket = (chatboxId, onMessage, shouldConnect = true) => 
       try {
         const data = JSON.parse(event.data);
         if (data.event === "new_message") {
-          if (onMessageRef.current) onMessageRef.current(data);
+          onMessage(data);
         } else if (data.event === "em_entered" || data.event === "pm_joined" || data.type === "em_entered" || data.type === "pm_joined") {
           const pmName = data.pm_name || data.username || data.sender_username || "Project Manager";
-          if (onMessageRef.current) onMessageRef.current({
+          onMessage({
             id: "sys-" + Date.now(),
             sender_type: "system",
             content: `[Project Manager] (${pmName}) has joined the chat and typing for your smooth solution`,
@@ -45,7 +39,7 @@ export const useChatWebSocket = (chatboxId, onMessage, shouldConnect = true) => 
           });
         } else if (data.event === "em_exited" || data.event === "pm_left" || data.type === "em_exited" || data.type === "pm_left") {
           const pmName = data.pm_name || data.username || data.sender_username || "Project Manager";
-          if (onMessageRef.current) onMessageRef.current({
+          onMessage({
             id: "sys-" + Date.now() + "-left",
             sender_type: "system",
             content: `[Project Manager] (${pmName}) has left the chat. I'll continue assisting you.`,
@@ -70,7 +64,7 @@ export const useChatWebSocket = (chatboxId, onMessage, shouldConnect = true) => 
         ws.current.close();
       }
     };
-  }, [chatboxId, shouldConnect]);
+  }, [chatboxId, onMessage, shouldConnect]);
 
   return ws;
 };

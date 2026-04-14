@@ -6,11 +6,16 @@ import { PMChatFooter } from "./chat/PMChatFooter";
 import { usePMChat } from "../../hooks/projectManager/usePMChat";
 
 // Project Manager ka modal, jaha saare 50-lines ke tukde jode gaye hain
-const PMChatModal = ({ notification, onClose }) => {
+const PMChatModal = ({ notification, onClose, onJoinChat }) => {
   const { 
     messages, input, setInput, isTyping, loading, 
-    hasJoined, scrollRef, join, leave, send, setMessages, loadMessages 
+    hasJoined, scrollRef, join, leave, send, setMessages, isJoining 
   } = usePMChat(notification.id);
+  
+  const handleJoin = async () => {
+    await join();
+    if (onJoinChat) onJoinChat();
+  };
   
   const cName = notification.client_name || "Client";
 
@@ -20,10 +25,7 @@ const PMChatModal = ({ notification, onClose }) => {
     onClose();
   };
 
-  const handleRefresh = () => {
-    setMessages([]);
-    loadMessages();
-  };
+  const handleRefresh = () => setMessages([]); // Clear locally
 
   return (
     <PMChatLayout>
@@ -37,7 +39,7 @@ const PMChatModal = ({ notification, onClose }) => {
       </div>
 
       <PMChatFooter 
-        hasJoined={hasJoined} onJoin={join} 
+        hasJoined={hasJoined} onJoin={handleJoin} isJoining={isJoining}
         input={input} setInput={setInput} onSend={send} 
         activeInput={input.trim() && !isTyping} 
       />

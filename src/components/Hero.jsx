@@ -1,7 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Hero() {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+  
+  // Naya artist logic (Maan ke chalte hain is_profile_complete ya aisi koi field aayegi backend se)
+  const isNewArtist = isAuthenticated && user?.role === "artist" && !user?.is_profile_complete;
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 overflow-hidden bg-black">
@@ -32,13 +37,21 @@ export default function Hero() {
           The context needed to navigate <br /> complex event productions.
         </p>
 
-        {/* Action Button */}
-        <button
-          onClick={() => navigate("/plan-event")}
-          className="group relative bg-white text-black px-12 py-5 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 hover:bg-red-600 hover:text-white shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
-        >
-          Start Planning
-        </button>
+        {isNewArtist ? (
+          <button
+            onClick={() => navigate("/make-profile")}
+            className="group relative bg-white text-black px-12 py-5 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 hover:bg-red-600 hover:text-white shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+          >
+            MAKE YOUR ARTIST PROFILE NOW
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate("/plan-event")}
+            className="group relative bg-white text-black px-12 py-5 rounded-full font-black text-[10px] uppercase tracking-[0.4em] transition-all duration-500 hover:bg-red-600 hover:text-white shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
+          >
+            Start Planning
+          </button>
+        )}
       </div>
 
       <div className="absolute bottom-0 w-full h-32 bg-linear-to-t from-black to-transparent z-5" />

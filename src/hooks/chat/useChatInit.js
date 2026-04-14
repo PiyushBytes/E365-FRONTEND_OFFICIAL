@@ -20,7 +20,7 @@ const format = (r, st) => {
 
 // Agar expired hai, toh naya banakar blank msg bhejein
 export const useChatInit = (st) => {
-  const init = async (forceNew = false, retryCount = 0) => {
+  const init = async (forceNew = false) => {
     try {
       let id = forceNew ? null : (localStorage.getItem("chatboxId") || st.chatboxId);
       if (id && id !== st.chatboxId && !forceNew) st.setChatboxId(id);
@@ -52,11 +52,7 @@ export const useChatInit = (st) => {
           // Chat expire hone pe clear aur naya banane ki koshish (Recursive)
           localStorage.removeItem("chatboxId"); st.setChatboxId(null);
           st.reset();
-          if (retryCount < 2) {
-            init(false, retryCount + 1);
-          } else {
-            console.error("Failed to initialize chatbox after retries.");
-          }
+          init();
         }
       }
     } catch (e) { st.setIsTyping(false); }

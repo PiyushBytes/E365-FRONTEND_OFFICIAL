@@ -1,14 +1,13 @@
 import React from "react";
 import { LogOut, Save, Shield, User, Bell, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 
 const AdminSettings = () => {
     const navigate = useNavigate();
-    const { logout } = useAuth();
 
     const handleLogout = () => {
-        logout();
+        
+        navigate("/");
     };
 
     return (
