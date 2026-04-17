@@ -32,3 +32,8 @@ lint_output.txt
 *.njsproj
 *.sln
 *.sw?
+
+.env.*
+.env.production
+.env.development
+.env.local
