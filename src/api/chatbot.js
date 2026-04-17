@@ -63,5 +63,13 @@ export const exitChatbox = (chatboxId) =>
 
 // PM client ko direct message bhejta hai (Bot silence rahega)
 // Body: { content: "message string" }
-export const sendPMReply = (chatboxId, message) => 
+export const sendPMReply = (chatboxId, message) =>
   api.post(`/api/chat/chatboxes/${chatboxId}/em-reply/`, { content: message });
+
+// Get all queries - to display relevant event details in chat overlay
+export const getAllQueries = () =>
+  api.get("/api/query/all");
+
+// Get query summary for a specific chatbox
+export const getQuerySummary = (chatboxId) =>
+  api.get(`/api/query/chatboxes/${chatboxId}/query/summary/`);

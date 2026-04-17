@@ -18,15 +18,15 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto pb-16">
+    <div className="max-w-350 mx-auto pb-16">
 
       {/* ═══════════════════════════════════════════════════════════════════
           HERO — Spotify-style full-bleed artist header
          ═══════════════════════════════════════════════════════════════════ */}
-      <div className="relative -mx-3 sm:-mx-6 lg:-mx-10 -mt-3 sm:-mt-6 lg:-mt-10 mb-0">
-        
+      <div className="relative -mx-4 sm:-mx-6 lg:-mx-10 -mt-4 sm:-mt-6 lg:-mt-10 mb-0">
+
         {profileLoading ? (
-          <div className="flex items-center justify-center py-40 bg-gradient-to-b from-zinc-900 to-black">
+          <div className="flex items-center justify-center py-40 bg-linear-to-b from-zinc-900 to-black">
             <div className="flex flex-col items-center gap-4">
               <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-white/40 animate-spin" />
               <span className="text-[11px] text-zinc-600 uppercase tracking-[0.3em]">Loading</span>
@@ -39,20 +39,20 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
               {profile?.profile_photo && (
                 <img src={profile.profile_photo} alt="" className="w-full h-full object-cover scale-110 blur-[80px] opacity-30" />
               )}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/70 to-black" />
+              <div className="absolute inset-0 bg-linear-to-b from-black/40 via-black/70 to-black" />
             </div>
 
-            <div className="relative px-6 sm:px-10 lg:px-14 pt-16 sm:pt-20 pb-10">
-              <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start sm:items-end">
-                
+            <div className="relative px-4 sm:px-6 lg:px-14 pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-10">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 items-start sm:items-end">
+
                 {/* Album-art style profile photo */}
                 <div className="shrink-0 group">
-                  <div className="w-40 h-40 sm:w-52 sm:h-52 lg:w-60 lg:h-60 rounded-md overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
+                  <div className="w-32 h-32 sm:w-48 sm:h-48 lg:w-60 lg:h-60 rounded-md overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
                     {profile?.profile_photo ? (
                       <img src={profile.profile_photo} alt="Profile" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
-                        <User className="text-zinc-700" size={72} />
+                      <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-zinc-800 to-zinc-900">
+                        <User className="text-zinc-700" size={48} />
                       </div>
                     )}
                   </div>
@@ -64,10 +64,10 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
                     <CheckCircle2 size={16} className="text-sky-400" fill="currentColor" />
                     <span className="text-[12px] font-semibold text-sky-400">Verified Artist</span>
                   </div>
-                  <h1 className="text-5xl sm:text-6xl lg:text-8xl font-black text-white tracking-tight leading-[0.9]">
+                  <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] wrap-break-word overflow-hidden">
                     {profile?.artist_username || user?.username || "Artist"}
                   </h1>
-                  <p className="text-sm text-zinc-400 pt-1">
+                  <p className="text-xs sm:text-sm text-zinc-400 pt-1 truncate">
                     {stats.totalBookings || 0} total bookings · {genres.length > 0 ? genres.map(g => g.charAt(0).toUpperCase() + g.slice(1)).join(", ") : "Artist"}
                   </p>
                 </div>
@@ -80,35 +80,35 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
       {/* ═══════════════════════════════════════════════════════════════════
           ACTION ROW — Spotify-style play button + controls
          ═══════════════════════════════════════════════════════════════════ */}
-      <div className="flex items-center gap-6 px-1 py-8 -mx-3 sm:-mx-6 lg:-mx-10 px-6 sm:px-10 lg:px-14 bg-gradient-to-b from-black/0 to-transparent">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-10 py-6 sm:py-8 -mx-4 sm:-mx-6 lg:-mx-10 bg-linear-to-b from-black/0 to-transparent">
         {/* Big play-style button */}
         <button
           onClick={() => setAvailable(!available)}
-          className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 ${
-            available 
-              ? "bg-[#1ed760] hover:bg-[#1fdf64] shadow-[0_8px_24px_rgba(30,215,96,0.3)]" 
+          className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 hover:scale-105 ${
+            available
+              ? "bg-[#1ed760] hover:bg-[#1fdf64] shadow-[0_8px_24px_rgba(30,215,96,0.3)]"
               : "bg-zinc-700 hover:bg-zinc-600"
           }`}
         >
-          <Play size={24} fill="black" className="text-black ml-0.5" />
+          <Play size={20} fill="black" className="text-black ml-0.5" />
         </button>
-        
+
         <div className="flex flex-col">
-          <span className={`text-sm font-bold ${available ? "text-[#1ed760]" : "text-zinc-500"}`}>
+          <span className={`text-xs sm:text-sm font-bold ${available ? "text-[#1ed760]" : "text-zinc-500"}`}>
             {available ? "Available · Taking Bookings" : "Currently Unavailable"}
           </span>
-          <span className="text-[11px] text-zinc-600">Toggle your availability</span>
+          <span className="text-[10px] sm:text-[11px] text-zinc-600">Toggle your availability</span>
         </div>
 
         {/* Quick meta pills */}
-        <div className="hidden md:flex items-center gap-3 ml-auto">
+        <div className="hidden md:flex items-center gap-2 lg:gap-3 ml-auto flex-wrap">
           {profile?.experience && (
-            <span className="text-xs text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-full border border-zinc-800">
+            <span className="text-xs text-zinc-400 bg-zinc-900 px-2.5 lg:px-3 py-1 lg:py-1.5 rounded-full border border-zinc-800 whitespace-nowrap">
               {profile.experience} yrs experience
             </span>
           )}
           {(profile?.min_price || profile?.max_price) && (
-            <span className="text-xs text-zinc-400 bg-zinc-900 px-3 py-1.5 rounded-full border border-zinc-800">
+            <span className="text-xs text-zinc-400 bg-zinc-900 px-2.5 lg:px-3 py-1 lg:py-1.5 rounded-full border border-zinc-800 whitespace-nowrap">
               {formatPrice(profile.min_price)} – {formatPrice(profile.max_price)}
             </span>
           )}
@@ -118,22 +118,22 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
       {/* ═══════════════════════════════════════════════════════════════════
           OVERVIEW METRICS — Like Spotify's "Overview" section
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="mb-10">
-        <h2 className="text-xl font-bold text-white mb-5">Overview</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <section className="mb-10 px-4 sm:px-0">
+        <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-5">Overview</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
           {[
             { label: "Total Bookings", value: stats.totalBookings, sub: "All time", icon: Disc3, color: "#818cf8" },
             { label: "Pending Requests", value: stats.pendingRequests, sub: "Needs action", icon: Clock, color: "#fbbf24" },
             { label: "Confirmed", value: stats.acceptedBookings, sub: "This month", icon: CheckCircle2, color: "#34d399" },
             { label: "Revenue", value: stats.revenue, sub: "Earnings", icon: TrendingUp, color: "#c084fc" },
           ].map((stat, i) => (
-            <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/70 rounded-lg p-5 transition-all duration-300 cursor-default">
-              <div className="flex items-center gap-2 mb-4">
-                <stat.icon size={16} style={{ color: stat.color }} />
-                <span className="text-[11px] text-zinc-500 font-medium uppercase tracking-wider">{stat.label}</span>
+            <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/70 rounded-lg p-3 sm:p-5 transition-all duration-300 cursor-default">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                <stat.icon size={14} style={{ color: stat.color }} />
+                <span className="text-[10px] sm:text-[11px] text-zinc-500 font-medium uppercase tracking-wider line-clamp-1">{stat.label}</span>
               </div>
-              <div className="text-3xl font-black text-white tracking-tight mb-1">{stat.value}</div>
-              <div className="text-[11px] text-zinc-600">{stat.sub}</div>
+              <div className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-1">{stat.value}</div>
+              <div className="text-[10px] sm:text-[11px] text-zinc-600">{stat.sub}</div>
             </div>
           ))}
         </div>
@@ -143,21 +143,21 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           ABOUT — Bio section like Spotify artist "About"
          ═══════════════════════════════════════════════════════════════════ */}
       {profile?.bio && (
-        <section className="mb-10">
-          <h2 className="text-xl font-bold text-white mb-4">About</h2>
+        <section className="mb-10 px-4 sm:px-0">
+          <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4">About</h2>
           <div className="relative rounded-lg overflow-hidden">
             {/* Background ambient from profile photo */}
             <div className="absolute inset-0">
               {profile?.profile_photo && (
-                <img src={profile.profile_photo} alt="" className="w-full h-full object-cover blur-[40px] opacity-15 scale-150" />
+                <img src={profile.profile_photo} alt="" className="w-full h-full object-cover blur-2xl opacity-15 scale-150" />
               )}
               <div className="absolute inset-0 bg-zinc-900/80" />
             </div>
-            <div className="relative p-6 sm:p-8">
-              <p className="text-[15px] text-zinc-300 leading-relaxed max-w-3xl">{profile.bio}</p>
-              <div className="flex flex-wrap gap-2 mt-5 pt-5 border-t border-white/5">
+            <div className="relative p-4 sm:p-6 lg:p-8">
+              <p className="text-sm sm:text-[15px] text-zinc-300 leading-relaxed max-w-3xl">{profile.bio}</p>
+              <div className="flex flex-wrap gap-2 mt-4 sm:mt-5 pt-4 sm:pt-5 border-t border-white/5">
                 {genres.map((g, i) => (
-                  <span key={i} className="text-[11px] text-zinc-400 bg-white/5 px-3 py-1 rounded-full font-medium capitalize">{g}</span>
+                  <span key={i} className="text-[10px] sm:text-[11px] text-zinc-400 bg-white/5 px-2.5 sm:px-3 py-1 rounded-full font-medium capitalize">{g}</span>
                 ))}
               </div>
             </div>
@@ -169,22 +169,22 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           ARTIST DETAILS — Horizontal card sections like Spotify "Popular cities"
          ═══════════════════════════════════════════════════════════════════ */}
       {profile && !profileLoading && (
-        <section className="mb-10 space-y-8">
-          
+        <section className="mb-10 space-y-8 px-4 sm:px-0">
+
           {/* Cities */}
           {cities.length > 0 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <MapPin size={18} className="text-zinc-500" /> Available Cities
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <MapPin size={16} className="text-zinc-500 shrink-0" /> Available Cities
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
                 {cities.map((city, i) => (
-                  <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/60 rounded-lg p-4 transition-all cursor-default">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-500/20 to-cyan-500/10 flex items-center justify-center mb-3">
-                      <MapPin size={16} className="text-teal-400" />
+                  <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/60 rounded-lg p-3 sm:p-4 transition-all cursor-default">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-linear-to-br from-teal-500/20 to-cyan-500/10 flex items-center justify-center mb-2 sm:mb-3 shrink-0">
+                      <MapPin size={14} className="text-teal-400" />
                     </div>
-                    <p className="text-sm font-semibold text-white capitalize">{city}</p>
-                    <p className="text-[11px] text-zinc-600 mt-0.5">Available</p>
+                    <p className="text-xs sm:text-sm font-semibold text-white capitalize line-clamp-2">{city}</p>
+                    <p className="text-[10px] sm:text-[11px] text-zinc-600 mt-0.5">Available</p>
                   </div>
                 ))}
               </div>
@@ -194,17 +194,17 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           {/* Event Types */}
           {eventTypes.length > 0 && (
             <div>
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Calendar size={18} className="text-zinc-500" /> Event Types
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 flex items-center gap-2">
+                <Calendar size={16} className="text-zinc-500 shrink-0" /> Event Types
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
                 {eventTypes.map((evt, i) => (
-                  <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/60 rounded-lg p-4 transition-all cursor-default">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500/20 to-fuchsia-500/10 flex items-center justify-center mb-3">
-                      <Star size={16} className="text-violet-400" />
+                  <div key={i} className="group bg-zinc-900/60 hover:bg-zinc-800/60 rounded-lg p-3 sm:p-4 transition-all cursor-default">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-linear-to-br from-violet-500/20 to-fuchsia-500/10 flex items-center justify-center mb-2 sm:mb-3 shrink-0">
+                      <Star size={14} className="text-violet-400" />
                     </div>
-                    <p className="text-sm font-semibold text-white capitalize">{evt}</p>
-                    <p className="text-[11px] text-zinc-600 mt-0.5">Performing</p>
+                    <p className="text-xs sm:text-sm font-semibold text-white capitalize line-clamp-2">{evt}</p>
+                    <p className="text-[10px] sm:text-[11px] text-zinc-600 mt-0.5">Performing</p>
                   </div>
                 ))}
               </div>
@@ -212,33 +212,33 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           )}
 
           {/* Languages + Duration row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {languages.length > 0 && (
-              <div className="bg-zinc-900/60 rounded-lg p-5">
+              <div className="bg-zinc-900/60 rounded-lg p-4 sm:p-5">
                 <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                  <Languages size={15} className="text-zinc-500" /> Languages
+                  <Languages size={15} className="text-zinc-500 shrink-0" /> Languages
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {languages.map((l, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-300/80 text-[12px] font-medium capitalize">{l}</span>
+                    <span key={i} className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-amber-500/10 text-amber-300/80 text-[11px] sm:text-[12px] font-medium capitalize whitespace-nowrap">{l}</span>
                   ))}
                 </div>
               </div>
             )}
-            
+
             {(profile?.min_duration || profile?.max_duration) && (
-              <div className="bg-zinc-900/60 rounded-lg p-5">
+              <div className="bg-zinc-900/60 rounded-lg p-4 sm:p-5">
                 <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                  <Clock size={15} className="text-zinc-500" /> Performance Duration
+                  <Clock size={15} className="text-zinc-500 shrink-0" /> Performance Duration
                 </h3>
-                <div className="flex items-end gap-4">
-                  <div>
-                    <span className="text-3xl font-black text-white">{profile.min_duration}–{profile.max_duration}</span>
-                    <span className="text-sm text-zinc-500 ml-1.5">minutes</span>
+                <div className="flex items-end gap-3 sm:gap-4">
+                  <div className="shrink-0">
+                    <span className="text-2xl sm:text-3xl font-black text-white">{profile.min_duration}–{profile.max_duration}</span>
+                    <span className="text-xs sm:text-sm text-zinc-500 ml-1.5">min</span>
                   </div>
-                  <div className="flex-1 pb-2">
+                  <div className="flex-1 pb-1.5 sm:pb-2 min-w-0">
                     <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-gradient-to-r from-sky-500 to-teal-400 rounded-full" style={{ width: "60%" }} />
+                      <div className="h-full bg-linear-to-r from-sky-500 to-teal-400 rounded-full" style={{ width: "60%" }} />
                     </div>
                   </div>
                 </div>

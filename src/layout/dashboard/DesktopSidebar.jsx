@@ -11,28 +11,28 @@ export default function DesktopSidebar({ isSidebarOpen, title, menuItems, active
       initial={{ width: isSidebarOpen ? 260 : 72 }} 
       animate={{ width: isSidebarOpen ? 260 : 72 }} 
       transition={{ duration: 0.25 }} 
-      className="hidden md:flex flex-col bg-black z-20"
+      className="hidden md:flex flex-col bg-linear-to-b from-slate-900 via-slate-800 to-slate-700 z-20 border-r border-teal-900/30"
     >
       {/* Logo */}
-      <div className="h-16 flex items-center px-5">
+      <div className="h-16 flex items-center px-5 border-b border-teal-800/30">
         <div className={`flex items-center gap-3 ${isSidebarOpen ? "" : "justify-center w-full"}`}>
-          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shrink-0">
-            <span className="font-black text-black text-[8px] tracking-wider">E365</span>
+          <div className="w-8 h-8 bg-linear-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center shrink-0 shadow-lg">
+            <span className="font-black text-slate-900 text-[8px] tracking-wider">E365</span>
           </div>
           {isSidebarOpen && <span className="font-bold text-[15px] text-white">{title || "Dashboard"}</span>}
         </div>
       </div>
 
-      {/* Main nav section — bg card like Spotify's library */}
-      <div className="mx-2 bg-[#121212] rounded-lg p-2 mb-2">
+      {/* Main nav section — with sophisticated dark background */}
+      <div className="mx-2 bg-slate-700/40 rounded-lg p-2 mb-2 backdrop-blur-sm border border-teal-400/20">
         {menuItems.map((item) => (
           <button 
             key={item.id} 
             onClick={() => onTabChange(item.id)} 
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md transition-all duration-150 group ${
-              activeTab === item.id 
-                ? "bg-[#1a1a1a] text-white" 
-                : "text-zinc-400 hover:text-white"
+              activeTab === item.id
+                ? "bg-linear-to-r from-teal-500 to-cyan-500 text-white font-semibold shadow-lg"
+                : "text-slate-300 hover:text-white hover:bg-slate-600/60"
             }`}
           >
             <item.icon size={22} className="shrink-0" />
@@ -48,28 +48,28 @@ export default function DesktopSidebar({ isSidebarOpen, title, menuItems, active
 
       {/* User card */}
       {isSidebarOpen && user && (
-        <div className="mx-2 mb-2 p-3 rounded-lg bg-[#121212] flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-zinc-600 to-zinc-800 flex items-center justify-center text-white font-bold text-xs shrink-0">
+        <div className="mx-2 mb-2 p-3 rounded-lg bg-linear-to-br from-slate-700 to-slate-600 flex items-center gap-3 border border-teal-500/30">
+          <div className="w-8 h-8 rounded-full bg-linear-to-br from-teal-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-xs shrink-0 shadow-md">
             {user.username?.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-bold truncate text-white">{user.username}</p>
-            <p className="text-[10px] text-zinc-500 capitalize">{user.role}</p>
+            <p className="text-[10px] text-slate-400 capitalize">{user.role}</p>
           </div>
         </div>
       )}
 
       {/* Bottom actions */}
-      <div className="mx-2 mb-2 bg-[#121212] rounded-lg p-1.5 space-y-0.5">
-        <button onClick={() => navigate("/")} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-white transition-colors">
+      <div className="mx-2 mb-2 bg-slate-700/40 rounded-lg p-1.5 space-y-0.5 backdrop-blur-sm border border-teal-400/20">
+        <button onClick={() => navigate("/")} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-slate-300 hover:text-teal-400 hover:bg-slate-600/60 transition-colors">
           <Home size={20} className="shrink-0" />{isSidebarOpen && <span className="text-[13px] font-medium">Home</span>}
         </button>
         {setShowSettings && (
-          <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-white transition-colors">
+          <button onClick={() => setShowSettings(true)} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-slate-300 hover:text-teal-400 hover:bg-slate-600/60 transition-colors">
             <Settings size={20} className="shrink-0" />{isSidebarOpen && <span className="text-[13px] font-medium">Settings</span>}
           </button>
         )}
-        <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-zinc-400 hover:text-white transition-colors">
+        <button onClick={onLogout} className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-slate-300 hover:text-red-400 hover:bg-slate-600/60 transition-colors">
           <LogOut size={20} className="shrink-0" />{isSidebarOpen && <span className="text-[13px] font-medium">Log out</span>}
         </button>
       </div>

@@ -6,14 +6,18 @@
 :root {
   --primary-red: #ff003c;
   --glow-red: rgba(255, 0, 60, 0.4);
+  --primary-navy: #0f172a;
+  --primary-teal: #14b8a6;
+  --primary-slate: #64748b;
+  --gradient-primary: linear-gradient(135deg, #0f172a 0%, #14b8a6 50%, #0e7490 100%);
+  --gradient-light: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdfa 100%);
 }
 
 /* Global styles — sabke liye apply hoga */
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background: linear-gradient(135deg, #f8fbff 0%, #f0fdf4 50%, #f0fdfa 100%);
+  color: #0f172a;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: #050505;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Mobile safe area insets (iPhone notch, etc.) */
@@ -24,44 +28,27 @@ body {
 h1, h2 {
   font-family: 'Syncopate', sans-serif;
   text-transform: uppercase;
+  color: #1f2937;
 }
 
 /* Reusable input class */
 .input-style {
-  background-color: rgba(0, 0, 0, 0.4);
-  border: 1px solid #374151;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid #e5e7eb;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   width: 100%;
+  color: #1f2937;
 }
 .input-style:focus {
   outline: none;
-  border-color: #ef4444;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
-/* Custom scrollbar hide aur style (dashboards mein clean look ke liye) */
-.scrollbar-hide::-webkit-scrollbar { display: none; }
-.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Custom Dark Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #000000;
-}
-::-webkit-scrollbar-thumb {
-  background: #333333;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #555555;
-}
-html, body, .scrollbar-custom {
-  scrollbar-width: thin;
-  scrollbar-color: #333333 #000000;
-}
+/* Hide scrollbars globally for clean modern look */
+::-webkit-scrollbar { display: none; }
+* { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Fade + slide animation */
 @keyframes fadeSlide {

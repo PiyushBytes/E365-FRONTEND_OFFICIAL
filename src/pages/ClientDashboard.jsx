@@ -25,24 +25,26 @@ export default function ClientDashboard() {
   if (!user) return <div className="text-white p-10">User not found</div>; // Safety check
 
   return (
-    // Isme saara sidebar aur header common structure set hota hai
-    <DashboardLayout 
-      menuItems={MENU_ITEMS} 
-      activeTab={activeTab} 
-      // Jab koi naya tab click kare toh purani chats wagarah reset kar do
-      onTabChange={(t) => { setActiveTab(t); dataHooks.setSelectedChatbox(null); dataHooks.setChatMessages([]); }} 
-      user={user} 
-      title="Client Hub" 
-      onLogout={logout} 
-      showSettings={showSettings} 
-      setShowSettings={setShowSettings}
-    >
-      {/* Jo tab select kiya hai sirf wahi component load karo */}
-      {activeTab === "dashboard" && <ClientOverviewTab data={dataHooks.data} querySummary={dataHooks.querySummary} />}
-      {activeTab === "messages" && <MessagesTab {...dataHooks} />}
-      {["bookings", "payments"].includes(activeTab) && <div className="text-white">Coming Soon</div>}
-      
+    <>
+      {/* Isme saara sidebar aur header common structure set hota hai */}
+      <DashboardLayout
+        menuItems={MENU_ITEMS}
+        activeTab={activeTab}
+        // Jab koi naya tab click kare toh purani chats wagarah reset kar do
+        onTabChange={(t) => { setActiveTab(t); dataHooks.setSelectedChatbox(null); dataHooks.setChatMessages([]); }}
+        user={user}
+        title="Client Hub"
+        onLogout={logout}
+        showSettings={showSettings}
+        setShowSettings={setShowSettings}
+      >
+        {/* Jo tab select kiya hai sirf wahi component load karo */}
+        {activeTab === "dashboard" && <ClientOverviewTab data={dataHooks.data} querySummary={dataHooks.querySummary} />}
+        {activeTab === "messages" && <MessagesTab {...dataHooks} />}
+        {["bookings", "payments"].includes(activeTab) && <div className="text-white">Coming Soon</div>}
+      </DashboardLayout>
+
       <ChatWidget />
-    </DashboardLayout>
+    </>
   );
 }
