@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getBookings, respondToBooking } from "../api/booking";
 import { getArtistProfile } from "../api/artistProfile";
+import { useAuth } from "../context/AuthContext";
 
 const CLIENT_IMAGES = [
   "https://images.unsplash.com/photo-1560250097-0b93528c311a",
@@ -17,6 +18,7 @@ export function useArtistData(user, activeTab) {
   const [available, setAvailable] = useState(true); // Artist abhi available hai ya nahi?
   const [profile, setProfile] = useState(null); // Artist profile data from backend
   const [profileLoading, setProfileLoading] = useState(false);
+  const { setUser } = useAuth();
 
   // Jab user login ho aur explicitly requests tab khula ho, uski saari details api se mangwao
   useEffect(() => {
@@ -27,27 +29,57 @@ export function useArtistData(user, activeTab) {
     }
 
     if (activeTab === "dashboard") {
-      // Artist profile fetch karo
-      setProfileLoading(true);
-      getArtistProfile()
-        .then(data => {
-          setProfile(data);
-          if (data?.is_available !== undefined) {
-            setAvailable(data.is_available);
-          }
-        })
-        .catch(console.error)
-        .finally(() => setProfileLoading(false));
+      // Artist profile ko optimise tarike se fetch karo (duplicate call avoid karo)
+      if (user?.artist_profile_data) {
+        setProfile(user.artist_profile_data);
+        if (user.artist_profile_data?.is_available !== undefined) {
+          setAvailable(user.artist_profile_data.is_available);
+        }
+      } else {
+        setProfileLoading(true);
+        getArtistProfile()
+          .then(data => {
+            const profileData = data?.profile || data;
+            setProfile(profileData);
+            if (setUser) {
+              setUser(prev => ({ ...prev, artist_profile_data: profileData }));
+            }
+            if (profileData?.is_available !== undefined) {
+              setAvailable(profileData.is_available);
+            }
+          })
+          .catch(console.error)
+          .finally(() => setProfileLoading(false));
+      }
 
-      // Stats json se load kar rahe hain (dummy/fallback data)
-      fetch("/static/artist_dashboard_count.json")
-        .then(res => res.json())
-        .then(data => {
-          setStats({ totalBookings: data?.totalBookings ?? 0, pendingRequests: data?.pendingRequests ?? 0, acceptedBookings: data?.acceptedBookings ?? 0, revenue: data?.revenue ?? "₹0K" });
-          // Har request par ek dummy user profile pic laga do
-          setRequests((data.requests || []).map((req, i) => ({ ...req, clientImg: CLIENT_IMAGES[i % CLIENT_IMAGES.length] })));
-        })
-        .catch(console.error);
+      // Stats dummy data locally set karo to avoid internal API calls
+      const dummyData = {
+        totalBookings: 124,
+        pendingRequests: 5,
+        acceptedBookings: 8,
+        revenue: "₹4.5L",
+        requests: [
+          {
+            id: "REQ-001",
+            name: "Rajesh Sharma",
+            eventType: "Corporate Event",
+            date: "OCT 25",
+            location: "Mumbai, MH",
+            offer: "₹1,50,000"
+          },
+          {
+            id: "REQ-002",
+            name: "Priya Mehta",
+            eventType: "Wedding Sangeet",
+            date: "NOV 12",
+            location: "Delhi, NCR",
+            offer: "₹2,00,000"
+          }
+        ]
+      };
+      
+      setStats({ totalBookings: dummyData.totalBookings, pendingRequests: dummyData.pendingRequests, acceptedBookings: dummyData.acceptedBookings, revenue: dummyData.revenue });
+      setRequests(dummyData.requests.map((req, i) => ({ ...req, clientImg: CLIENT_IMAGES[i % CLIENT_IMAGES.length] })));
     }
   }, [user, activeTab]);
 

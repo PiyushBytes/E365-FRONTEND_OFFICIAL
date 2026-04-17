@@ -1,10 +1,12 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useState, useEffect, forwardRef, useImperativeHandle, Suspense, lazy } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MessageCircle } from "lucide-react";
-import ChatOverlay from "./chat/ChatOverlay";
+
+const ChatOverlay = lazy(() => import("./chat/ChatOverlay"));
 
 const ChatWidget = forwardRef((props, ref) => {
   const [open, setOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const [initialMsg, setInitialMsg] = useState("");
 
   useImperativeHandle(ref, () => ({ 
@@ -13,6 +15,7 @@ const ChatWidget = forwardRef((props, ref) => {
         localStorage.removeItem("chatboxId");
         setInitialMsg(msg);
       }
+      setHasOpened(true);
       setOpen(true);
     }, 
     close: () => setOpen(false) 
@@ -20,6 +23,7 @@ const ChatWidget = forwardRef((props, ref) => {
 
   useEffect(() => {
     const handleOpen = (e) => {
+      setHasOpened(true);
       setOpen(true);
       if (e.detail?.msg) {
         localStorage.removeItem("chatboxId");
@@ -32,12 +36,18 @@ const ChatWidget = forwardRef((props, ref) => {
 
   return (
     <>
-      <ChatOverlay open={open} onClose={() => setOpen(false)} initialMsg={initialMsg} onMsgProcessed={() => setInitialMsg("")} />
+      {hasOpened && (
+        <Suspense fallback={null}>
+          <ChatOverlay open={open} onClose={() => setOpen(false)} initialMsg={initialMsg} onMsgProcessed={() => setInitialMsg("")} />
+        </Suspense>
+      )}
       <div className="fixed bottom-6 right-6 z-[9999]">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setOpen(!open)}
+          onClick={() => { setHasOpened(true); setOpen(!open); }}
+          aria-label={open ? "Close Chat" : "Open Chat"}
+          aria-expanded={open}
           className="w-14 h-14 rounded-2xl text-white flex items-center justify-center relative group"
           style={{ background: "linear-gradient(135deg, #1d4ed8, #3b82f6)", boxShadow: "0 8px 30px rgba(37,99,235,0.5)" }}
         >

@@ -6,12 +6,14 @@ export const getArtistProfile = async () => {
 };
 
 export const createArtistProfile = async (profileData) => {
-  const response = await api.post("/api/artiste/profile/", profileData);
+  const config = profileData instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+  const response = await api.post("/api/artiste/profile/", profileData, config);
   return response.data;
 };
 
 export const updateArtistProfile = async (profileData) => {
-  const response = await api.patch("/api/artiste/profile/", profileData);
+  const config = profileData instanceof FormData ? { headers: { "Content-Type": "multipart/form-data" } } : {};
+  const response = await api.patch("/api/artiste/profile/", profileData, config);
   return response.data;
 };
 

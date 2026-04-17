@@ -73,9 +73,10 @@ export const AuthProvider = ({ children }) => {
           // Agar artist hai, toh check karo ki profile exist karta hai ya nahi
           if (backendUser.role === "artist") {
             try {
-              await getArtistProfile();
+              const profRes = await getArtistProfile();
               // Profile successfully mila — matlab profile complete hai
               finalUser.is_profile_complete = true;
+              finalUser.artist_profile_data = profRes?.profile || profRes;
             } catch {
               // Profile nahi mila (404 ya error) — matlab abhi profile nahi bana
               finalUser.is_profile_complete = false;
@@ -164,18 +165,22 @@ export const AuthProvider = ({ children }) => {
 
       let userObj = data?.user;
 
+      data.user = userObj; // Mutate payload safely before persisting
+      persistAuth(data); // Call this FIRST so secureStorage has the fresh tokens!
+
       // Sync artist profile completeness properly directly after login!
       if (userObj?.role === "artist") {
         try {
-          await getArtistProfile();
+          const profRes = await getArtistProfile();
           userObj.is_profile_complete = true;
+          userObj.artist_profile_data = profRes?.profile || profRes;
         } catch {
           userObj.is_profile_complete = false;
         }
+        // Save the updated user with profile flag into storage manually since persistAuth already ran
+        setUser(userObj);
+        secureStorage.setItem("user", userObj);
       }
-
-      data.user = userObj; // Mutate payload safely before persisting
-      persistAuth(data);
 
       return {
         success: true,

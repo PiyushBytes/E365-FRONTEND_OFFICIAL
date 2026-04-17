@@ -8,6 +8,21 @@
   --glow-red: rgba(255, 0, 60, 0.4);
 }
 
+/* Tailwind v4 Theme Override Engine */
+@theme {
+  /* Is tarike se aapke JS Config wale rang seedha Tailwind colors ko replace kar dete hain puray website mein */
+  --color-indigo-600: var(--theme-brand-primary);
+  --color-indigo-700: var(--theme-brand-hover);
+  --color-indigo-50: var(--theme-brand-light);
+  
+  --color-slate-50: var(--theme-bg-base);
+  --color-slate-900: var(--theme-text-main);
+  --color-slate-500: var(--theme-text-muted);
+  
+  --color-blue-500: var(--theme-accent-success);
+  --color-red-500: var(--theme-accent-danger);
+}
+
 /* Global styles — sabke liye apply hoga */
 body {
   background-color: #000000;

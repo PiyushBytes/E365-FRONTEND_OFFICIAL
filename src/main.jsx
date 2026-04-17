@@ -5,6 +5,9 @@ import './index.css'
 import App from './App.jsx'
 import { AuthProvider } from './context/AuthContext'
 import { NotificationProvider } from './context/NotificationContext'
+import { applyThemeTokens } from './theme.js'
+
+applyThemeTokens(); // Bootstraps global css variables before render
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
