@@ -31,8 +31,10 @@ export function useArtistData(user, activeTab) {
     if (activeTab === "dashboard") {
       // Artist profile ko optimise tarike se fetch karo (duplicate call avoid karo)
       if (user?.artist_profile_data) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setProfile(user.artist_profile_data);
         if (user.artist_profile_data?.is_available !== undefined) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setAvailable(user.artist_profile_data.is_available);
         }
       } else {
@@ -81,7 +83,7 @@ export function useArtistData(user, activeTab) {
       setStats({ totalBookings: dummyData.totalBookings, pendingRequests: dummyData.pendingRequests, acceptedBookings: dummyData.acceptedBookings, revenue: dummyData.revenue });
       setRequests(dummyData.requests.map((req, i) => ({ ...req, clientImg: CLIENT_IMAGES[i % CLIENT_IMAGES.length] })));
     }
-  }, [user, activeTab]);
+  }, [user, activeTab, setUser]);
 
   // Agar artist ne booking accept karli
   const handleAccept = async (req) => {
