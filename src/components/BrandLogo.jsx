@@ -6,7 +6,7 @@ export default function BrandLogo() {
       <div className="relative flex items-center gap-4 p-2 pr-6 rounded-2xl bg-black/20 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-red-500/30 hover:bg-black/40 hover:shadow-[0_0_40px_rgba(255,0,60,0.15)] overflow-hidden">
         
         {/* Animated Glow Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute inset-0 bg-linear-to-r from-red-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
         
         {/* Logo Icon Box */}
         <div className="relative w-12 h-12 bg-white/5 border border-white/5 rounded-xl flex items-center justify-center shadow-inner overflow-hidden group-hover:bg-white/10 transition-colors duration-500">
@@ -37,7 +37,7 @@ export default function BrandLogo() {
         </div>
 
         {/* Shine Effect */}
-        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
+        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-linear-to-r from-transparent to-white opacity-20 group-hover:animate-shine" />
       </div>
     </div>
   );

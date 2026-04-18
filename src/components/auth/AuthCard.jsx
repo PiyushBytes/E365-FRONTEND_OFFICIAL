@@ -10,7 +10,7 @@ export default function AuthCard({ title, subtitle, showLogo = false, children }
       <div className="relative z-10">
         <div className="text-center mb-6 sm:mb-8">
           {showLogo && (
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-b from-red-600 to-black rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-900/40 mb-4">
+            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-14 h-14 sm:w-16 sm:h-16 bg-linear-to-b from-red-600 to-black rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-red-900/40 mb-4">
               <span className="font-['Syncopate'] font-bold text-white text-xs">E365</span>
             </motion.div>
           )}

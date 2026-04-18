@@ -28,13 +28,13 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto pb-16">
+    <div className="max-w-350 mx-auto pb-16">
 
       {/* ═══════════════════════════════════════════════════════════════════
           HERO — Sleek enterprise header
          ═══════════════════════════════════════════════════════════════════ */}
-      <div className="relative -mx-3 sm:-mx-6 lg:-mx-10 -mt-3 sm:-mt-6 lg:-mt-10 mb-0">
-        
+      <div className="relative -mx-4 sm:-mx-6 lg:-mx-10 -mt-4 sm:-mt-6 lg:-mt-10 mb-0">
+
         {profileLoading ? (
           <div className="flex items-center justify-center py-40 bg-white">
             <div className="flex flex-col items-center gap-4">
@@ -98,7 +98,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
         </button>
 
         {/* Quick meta pills */}
-        <div className="hidden md:flex items-center gap-3 ml-auto">
+        <div className="hidden md:flex items-center gap-2 lg:gap-3 ml-auto flex-wrap">
           {profile?.experience && (
             <span className="text-xs font-medium text-slate-600 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
               {profile.experience} yrs experience
@@ -157,15 +157,15 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           ARTIST DETAILS — Standard grids
          ═══════════════════════════════════════════════════════════════════ */}
       {profile && !profileLoading && (
-        <section className="mb-10 space-y-8">
-          
+        <section className="mb-10 space-y-8 px-4 sm:px-0">
+
           {/* Cities */}
           {cities.length > 0 && (
             <div>
               <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <MapPin size={18} className="text-slate-400" /> Available Cities
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
                 {cities.map((city, i) => (
                   <div key={i} className="bg-white border border-slate-200 shadow-sm rounded-lg p-4">
                     <div className="w-9 h-9 rounded-md bg-indigo-50 flex items-center justify-center mb-3">
@@ -185,7 +185,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
               <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <Calendar size={18} className="text-slate-400" /> Event Types
               </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
                 {eventTypes.map((evt, i) => (
                   <div key={i} className="bg-white border border-slate-200 shadow-sm rounded-lg p-4">
                     <div className="w-9 h-9 rounded-md bg-purple-50 flex items-center justify-center mb-3">
@@ -200,7 +200,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
           )}
 
           {/* Languages + Duration row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
             {languages.length > 0 && (
               <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -213,7 +213,7 @@ export default function ArtistOverviewTab({ user, available, setAvailable, stats
                 </div>
               </div>
             )}
-            
+
             {(profile?.min_duration || profile?.max_duration) && (
               <div className="bg-white border border-slate-200 shadow-sm rounded-xl p-5">
                 <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">

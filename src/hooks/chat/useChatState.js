@@ -8,6 +8,7 @@ export const useChatState = () => {
   const [messages, setMessages] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [view, setView] = useState("home");
+  const [queryData, setQueryData] = useState(null);
   const scrollRef = useRef(null);
 
   // Naya message aane pe auto scroll karna
@@ -37,6 +38,8 @@ export const useChatState = () => {
     setSubmitted,
     view,
     setView,
+    queryData,
+    setQueryData,
     scrollRef,
     reset,
   };

@@ -1,112 +1,112 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, MessageSquare, Edit2, Check, MessageCircle } from "lucide-react";
+import { MapPin, Calendar, Music, CheckCircle2, Clock } from "lucide-react";
 
 export default function MessagesTab({ chatboxes, selectedChatbox, setSelectedChatbox, chatMessages, setChatMessages, loadingMessages, handleSelectChatbox }) {
   const [titles, setTitles] = useState(() => JSON.parse(localStorage.getItem("chatTitles") || "{}"));
-  const [editingId, setEditingId] = useState(null);
-  const [editValue, setEditValue] = useState("");
 
-  const saveTitle = (id) => {
-    const newTitles = { ...titles, [id]: editValue };
-    setTitles(newTitles);
-    localStorage.setItem("chatTitles", JSON.stringify(newTitles));
-    setEditingId(null);
+  // Automatically open chat widget when a chat is selected
+  useEffect(() => {
+    if (selectedChatbox) {
+      localStorage.setItem("chatboxId", selectedChatbox.id);
+      window.dispatchEvent(new CustomEvent("open-chat-widget"));
+      setSelectedChatbox(null);
+      setChatMessages([]);
+    }
+  }, [selectedChatbox]);
+
+  const getStatusColor = (status) => {
+    if (status === "Confirmed") {
+      return "bg-emerald-500/20 border-emerald-500/40 text-emerald-300";
+    }
+    return "bg-blue-500/20 border-blue-500/40 text-blue-300";
   };
 
-  const handleContinueChat = () => {
-    localStorage.setItem("chatboxId", selectedChatbox.id);
-    window.dispatchEvent(new CustomEvent("open-chat-widget"));
+  const getStatusIcon = (status) => {
+    return status === "Confirmed" ? <CheckCircle2 size={14} /> : <Clock size={14} />;
   };
-  
-  if (selectedChatbox) {
-    return (
-      <div className="max-w-3xl mx-auto">
-        <button onClick={() => { setSelectedChatbox(null); setChatMessages([]); }} className="flex items-center gap-2 text-gray-400 hover:text-white mb-6"><ChevronLeft size={18} /> Back to all chats</button>
-        <div className="bg-slate-800 rounded-xl p-5 mb-6 border border-slate-700 flex justify-between items-center group">
-          <div>
-            <h3 className="text-white font-bold text-lg mb-1">{titles[selectedChatbox.id] || `Conversation #${selectedChatbox.id.slice(0, 8)}`}</h3>
-            <p className="text-gray-400 text-sm">Created: {new Date(selectedChatbox.created_at).toLocaleDateString("en-IN")}</p>
-          </div>
-          <button 
-            onClick={handleContinueChat}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-          >
-            <MessageCircle size={16} />
-            Continue Chat
-          </button>
-        </div>
-        <div className="flex flex-col gap-3">
-          {loadingMessages ? (
-            <div className="text-gray-400 text-center py-10">Loading messages...</div>
-          ) : chatMessages.length === 0 ? (
-            <div className="text-gray-400 text-center py-10">No messages found</div>
-          ) : (
-            chatMessages.map((msg, i) => {
-              // Robust mapping for role and text
-              const role = msg.sender_type || msg.role || "bot";
-              const text = msg.content || msg.text || "";
-              return (
-                <div key={i} className={`flex flex-col max-w-[75%] ${role === "user" ? "self-end ml-auto" : "self-start"}`}>
-                  <span className="text-[10px] text-gray-500 mb-1 px-1 capitalize">
-                    {msg.username ? msg.username.replace('_', ' ') : (role === "user" ? "You" : role === "pm" ? "Manager" : "E365 Bot")}
-                  </span>
-                  <div className={`p-3 rounded-xl text-white text-sm ${role === "user" ? "bg-blue-600" : role === "pm" ? "bg-purple-600" : "bg-slate-700"}`}>
-                    {text}
-                    {(msg.time || msg.created_at) && (
-                      <div className="text-[9px] text-gray-300 mt-1 text-right">
-                        {new Date(msg.time || msg.created_at).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          )}
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-6">My Conversations</h2>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-0">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-slate-900">My Event Bookings</h2>
       {chatboxes.length === 0 ? (
-        <div className="text-gray-400 text-center py-20"><MessageSquare size={48} className="mx-auto mb-4 opacity-30" /><p>No conversations yet.</p></div>
+        <div className="text-gray-400 text-center py-20">
+          <Music size={48} className="mx-auto mb-4 opacity-30" />
+          <p>No bookings yet.</p>
+        </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {chatboxes.map((c) => (
-            <div key={c.id} className="bg-slate-800 border border-slate-700 rounded-xl p-5 flex flex-col sm:flex-row justify-between group transition-all hover:bg-slate-700/50 cursor-pointer" onClick={() => handleSelectChatbox(c)}>
-              <div className="flex-1">
-                {editingId === c.id ? (
-                  <div className="flex items-center gap-2 mb-1" onClick={(e) => e.stopPropagation()}>
-                    <input 
-                      type="text" 
-                      value={editValue} 
-                      onChange={(e) => setEditValue(e.target.value)} 
-                      className="bg-slate-900 text-white border border-slate-600 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 w-full max-w-[200px]"
-                      autoFocus
-                      onKeyDown={(e) => e.key === 'Enter' && saveTitle(c.id)}
-                    />
-                    <button onClick={() => saveTitle(c.id)} className="text-green-400 hover:text-green-300"><Check size={16} /></button>
+          {chatboxes.map((booking) => (
+            <div
+              key={booking.id}
+              onClick={() => handleSelectChatbox(booking)}
+              className="group cursor-pointer transition-all duration-300 active:scale-95"
+            >
+              {/* Card */}
+              <div className="bg-linear-to-br from-blue-50/40 via-teal-50/30 to-emerald-50/40 border border-teal-200/50 rounded-2xl p-4 sm:p-6 transition-all duration-300 group-hover:border-teal-400/60 group-hover:shadow-lg group-hover:bg-linear-to-br group-hover:from-blue-50/60 group-hover:via-teal-50/50 group-hover:to-emerald-50/60">
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-5">
+                  <div className="flex items-center gap-2">
+                    <Music size={16} className="text-teal-600 shrink-0" />
+                    <span className="text-xs uppercase tracking-wider text-teal-700 font-bold">
+                      {booking.eventType || "Event"}
+                    </span>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2 mb-1 group/title">
-                    <p className="text-white font-semibold">
-                      {titles[c.id] || `Chat ID: ${c.id.slice(0, 8)}...`}
-                    </p>
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); setEditingId(c.id); setEditValue(titles[c.id] || `Chat ID: ${c.id.slice(0, 8)}`); }}
-                      className="text-gray-500 hover:text-blue-400 opacity-0 group-hover/title:opacity-100 transition-opacity"
-                    >
-                      <Edit2 size={14} />
-                    </button>
+                  <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-semibold text-xs whitespace-nowrap w-fit ${getStatusColor(booking.status)}`}>
+                    {getStatusIcon(booking.status)}
+                    <span className="uppercase tracking-wider">{booking.status || "Pending"}</span>
                   </div>
-                )}
-                <p className="text-gray-400 text-sm mt-1">{c.last_message || "Click to view history"}</p>
-              </div>
-              <div className="text-gray-500 text-xs sm:text-right mt-3 sm:mt-0 flex flex-col justify-between items-end">
-                {new Date(c.created_at).toLocaleDateString("en-IN")}
-                {c.request_submitted && <div className="mt-2"><span className="bg-green-600/20 text-green-400 text-[10px] px-2 py-1 rounded-full font-bold">SENT</span></div>}
+                </div>
+
+                {/* Artist Name */}
+                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 wrap-break-word">
+                  {booking.artistName || titles[booking.id] || `Booking ${booking.id.slice(0, 8)}`}
+                </h3>
+
+                {/* Details Grid - Responsive */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                  {/* Event Date */}
+                  <div className="bg-white/50 border border-teal-200/50 rounded-lg p-3 sm:p-4 flex items-start gap-3 hover:bg-white/70 transition-colors">
+                    <Calendar size={18} className="text-teal-600 shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-slate-600 uppercase tracking-wider font-bold mb-0.5">
+                        Event Date
+                      </p>
+                      <p className="text-slate-900 font-semibold text-sm sm:text-base">
+                        {booking.eventDate
+                          ? new Date(booking.eventDate).toLocaleDateString("en-IN", {
+                              weekday: "short",
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            })
+                          : "TBD"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Location */}
+                  <div className="bg-white/50 border border-teal-200/50 rounded-lg p-3 sm:p-4 flex items-start gap-3 hover:bg-white/70 transition-colors">
+                    <MapPin size={18} className="text-teal-600 shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-slate-600 uppercase tracking-wider font-bold mb-0.5">
+                        Location
+                      </p>
+                      <p className="text-slate-900 font-semibold text-sm sm:text-base truncate">
+                        {booking.eventLocation || booking.location || "Location TBD"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-3 border-t border-teal-200/50">
+                  <div className="text-xs text-slate-600 font-medium">
+                    {new Date(booking.created_at).toLocaleDateString("en-IN")}
+                  </div>
+                  <span className="text-xs text-teal-700 font-bold uppercase tracking-wider group-hover:text-teal-600 transition-colors">
+                    Click to view messages →
+                  </span>
+                </div>
               </div>
             </div>
           ))}

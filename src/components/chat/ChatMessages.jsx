@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, User, Crown } from "lucide-react";
+import ArtistRecommendations from "./ArtistRecommendations";
+import QueryDetails from "./QueryDetails";
 
 const BotAvatar = () => (
   <div className="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30 relative"
@@ -31,7 +33,7 @@ function formatTime(iso) {
   return new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function ChatMessages({ messages, isTyping, scrollRef }) {
+export default function ChatMessages({ messages, isTyping, scrollRef, chatboxId, onSendMessage, queryData }) {
   const filtered = messages.filter((msg, i, arr) => {
     if (i > 0 && arr[i - 1].text === msg.text && /has joined|has left/i.test(msg.text)) return false;
     return true;
@@ -39,7 +41,9 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
 
   let isPMActive = false;
   let activePMName = "Project Manager";
-  
+  let showRecommendations = false;
+  let recommendationIndex = -1;
+
   for (let i = messages.length - 1; i >= 0; i--) {
     const text = messages[i].text;
     if (text) {
@@ -55,12 +59,27 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
     }
   }
 
+  // Check if bot sent artists in the response (stage: "recommending")
+  let artistsData = [];
+  for (let i = filtered.length - 1; i >= 0; i--) {
+    if (filtered[i].role === "bot" && filtered[i].artists && filtered[i].artists.length > 0) {
+      showRecommendations = true;
+      recommendationIndex = i;
+      artistsData = filtered[i].artists;
+      console.log("✅ SHOW RECOMMENDATIONS TRIGGERED! Artists:", artistsData);
+      break;
+    }
+  }
+
+  console.log("ChatMessages Debug - chatboxId:", chatboxId, "showRecommendations:", showRecommendations, "isTyping:", isTyping);
+
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}
       ref={scrollRef}
-      className="h-full px-6 py-6 overflow-y-auto flex flex-col gap-3 scrollbar-hide max-w-3xl mx-auto w-full"
+      className="h-full px-6 py-6 overflow-y-auto flex flex-col gap-1 scrollbar-hide max-w-3xl mx-auto w-full"
     >
+      <QueryDetails queryData={queryData} />
       {filtered.map((msg, i) => {
         const isSystem = /has joined the chat|has left the chat|continue assisting you/i.test(msg.text);
 
@@ -101,6 +120,7 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
         const isPM   = msg.role === "pm";
         const isBot  = msg.role === "bot";
         const alignRight = isUser;
+        const hasArtists = isBot && msg.artists && msg.artists.length > 0;
 
         const bubbleStyle = isUser
           ? { background: "linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #1d4ed8 100%)", boxShadow: "0 4px 24px rgba(37,99,235,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }
@@ -115,7 +135,7 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
             initial={{ opacity: 0, y: 16, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className={`flex flex-col ${alignRight ? "items-end" : "items-start"} gap-1 w-full`}
+            className="flex flex-col gap-1 w-full"
           >
             {/* Role label */}
             <span className={`text-[10px] font-semibold tracking-widest uppercase px-1 mb-0.5 ${
@@ -124,20 +144,22 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
               {roleName}
             </span>
 
-            <div className={`flex items-end gap-2.5 max-w-[80%] ${alignRight ? "flex-row-reverse" : "flex-row"}`}>
+            {/* Message bubble container */}
+            <div className={`flex items-end gap-2.5 ${alignRight ? "justify-end" : "justify-start"}`}>
               {/* Avatar */}
               {isUser ? <UserAvatar /> : isPM ? <PMAvatar /> : <BotAvatar />}
 
               {/* Bubble */}
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 max-w-[80%]">
                 <div
-                  className={`text-[14px] leading-relaxed px-5 py-3.5 whitespace-pre-wrap break-words ${
+                  className={`text-[14px] leading-relaxed px-4 py-2 whitespace-pre-wrap wrap-break-word ${
                     alignRight ? "rounded-2xl rounded-br-sm text-white" : "rounded-2xl rounded-bl-sm text-gray-100"
                   }`}
                   style={bubbleStyle}
                 >
                   {msg.text}
                 </div>
+
                 {/* Timestamp */}
                 {msg.time && (
                   <span className={`text-[10px] text-slate-600 font-medium ${alignRight ? "text-right pr-1" : "pl-1"}`}>
@@ -146,6 +168,23 @@ export default function ChatMessages({ messages, isTyping, scrollRef }) {
                 )}
               </div>
             </div>
+
+            {/* Carousel - render full width outside bubble constraint */}
+            {hasArtists && (
+              <div className="w-full mt-4 flex justify-center">
+                {(() => {
+                  const isExpired = queryData?.event_date && new Date(queryData.event_date) < new Date();
+                  return (
+                    <ArtistRecommendations
+                      isVisible={true}
+                      artists={msg.artists}
+                      onSelectArtist={onSendMessage}
+                      isExpired={isExpired}
+                    />
+                  );
+                })()}
+              </div>
+            )}
           </motion.div>
         );
       })}
