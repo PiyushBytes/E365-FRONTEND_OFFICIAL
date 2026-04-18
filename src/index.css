@@ -1,61 +1,136 @@
-/* Sabse pehle fonts aur Tailwind import karo */
-@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+/* Base fonts loading: Adding Outfit for ultra-modern typography */
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;500;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-/* Branding ke liye custom CSS variables */
+/* Branding & Premium CSS System */
 :root {
   --primary-red: #ff003c;
   --glow-red: rgba(255, 0, 60, 0.4);
   --primary-navy: #0f172a;
   --primary-teal: #14b8a6;
   --primary-slate: #64748b;
+  
+  /* Modern Premium Gradients */
+  --gradient-dark: linear-gradient(145deg, #020617 0%, #0f172a 100%);
   --gradient-primary: linear-gradient(135deg, #0f172a 0%, #14b8a6 50%, #0e7490 100%);
+  --gradient-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
   --gradient-light: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 50%, #f0fdfa 100%);
+
+  /* Glassmorphism System */
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --glass-blur: blur(16px);
 }
 
-/* Global styles — sabke liye apply hoga */
+/* Tailwind v4 Theme Override Engine */
+@theme {
+  --color-indigo-600: var(--theme-brand-primary);
+  --color-indigo-700: var(--theme-brand-hover);
+  --color-indigo-50: var(--theme-brand-light);
+  
+  --color-slate-50: var(--theme-bg-base);
+  --color-slate-900: var(--theme-text-main);
+  --color-slate-500: var(--theme-text-muted);
+  
+  --color-blue-500: var(--theme-accent-success);
+  --color-red-500: var(--theme-accent-danger);
+}
+
+/* Premium Reset & Body */
 body {
-  background: linear-gradient(135deg, #f8fbff 0%, #f0fdf4 50%, #f0fdfa 100%);
-  color: #0f172a;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--gradient-dark); /* Changed to dark theme root to avoid white flashing */
+  background-attachment: fixed;
+  color: #f8fafc;
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Mobile safe area insets (iPhone notch, etc.) */
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-x: hidden;
 }
 
-/* Heading fonts — uppercase Syncopate */
-h1, h2 {
+/* High-Impact Typography */
+h1, h2, h3 {
   font-family: 'Syncopate', sans-serif;
   text-transform: uppercase;
-  color: #1f2937;
+  letter-spacing: -0.03em;
 }
 
-/* Reusable input class */
+/* Text Highlight Premium State */
+::selection {
+  background: var(--primary-teal);
+  color: #ffffff;
+}
+
+/* Elegant Scrollbars (Replaced `display: none` for better UX) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 184, 166, 0.5); /* Teal glow on hover */
+}
+
+/* Reusable Smooth Input Style */
 .input-style {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 2px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
   width: 100%;
-  color: #1f2937;
+  color: #f8fafc;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
 }
 .input-style:focus {
   outline: none;
-  border-color: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(255, 0, 60, 0.15);
 }
 
-/* Hide scrollbars globally for clean modern look */
-::-webkit-scrollbar { display: none; }
-* { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Fade + slide animation */
-@keyframes fadeSlide {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Reusable Premium Glassmorphism Class */
+.glass-panel {
+  background: var(--gradient-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 1.5rem;
 }
-.animate-fade { animation: fadeSlide 0.5s ease-in-out; }
 
-/* Touch devices ke liye — tap highlight hatao */
+/* Master Interactions */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 15px 30px -10px rgba(255, 0, 60, 0.3);
+  border-color: rgba(255, 0, 60, 0.3);
+}
+
+/* Cinematic Animations */
+@keyframes cinematicReveal {
+  0% { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.95); 
+    filter: blur(10px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+    filter: blur(0); 
+  }
+}
+.animate-fade { 
+  animation: cinematicReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; 
+}
+
+/* Touch fixes */
 * { -webkit-tap-highlight-color: transparent; }

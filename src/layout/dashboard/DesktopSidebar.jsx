@@ -1,17 +1,21 @@
-// Desktop Sidebar — True Spotify aesthetic
+// Desktop Sidebar — Sleek enterprise style
 import React from "react";
 import { motion } from "framer-motion";
 import { Settings, LogOut, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getAvatarUrl, getUserAvatarSrc, getUserAvatarCacheVal } from "../../utils/avatar";
 
 export default function DesktopSidebar({ isSidebarOpen, title, menuItems, activeTab, onTabChange, user, setShowSettings, onLogout }) {
   const navigate = useNavigate();
+  const sidebarAvatarSrc = getUserAvatarSrc(user);
+  const avatarCacheVal = getUserAvatarCacheVal(user);
+
   return (
     <motion.aside 
       initial={{ width: isSidebarOpen ? 260 : 72 }} 
       animate={{ width: isSidebarOpen ? 260 : 72 }} 
       transition={{ duration: 0.25 }} 
-      className="hidden md:flex flex-col bg-linear-to-b from-slate-900 via-slate-800 to-slate-700 z-20 border-r border-teal-900/30"
+      className="hidden md:flex flex-col bg-slate-50 border-r border-slate-200 z-20"
     >
       {/* Logo */}
       <div className="h-16 flex items-center px-5 border-b border-teal-800/30">
@@ -19,7 +23,7 @@ export default function DesktopSidebar({ isSidebarOpen, title, menuItems, active
           <div className="w-8 h-8 bg-linear-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center shrink-0 shadow-lg">
             <span className="font-black text-slate-900 text-[8px] tracking-wider">E365</span>
           </div>
-          {isSidebarOpen && <span className="font-bold text-[15px] text-white">{title || "Dashboard"}</span>}
+          {isSidebarOpen && <span className="font-bold text-[15px] text-slate-900">{title || "Dashboard"}</span>}
         </div>
       </div>
 
@@ -35,9 +39,9 @@ export default function DesktopSidebar({ isSidebarOpen, title, menuItems, active
                 : "text-slate-300 hover:text-white hover:bg-slate-600/60"
             }`}
           >
-            <item.icon size={22} className="shrink-0" />
+            <item.icon size={20} className={activeTab === item.id ? "text-indigo-600" : "text-slate-500 group-hover:text-slate-700"} />
             {isSidebarOpen && (
-              <span className={`text-sm ${activeTab === item.id ? "font-bold" : "font-medium"}`}>{item.label}</span>
+              <span className="text-sm">{item.label}</span>
             )}
           </button>
         ))}

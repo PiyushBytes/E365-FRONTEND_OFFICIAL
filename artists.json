@@ -1,0 +1,502 @@
+[
+    {
+        "id": 1,
+        "name": "Badshah",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/88/88/14/8888149b-06f3-d61e-fc46-5da101bb0d0a/886448368991.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Parikrama",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/14/04/65/140465f0-b851-2a13-6f7c-4b1398a1e9e0/194694961959.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Sourendro Soumyajit",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e4/23/b8/e423b87a-ad7c-79ed-918a-e86aea65a05d/artwork.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Divine",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/72/33/69/7233691c-aefe-252d-678b-faa9b3455200/8809928958965_Cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Prateek Kuhad",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/13/b2/5e/13b25e33-746d-9567-0c36-b11af5b55ab0/075679754943.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Ritviz",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e2/e5/6f/e2e56f3d-0491-338e-c8d2-0f147b07d092/859745100557_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Indian Ocean",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7a/0d/a3/7a0da341-8769-4b81-b3d5-a85a5f630929/26UMGIM21264.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Agnee",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c3/68/8d/c3688d0a-5493-19d2-d489-10ab550e3470/888880945471.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Thaikkudam Bridge",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8f/a8/fc/8fa8fc52-f8b3-03ca-c81c-92527e12be03/840920108024.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Nucleya",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7e/3e/e2/7e3ee297-71cd-75e5-463e-0ea47049ddca/3614978401027_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 11,
+        "name": "Shankar Mahadevan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music49/v4/93/cc/db/93ccdb69-815f-7e02-4450-21a358166970/190374418898.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 12,
+        "name": "Curry",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8e/38/32/8e383245-d171-e040-7a84-a9af0f8ae4c9/0.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 13,
+        "name": "Niladri Kumar",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/bd/4e/6a/bd4e6a3c-885d-77e4-e9cc-9a8d68049eae/714266251228.png/600x600bb.jpg"
+    },
+    {
+        "id": 14,
+        "name": "Bickram Ghosh",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/63/f0/5d/63f05d0d-9195-755f-71a0-344692def310/8902357274993.png/600x600bb.jpg"
+    },
+    {
+        "id": 15,
+        "name": "Papon",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/28/94/26/28942687-425c-d8d0-4284-3a54e4d1170b/886445273656.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 16,
+        "name": "Mame Khan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a8/ba/55/a8ba5598-c9de-ba41-6b10-30a4d7151433/8902357372668.png/600x600bb.jpg"
+    },
+    {
+        "id": 17,
+        "name": "Kaushiki Chakraborty",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6f/bb/70/6fbb709e-40e1-9b86-8d20-68216967a434/859709883120_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 18,
+        "name": "TM Krishna",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/ef/fe/8e/effe8e1c-cbad-553b-dd16-a6ed60d8da51/888831172628.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 19,
+        "name": "Anoushka Shankar",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/86/b5/3f/86b53fc7-cc73-c735-17fb-549fc459edca/199538459005.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 20,
+        "name": "Rakesh Chaurasia",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/5f/d4/c8/5fd4c89e-884a-bfe7-363c-b769d12d81d1/195081729855.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 21,
+        "name": "DJ Chetas",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/b8/91/63/b89163a5-fce7-89e4-03e2-971fe8fa4115/886449708840.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 22,
+        "name": "Lost Stories",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b3/5b/aa/b35baae1-01e6-20ea-5277-a296cb9d0f00/25UM1IM74367.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 23,
+        "name": "Dualist Inquiry",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7e/0d/57/7e0d5740-b383-e031-715e-2e7f6389b6de/00_Cover_Art.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 24,
+        "name": "Zaeden",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e6/99/5d/e6995d3b-581c-2509-a078-8be9f3236aaf/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 25,
+        "name": "King",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e9/2c/0a/e92c0a04-7ac6-9563-a9b1-ec93171fcca5/00602547836649.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 26,
+        "name": "Raftaar",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/5c/32/9d/5c329d14-5df6-5a3f-2855-ef67e57028d6/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 27,
+        "name": "Krsna",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music/39/27/e8/mzi.jrdzijwa.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 28,
+        "name": "Seedhe Maut",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/51/40/25/51402500-fe22-aa54-14bd-6a0743286f1d/3616403041662_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 29,
+        "name": "Brodha V",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/5a/d7/6d/5ad76df5-f441-a4c9-4f6d-b55842793346/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 30,
+        "name": "MC Stan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/17/41/cd/1741cdfb-9143-05fa-6f25-641f7c52fb33/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 31,
+        "name": "Euphoria",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/34/fc/1d/34fc1d8d-62ad-4676-afe6-a85491cb88ff/19UMGIM70965.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 32,
+        "name": "Pentagram",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/14/bc/b6/14bcb673-91da-9762-2b00-478da988cdb7/dj.jtazjrsm.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 33,
+        "name": "Indus Creed",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/3b/b8/03/3bb803fb-4ce8-608a-afb4-a06fa1cd88d9/191924194163.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 34,
+        "name": "Avial",
+        "image": "https://ui-avatars.com/api/?name=Avial&background=random&size=600"
+    },
+    {
+        "id": 35,
+        "name": "Lagori",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music1/v4/50/12/97/50129787-1921-df07-3014-9ffa15abcc46/889845170648.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 36,
+        "name": "Jyostna Narvekar",
+        "image": "https://ui-avatars.com/api/?name=Jyostna%20Narvekar&background=random&size=600"
+    },
+    {
+        "id": 37,
+        "name": "When Chai Met Toast",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/3d/6f/76/3d6f7624-69d5-96aa-c087-f96ab4ef61d0/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 38,
+        "name": "Sanam",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/70/b8/2b/70b82bee-fe1e-241b-b7ea-55ee23869234/191773899011.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 39,
+        "name": "The Yellow Diary",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/12/04/01/12040188-4924-6508-b5b9-40a5bf4360a1/886449040025.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 40,
+        "name": "Easy Wanderlings",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music62/v4/b8/36/c3/b836c3b5-a18a-56ff-3a95-33446026c1f7/191773570644.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 41,
+        "name": "Arijit Singh",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/4c/24/fe/4c24fe2d-fc2a-e641-a43b-d7dd82e29537/7750.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 42,
+        "name": "Shreya Ghoshal",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a9/73/6b/a9736ba9-c58e-d7cb-ec7d-e44ae0d2e44e/820233018029.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 43,
+        "name": "Sonu Nigam",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/08/8c/f6/088cf689-6594-5117-c59b-5235a8bbcaa0/8718521109721.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 44,
+        "name": "Sunidhi Chauhan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ff/54/19/ff5419cf-966b-0c4d-ebca-5c466f1fb6cc/828970000123.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 45,
+        "name": "Neha Kakkar",
+        "image": "https://ui-avatars.com/api/?name=Neha%20Kakkar&background=random&size=600"
+    },
+    {
+        "id": 46,
+        "name": "Jubin Nautiyal",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b1/4d/34/b14d3476-d18a-944d-381d-ab769cbc1dbb/8903431190635_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 47,
+        "name": "Armaan Malik",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music18/v4/80/c5/98/80c598f3-a4ef-4bd9-85b2-f6ba0381e276/8902894357517_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 48,
+        "name": "Amaal Mallik",
+        "image": "https://ui-avatars.com/api/?name=Amaal%20Mallik&background=random&size=600"
+    },
+    {
+        "id": 49,
+        "name": "Kanika Kapoor",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e7/fb/65/e7fb6545-17e3-bb5f-ae1a-02895f26a0c5/8902894356688_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 50,
+        "name": "Palak Muchhal",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/bb/23/ee/bb23eeed-0c35-4f1d-2b11-485622777ae4/8902894353007_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 51,
+        "name": "Harshdeep Kaur",
+        "image": "https://ui-avatars.com/api/?name=Harshdeep%20Kaur&background=random&size=600"
+    },
+    {
+        "id": 52,
+        "name": "Rekha Bhardwaj",
+        "image": "https://ui-avatars.com/api/?name=Rekha%20Bhardwaj&background=random&size=600"
+    },
+    {
+        "id": 53,
+        "name": "Richa Sharma",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/49/32/5a/49325a52-e5e5-bb10-62f6-eebb211ce423/886446889825.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 54,
+        "name": "Sukhwinder Singh",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music30/v4/5b/6f/99/5b6f99e1-3c08-b0aa-3ffc-62643b227622/8902894116398_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 55,
+        "name": "Jasleen Royal",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f0/8c/2a/f08c2aeb-3903-8738-d0a5-8c2e4547eed7/5054197711039.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 56,
+        "name": "Anuv Jain",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/02/e7/77/02e77709-a5f6-5470-9e5b-70a0d6ff45ed/25UM1IM13936.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 57,
+        "name": "Nikhita Gandhi",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ec/68/d4/ec68d41a-ddc0-092e-34fa-11074dbacaa0/Aavan-Jaavan-Hindi-Audio-Cover-wc.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 58,
+        "name": "Jonita Gandhi",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/bd/b8/3f/bdb83f07-b4c6-a6c7-3358-e87a094d1b57/5021732823496.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 59,
+        "name": "Shirley Setia",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a3/8e/96/a38e9628-42da-fce2-62e7-8f79a8b253c7/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 60,
+        "name": "Vidya Vox",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/bb/3a/ca/bb3aca26-b67f-b67e-6b50-f0e92d42e759/859722780444_1.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 61,
+        "name": "Sivamani",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7e/3e/e2/7e3ee297-71cd-75e5-463e-0ea47049ddca/3614978401027_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 62,
+        "name": "Taufiq Qureshi",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/12/cc/7c/12cc7c33-0b9b-c56d-6acf-b1c65a378f48/8902894602143_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 63,
+        "name": "L Subramaniam",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music4/v4/4f/d7/58/4fd758ba-34b6-8353-ca5f-dccd986a37da/888174155197.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 64,
+        "name": "Prasanna",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music/89/9d/85/mzi.symtzsdb.tif/600x600bb.jpg"
+    },
+    {
+        "id": 65,
+        "name": "Arshad Khan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music7/v4/0f/b7/a0/0fb7a01c-d872-0655-4882-cf8b70954d64/889845329480.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 66,
+        "name": "Ronan D'Souza",
+        "image": "https://ui-avatars.com/api/?name=Ronan%20D%27Souza&background=random&size=600"
+    },
+    {
+        "id": 67,
+        "name": "Ehsaan Noorani",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/b0/53/0b/b0530b14-15f5-1ec4-2284-247053facefe/8902894687317_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 68,
+        "name": "Rahul Sharma",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/fa/54/a9/fa54a9f8-6331-bdea-d7cd-2bac9095945b/00888072339705.rgb.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 69,
+        "name": "Anish Sood",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/71/06/15/7106155e-cc97-80c2-2390-50b7860a371f/3614979804056_1.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 70,
+        "name": "Sartek",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/9f/59/6b/9f596b9b-4ff0-8a12-0bae-2ca7e86252c4/194491282912.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 71,
+        "name": "DJ NYK",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/ce/0a/37/ce0a3708-a6b2-c0ae-bd8a-760e09dd9c26/8903431873378_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 72,
+        "name": "Naezy",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/7b/7c/23/7b7c2381-a4c0-7dcb-9b45-e09bd79bd122/197189891762.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 73,
+        "name": "Emiway Bantai",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/5b/db/e9/5bdbe939-92c8-df00-f942-2534813d0d06/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 74,
+        "name": "Prabh Deep",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/00/b7/19/00b71940-97f9-b9b0-b9ed-1cc4df5ee556/193436163804.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 75,
+        "name": "Hanita Bhambri",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/e6/99/5d/e6995d3b-581c-2509-a078-8be9f3236aaf/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 76,
+        "name": "Anumita Nadesan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/9a/8c/f9/9a8cf95e-def3-6880-5739-6ac687b424dd/196626297754.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 77,
+        "name": "Darshan Raval",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/0a/06/1d/0a061dfc-cbeb-6d2f-7074-8a6fb7ad60e5/8909024090108.png/600x600bb.jpg"
+    },
+    {
+        "id": 78,
+        "name": "Stebin Ben",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/a4/1b/a3/a41ba3bf-f529-938d-bf92-d7dc87e7f377/197187853243.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 79,
+        "name": "Asees Kaur",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/4e/93/884e93af-ef43-e215-0d90-a27e32ba6f86/8718857907909.png/600x600bb.jpg"
+    },
+    {
+        "id": 80,
+        "name": "Nikhil D'Souza",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8d/d5/db/8dd5db1c-e1d2-5b0d-f644-af70b673a1ad/884977744330.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 81,
+        "name": "Anusha Mani",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/91/89/89/918989bc-cc33-5538-cd16-76f400aab629/8902894353823_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 82,
+        "name": "Md Irfan",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/3e/7a/a7/3e7aa76b-9b30-6968-dd08-1962aa2bdce3/8718857902904.png/600x600bb.jpg"
+    },
+    {
+        "id": 83,
+        "name": "Shilajit Majumdar",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/02/bb/eb/02bbeb10-5e0a-2532-902b-34245a0809ff/195079575495.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 84,
+        "name": "Arko Mukherjee",
+        "image": "https://ui-avatars.com/api/?name=Arko%20Mukherjee&background=random&size=600"
+    },
+    {
+        "id": 85,
+        "name": "TrapperX",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/e3/36/e8/e336e86b-90a0-19ca-e330-28f2be1aeab2/cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 86,
+        "name": "Annesha Seth",
+        "image": "https://ui-avatars.com/api/?name=Annesha%20Seth&background=random&size=600"
+    },
+    {
+        "id": 87,
+        "name": "Amit Gupta",
+        "image": "https://ui-avatars.com/api/?name=Amit%20Gupta&background=random&size=600"
+    },
+    {
+        "id": 88,
+        "name": "Benny Dayal",
+        "image": "https://ui-avatars.com/api/?name=Benny%20Dayal&background=random&size=600"
+    },
+    {
+        "id": 89,
+        "name": "Blood",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/f7/ab/66/f7ab66e2-d194-c422-62a1-a177840b78d5/886443528543.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 90,
+        "name": "Mayuri Darani",
+        "image": "https://ui-avatars.com/api/?name=Mayuri%20Darani&background=random&size=600"
+    },
+    {
+        "id": 91,
+        "name": "Adil Hussaini",
+        "image": "https://ui-avatars.com/api/?name=Adil%20Hussaini&background=random&size=600"
+    },
+    {
+        "id": 92,
+        "name": "Akasa Singh",
+        "image": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/32/39/e2/3239e2fd-5cc1-404c-525c-c1d80be47b7b/8902894360784_cover.jpg/600x600bb.jpg"
+    },
+    {
+        "id": 93,
+        "name": "Sagar Bhatia",
+        "image": "https://ui-avatars.com/api/?name=Sagar%20Bhatia&background=random&size=600"
+    },
+    {
+        "id": 94,
+        "name": "Retrio To Metro",
+        "image": "https://ui-avatars.com/api/?name=Retrio%20To%20Metro&background=random&size=600"
+    },
+    {
+        "id": 95,
+        "name": "TRAP",
+        "image": "https://ui-avatars.com/api/?name=TRAP&background=random&size=600"
+    },
+    {
+        "id": 96,
+        "name": "Tony Kakkar",
+        "image": "https://ui-avatars.com/api/?name=Tony%20Kakkar&background=random&size=600"
+    },
+    {
+        "id": 97,
+        "name": "Raman Negi",
+        "image": "https://ui-avatars.com/api/?name=Raman%20Negi&background=random&size=600"
+    },
+    {
+        "id": 98,
+        "name": "Zikrr The Band",
+        "image": "https://ui-avatars.com/api/?name=Zikrr%20The%20Band&background=random&size=600"
+    },
+    {
+        "id": 99,
+        "name": "Salman Zaman",
+        "image": "https://ui-avatars.com/api/?name=Salman%20Zaman&background=random&size=600"
+    },
+    {
+        "id": 100,
+        "name": "Senjuti Das",
+        "image": "https://ui-avatars.com/api/?name=Senjuti%20Das&background=random&size=600"
+    }
+]

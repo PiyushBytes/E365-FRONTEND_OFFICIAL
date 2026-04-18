@@ -7,6 +7,7 @@ const VideoBackground = () => (
       loop
       muted
       playsInline
+      poster="/Logos/pic1.jpg"
       className="w-full h-full object-cover opacity-50"
     >
       <source src="/Logos/video1.mp4" type="video/mp4" />

@@ -24,7 +24,7 @@ export default function ArtistsPanel({ isOpen, onClose }) {
       {/* STOP CLICK FROM CLOSING WHEN CLICKING INSIDE PANEL */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`bg-black/80 border border-red-500/20 rounded-2xl p-8 w-full max-w-6xl max-h-[80vh] overflow-y-auto shadow-[0_0_40px_rgba(255,0,60,0.2)] relative transition-all duration-300 transform ${
+        className={`bg-black/80 border border-red-500/20 rounded-2xl p-8 w-full max-w-6xl max-h-[80vh] overflow-y-auto scrollbar-custom shadow-[0_0_40px_rgba(255,0,60,0.2)] relative transition-all duration-300 transform ${
           isOpen ? "translate-y-0 scale-100" : "-translate-y-6 scale-95"
         }`}
       >
@@ -46,6 +46,7 @@ export default function ArtistsPanel({ isOpen, onClose }) {
                 <img
                   src={artist.img}
                   alt={artist.name}
+                  loading="lazy"
                   className="w-32 h-32 object-cover rounded-full border-2 border-transparent transition-all duration-300 group-hover:border-red-500"
                 />
                 {/* GLOW EFFECT */}

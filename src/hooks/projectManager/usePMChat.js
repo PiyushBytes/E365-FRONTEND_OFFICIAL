@@ -96,7 +96,9 @@ export const usePMChat = (notificationId) => {
         try {
           const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
           pmName = parsed?.first_name || parsed?.username || "Event Manager";
-        } catch (e) { }
+        } catch (e) {
+          console.error("Failed to parse user", e);
+        }
       }
       
       await sendPMReply(notificationId, `[Project Manager] (${pmName}) has joined the chat and typing for your smooth solution`);
@@ -115,7 +117,9 @@ export const usePMChat = (notificationId) => {
           try {
             const parsed = typeof storedUser === "string" ? JSON.parse(storedUser) : storedUser;
             pmName = parsed?.first_name || parsed?.username || "Event Manager";
-          } catch (e) { }
+          } catch (e) {
+            console.error("Failed to parse user", e);
+          }
         }
         await sendPMReply(notificationId, `[Project Manager] (${pmName}) has left the chat. I'll continue assisting you.`);
         await exitChatbox(notificationId);

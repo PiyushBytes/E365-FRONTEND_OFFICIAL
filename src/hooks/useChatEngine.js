@@ -8,6 +8,7 @@ import { useCallback } from "react";
 // Ye saare chote modules ko mila ke main functional useChatEngine banata hai
 export function useChatEngine() {
   const st = useChatState();
+  const { setMessages, setIsTyping } = st;
   const init = useChatInit(st);
   const send = useChatSend(st);
 

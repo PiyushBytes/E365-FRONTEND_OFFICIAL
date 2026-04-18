@@ -1,4 +1,4 @@
-// Dashboard Layout — Spotify-style with #121212 content bg
+// Dashboard Layout — Sleek enterprise style
 import React, { useState } from "react";
 import DesktopSidebar from "./dashboard/DesktopSidebar";
 import MobileSidebar from "./dashboard/MobileSidebar";

@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import ArtistsPanel from "../components/ArtistsPanel";
 import { useAuth } from "../context/AuthContext";
 import { User, LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { getAvatarUrl, getUserAvatarSrc, getUserAvatarCacheVal } from "../utils/avatar";
 
 export default function Navbar() {
   const [showArtists, setShowArtists] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
+  
+  const navAvatarSrc = getUserAvatarSrc(user);
+  const avatarCacheVal = getUserAvatarCacheVal(user);
 
   return (
     <>
@@ -67,8 +71,8 @@ export default function Navbar() {
                 className="relative z-50 w-10 h-10 rounded-full border-2 border-gray-700 hover:border-gray-500 transition-colors focus:outline-none flex items-center justify-center p-[2px]"
               >
                 <div className="w-full h-full bg-black rounded-full flex items-center justify-center overflow-hidden">
-                  {user?.profilePicture ? (
-                    <img src={user.profilePicture} alt="Profile" className="w-full h-full object-cover" />
+                  {navAvatarSrc ? (
+                    <img src={getAvatarUrl(navAvatarSrc, avatarCacheVal)} alt="Profile" className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-white font-medium text-[14px]">
                       {user?.username?.[0]?.toUpperCase() || <User size={16} className="text-gray-300" />}
@@ -77,7 +81,7 @@ export default function Navbar() {
                 </div>
               </button>
 
-              {/* Dropdown Menu - Solid dark professional enterprise styling */}
+              {/* Dropdown Menu  */}
               <div 
                 className={`absolute top-full right-0 mt-3 w-64 rounded-lg border border-gray-800 bg-[#0A0A0A] shadow-2xl transform transition-all duration-200 origin-top-right z-50 overflow-hidden ${
                   showProfileMenu ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
