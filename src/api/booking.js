@@ -17,3 +17,7 @@ export const respondToBooking = (bookingId, responseData) =>
 // Step 9: Client payment process kare booking confirm karne ke liye
 export const processPayment = (bookingId, paymentData) =>
   api.post(`/api/booking/bookings/${bookingId}/payment/`, paymentData);
+
+// Fetch booking details by chatbox ID - used in PM dashboard to see selected artist
+export const getBookingByChatbox = (chatboxId) =>
+  api.get("/api/booking/bookings/", { params: { chatbox: chatboxId } });
